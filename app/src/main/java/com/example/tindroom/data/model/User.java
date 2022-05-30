@@ -2,11 +2,9 @@ package com.example.tindroom.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-
 public class User {
-    @SerializedName("id_user")
-    private int idUser;
+    @SerializedName("user_id")
+    private int userId;
 
     @SerializedName("name")
     private String name;
@@ -20,7 +18,7 @@ public class User {
     @SerializedName("sex")
     private char sex;
 
-    @SerializedName("id_faculty")
+    @SerializedName("faculty_id")
     private long idFaculty;
 
     @SerializedName("roommate_sex")
@@ -33,7 +31,7 @@ public class User {
     private int roommateAgeTo;
 
     @SerializedName("has_apartment")
-    private boolean hasApartment;
+    private int hasApartment;
 
     @SerializedName("price_from")
     private double priceFrom;
@@ -41,7 +39,7 @@ public class User {
     @SerializedName("price_to")
     private double priceTo;
 
-    @SerializedName("id_neighborhood")
+    @SerializedName("neighborhood_id")
     private Long idNeighborhood;
 
     public User(final String name, final String dateOfBirth, final String description, final char sex, final long idFaculty, final char roommateSex, final int roommateAgeFrom,
@@ -55,14 +53,14 @@ public class User {
         this.roommateSex = roommateSex;
         this.roommateAgeFrom = roommateAgeFrom;
         this.roommateAgeTo = roommateAgeTo;
-        this.hasApartment = hasApartment;
+        this.hasApartment = hasApartment ? 1 : 0;
         this.priceFrom = priceFrom;
         this.priceTo = priceTo;
         this.idNeighborhood = idNeighborhood;
     }
 
-    public int getIdUser() {
-        return idUser;
+    public int getUserId() {
+        return userId;
     }
 
     public String getName() {
@@ -130,11 +128,11 @@ public class User {
     }
 
     public boolean isHasApartment() {
-        return hasApartment;
+        return  hasApartment > 0 ;
     }
 
     public void setHasApartment(final boolean hasApartment) {
-        this.hasApartment = hasApartment;
+        this.hasApartment = hasApartment ? 1 : 0;
     }
 
     public double getPriceFrom() {
@@ -171,7 +169,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "idUser=" + idUser +
+                "userId=" + userId +
                 ", name='" + name + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", description='" + description + '\'' +
@@ -180,7 +178,7 @@ public class User {
                 ", roommateSex=" + roommateSex +
                 ", roommateAgeFrom=" + roommateAgeFrom +
                 ", roommateAgeTo=" + roommateAgeTo +
-                ", hasApartment=" + hasApartment +
+                ", hasApartment=" + (hasApartment > 0) +
                 ", priceFrom=" + priceFrom +
                 ", priceTo=" + priceTo +
                 ", idNeighborhood=" + idNeighborhood +

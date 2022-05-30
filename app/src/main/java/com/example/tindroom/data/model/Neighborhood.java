@@ -2,10 +2,9 @@ package com.example.tindroom.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Faculty {
-
-    @SerializedName("faculty_id")
-    private long facultyId;
+public class Neighborhood {
+    @SerializedName("neighborhood_id")
+    private long neighborhoodId;
 
     @SerializedName("name")
     private String name;
@@ -13,8 +12,8 @@ public class Faculty {
     @SerializedName("area")
     private String area;
 
-    public float getFacultyId() {
-        return facultyId;
+    public float getNeighborhoodId() {
+        return neighborhoodId;
     }
 
     public String getName() {
@@ -27,11 +26,10 @@ public class Faculty {
 
     @Override
     public String toString() {
-        return "Faculty{"
-                + "facultyId = " + facultyId
+        return "Neighborhood{"
+                + "neighborhoodId = " + neighborhoodId
                 + ", name = " + name
                 + ", area = " + area
                 + "}";
     }
-
 }

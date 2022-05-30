@@ -5,7 +5,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public abstract class RetrofitService {
 
-//    private static final String BASE_URL = "http://localhost:3000/";
     private static final String BASE_URL = "https://tindroom-api.herokuapp.com/";
 
     public static Retrofit getRetrofit() {
