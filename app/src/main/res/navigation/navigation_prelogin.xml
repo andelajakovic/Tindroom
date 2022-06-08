@@ -47,12 +47,24 @@
         android:label="fragment_about_you"
         tools:layout="@layout/fragment_about_you" >
         <action
-            android:id="@+id/action_aboutYouFragment_to_homeActivity"
-            app:destination="@id/homeActivity" />
+            android:id="@+id/action_aboutYouFragment_to_roomateFormFragment"
+            app:destination="@id/roomateFormFragment" />
     </fragment>
     <activity
         android:id="@+id/homeActivity"
-        android:name="com.example.tindroom.HomeActivity"
+        android:name="com.example.tindroom.ui.postlogin.HomeActivity"
         android:label="activity_home"
         tools:layout="@layout/activity_home" />
+    <fragment
+        android:id="@+id/roomateFormFragment"
+        android:name="com.example.tindroom.ui.prelogin.RoommateFormFragment"
+        android:label="fragment_roomate_form"
+        tools:layout="@layout/fragment_roomate_form" >
+        <action
+            android:id="@+id/action_roomateFormFragment_to_homeActivity"
+            app:destination="@id/homeActivity" />
+        <argument
+            android:name="user"
+            app:argType="com.example.tindroom.data.model.User" />
+    </fragment>
 </navigation>

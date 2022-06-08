@@ -1,3 +1,33 @@
 <resources>
-    <string name="app_name">Tindroom</string>
+    <string name="app_name" translatable="false">Tindroom</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="any">Any</string>
+    <string name="name">Name</string>
+    <string name="date_of_birth">Date of birth</string>
+    <string name="gender">Gender</string>
+    <string name="faculty">Faculty</string>
+    <string name="about_you">About you</string>
+    <string name="next">Next</string>
+
+    <string name="about_you_fragment_male_option" translatable="false">@string/male</string>
+    <string name="about_you_fragment_female_option" translatable="false">@string/female</string>
+    <string name="about_you_fragment_name_hint" translatable="false">@string/name</string>
+    <string name="about_you_fragment_date_of_birth_hint" translatable="false">@string/date_of_birth</string>
+    <string name="about_you_fragment_gender_hint" translatable="false">@string/gender</string>
+    <string name="about_you_fragment_faculty_hint" translatable="false">@string/faculty</string>
+    <string name="about_you_fragment_about_you_hint" translatable="false">@string/about_you</string>
+    <string name="about_you_fragment_next_button_label" translatable="false">@string/next</string>
+    
+    <array name="your_gender">
+        <item>@string/male</item>
+        <item>@string/female</item>
+    </array>
+
+    <array name="roommates_gender">
+        <item>@string/male</item>
+        <item>@string/female</item>
+        <item>@string/any</item>
+    </array>
+
 </resources>

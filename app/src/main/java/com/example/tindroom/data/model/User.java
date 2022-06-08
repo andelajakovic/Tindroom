@@ -1,8 +1,13 @@
 package com.example.tindroom.data.model;
 
+import android.annotation.SuppressLint;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+@SuppressLint("ParcelCreator")
+public class User implements Parcelable {
     @SerializedName("user_id")
     private int userId;
 
@@ -41,23 +46,6 @@ public class User {
 
     @SerializedName("neighborhood_id")
     private Long idNeighborhood;
-
-    public User(final String name, final String dateOfBirth, final String description, final char sex, final long idFaculty, final char roommateSex, final int roommateAgeFrom,
-                final int roommateAgeTo, final boolean hasApartment,
-                final double priceFrom, final double priceTo, final Long idNeighborhood) {
-        this.name = name;
-        this.dateOfBirth = dateOfBirth;
-        this.description = description;
-        this.sex = sex;
-        this.idFaculty = idFaculty;
-        this.roommateSex = roommateSex;
-        this.roommateAgeFrom = roommateAgeFrom;
-        this.roommateAgeTo = roommateAgeTo;
-        this.hasApartment = hasApartment ? 1 : 0;
-        this.priceFrom = priceFrom;
-        this.priceTo = priceTo;
-        this.idNeighborhood = idNeighborhood;
-    }
 
     public int getUserId() {
         return userId;
@@ -183,5 +171,15 @@ public class User {
                 ", priceTo=" + priceTo +
                 ", idNeighborhood=" + idNeighborhood +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(final Parcel parcel, final int i) {
+
     }
 }

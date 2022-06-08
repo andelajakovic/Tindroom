@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class Faculty {
 
     @SerializedName("faculty_id")
-    private long facultyId;
+    private Long facultyId;
 
     @SerializedName("name")
     private String name;
@@ -13,7 +13,7 @@ public class Faculty {
     @SerializedName("area")
     private String area;
 
-    public float getFacultyId() {
+    public Long getFacultyId() {
         return facultyId;
     }
 

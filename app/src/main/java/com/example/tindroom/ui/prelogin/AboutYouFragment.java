@@ -5,20 +5,27 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.tindroom.R;
+import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.Faculty;
+import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
+import com.example.tindroom.utils.ImageHandler;
+import com.example.tindroom.utils.InputValidator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -44,8 +51,8 @@ import static android.app.Activity.RESULT_OK;
 
 public class AboutYouFragment extends Fragment {
 
-    private TextInputLayout nameInput, dateOfBirthInput;
-    private TextInputEditText dateOfBirthEditText;
+    private TextInputLayout nameInput, dateOfBirthInput, genderInput, facultyInput;
+    private TextInputEditText nameEditText, dateOfBirthEditText, descriptionEditText;
     private AutoCompleteTextView genderDropdown, facultyDropdown;
     private List<Faculty> facultyList;
     private Retrofit retrofit;
@@ -54,6 +61,7 @@ public class AboutYouFragment extends Fragment {
     private Calendar dateCalendar;
     private ImageView avatarImageView;
     private ImageButton editImageButton;
+    private Button nextButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +71,6 @@ public class AboutYouFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_about_you, container, false);
 
         retrofit = RetrofitService.getRetrofit();
@@ -82,13 +89,28 @@ public class AboutYouFragment extends Fragment {
     }
 
     private void initViews() {
-        nameInput = (TextInputLayout) rootView.findViewById(R.id.nameInput);
-        dateOfBirthInput = (TextInputLayout) rootView.findViewById(R.id.dateOfBirthInput);
-        facultyDropdown = (AutoCompleteTextView) rootView.findViewById(R.id.facultyDropdown);
-        genderDropdown = (AutoCompleteTextView) rootView.findViewById(R.id.genderDropdown);
-        dateOfBirthEditText = (TextInputEditText) rootView.findViewById(R.id.dateOfBirthEditText);
-        avatarImageView = (ImageView) rootView.findViewById(R.id.avatarImageView);
-        editImageButton = (ImageButton) rootView.findViewById(R.id.editImageButton);
+        nameInput = rootView.findViewById(R.id.nameInput);
+        nameEditText = rootView.findViewById(R.id.nameEditText);
+
+        dateOfBirthInput = rootView.findViewById(R.id.dateOfBirthInput);
+        dateOfBirthEditText = rootView.findViewById(R.id.dateOfBirthEditText);
+
+        facultyInput = rootView.findViewById(R.id.facultyInput);
+        facultyDropdown = rootView.findViewById(R.id.facultyDropdown);
+
+        genderInput = rootView.findViewById(R.id.genderInput);
+        genderDropdown = rootView.findViewById(R.id.genderDropdown);
+
+        avatarImageView = rootView.findViewById(R.id.avatarImageView);
+
+        editImageButton = rootView.findViewById(R.id.editImageButton);
+
+        descriptionEditText = rootView.findViewById(R.id.descriptionEditText);
+        descriptionEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        descriptionEditText.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+
+        nextButton = rootView.findViewById(R.id.nextButton);
+
         setGenderMenuItems();
         setFacultyMenuItems();
     }
@@ -100,7 +122,7 @@ public class AboutYouFragment extends Fragment {
             public void onClick(final View view) {
                 SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
                 Calendar newCalendar = Calendar.getInstance();  // current date
-                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), R.style.MySpinnerDatePickerStyle,
                                                                          (v, year, monthOfYear, dayOfMonth) -> {
                                                                              dateCalendar = Calendar.getInstance(); // picked date
                                                                              dateCalendar.set(year, monthOfYear, dayOfMonth);
@@ -109,6 +131,7 @@ public class AboutYouFragment extends Fragment {
                                                                          newCalendar.get(Calendar.YEAR),
                                                                          newCalendar.get(Calendar.MONTH),
                                                                          newCalendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.getDatePicker().setMaxDate(newCalendar.getTime().getTime());
                 datePickerDialog.show();
             }
         });
@@ -120,13 +143,21 @@ public class AboutYouFragment extends Fragment {
                 chooseImage();
             }
         });
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(final View view) {
+                navigateToRoommateFormFragment(view);
+            }
+        });
     }
 
     private void chooseImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+        startActivityForResult(Intent.createChooser(intent, ""), 1);
     }
 
     @Override
@@ -135,8 +166,11 @@ public class AboutYouFragment extends Fragment {
         if (requestCode == 1 && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             try {
-                Bitmap avatar = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), data.getData());
-                avatarImageView.setImageBitmap(avatar);
+                Bitmap avatar = ImageHandler.handleSamplingAndRotationBitmap(getContext(), data.getData());
+                Glide.with(rootView)
+                     .asBitmap()
+                     .load(avatar)
+                     .into(avatarImageView);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -145,7 +179,8 @@ public class AboutYouFragment extends Fragment {
     }
 
     private void setGenderMenuItems() {
-        String[] items = {"Muško", "Žensko"};
+        String[] items =  getResources().getStringArray(R.array.your_gender);
+
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items);
         genderDropdown.setAdapter(arrayAdapter);
     }
@@ -178,9 +213,37 @@ public class AboutYouFragment extends Fragment {
         });
     }
 
-    public void navigateToHomeActivity(View view) {
-        NavDirections action = AboutYouFragmentDirections.actionAboutYouFragmentToHomeActivity();
-        Navigation.findNavController(view).navigate(action);
+    public void navigateToRoommateFormFragment(View view) {
+
+        InputValidator inputValidator = new InputValidator(getContext());
+
+        if (inputValidator.isInputEditTextFilled(nameEditText, nameInput)
+                && inputValidator.isInputEditTextFilled(dateOfBirthEditText, dateOfBirthInput)
+                && inputValidator.isInputEditTextFilled(genderDropdown, genderInput)
+                && inputValidator.isInputEditTextFilled(facultyDropdown, facultyInput)) {
+
+            User user = new User();
+            user.setName(String.valueOf(nameEditText.getText()));
+            user.setDateOfBirth(String.valueOf(dateOfBirthEditText.getText()));
+            if (String.valueOf(genderDropdown.getText()).equals(getString(R.string.about_you_fragment_male_option))) {
+                user.setSex('M');
+            } else if (String.valueOf(genderDropdown.getText()).equals(getString(R.string.about_you_fragment_female_option))) {
+                user.setSex('F');
+            }
+            for (Faculty faculty : facultyList) {
+                if (faculty.getName().equals(String.valueOf(facultyDropdown.getText()))) {
+                    user.setIdFaculty(faculty.getFacultyId());
+                    break;
+                }
+            }
+            user.setDescription(String.valueOf(descriptionEditText.getText()));
+
+            NavDirections action = AboutYouFragmentDirections.actionAboutYouFragmentToRoomateFormFragment(user);
+            Navigation.findNavController(view).navigate(action);
+
+        }
+
+
     }
 
 }

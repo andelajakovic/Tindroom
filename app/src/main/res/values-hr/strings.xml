@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="male">Muško</string>
+    <string name="female">Žensko</string>
+    <string name="any">Svejedno</string>
+    <string name="name">Ime</string>
+    <string name="date_of_birth">Datum rođenja</string>
+    <string name="gender">Spol</string>
+    <string name="faculty">Fakultet</string>
+    <string name="about_you">O tebi</string>
+    <string name="next">Dalje</string>
+</resources>
