@@ -38,7 +38,7 @@
         <item>@string/female</item>
     </array>
 
-    <array name="roommates_gender">
+    <array name="roommates_gender_items">
         <item>@string/male</item>
         <item>@string/female</item>
         <item>@string/any</item>
