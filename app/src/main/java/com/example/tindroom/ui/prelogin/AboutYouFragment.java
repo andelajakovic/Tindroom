@@ -19,7 +19,6 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.tindroom.R;
-import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.Faculty;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
@@ -179,7 +178,7 @@ public class AboutYouFragment extends Fragment {
     }
 
     private void setGenderMenuItems() {
-        String[] items =  getResources().getStringArray(R.array.your_gender);
+        String[] items =  getResources().getStringArray(R.array.your_gender_items);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items);
         genderDropdown.setAdapter(arrayAdapter);

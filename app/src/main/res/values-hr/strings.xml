@@ -9,4 +9,11 @@
     <string name="faculty">Fakultet</string>
     <string name="about_you">O tebi</string>
     <string name="next">Dalje</string>
+    <string name="roommates_gender">Spol cimera</string>
+    <string name="have_apartment">Imam stan: </string>
+    <string name="apartment_price">Cijena stana (kuna po osobi)</string>
+    <string name="neighborhood">Kvart</string>
+    <string name="roommate_age_limit">Dobna granica cimera: %s - %s</string>
+    <string name="apartment_price_limit">Cijena stana do (kuna po osobi): %s</string>
+
 </resources>
