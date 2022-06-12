@@ -128,7 +128,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/linear_layout_margin"
-            android:text="@string/about_you_fragment_next_button_label" />
+            android:text="Next" />
 
     </LinearLayout>
 </ScrollView>

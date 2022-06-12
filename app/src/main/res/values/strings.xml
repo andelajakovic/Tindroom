@@ -18,7 +18,11 @@
     <string name="about_you_fragment_faculty_hint" translatable="false">@string/faculty</string>
     <string name="about_you_fragment_about_you_hint" translatable="false">@string/about_you</string>
     <string name="about_you_fragment_next_button_label" translatable="false">@string/next</string>
-    
+    <string name="email">Email</string>
+    <string name="dalje">Dalje</string>
+    <string name="registriraj_se">Registriraj se!</string>
+    <string name="nema_korisni_ki_ra_un">Nemaš korisnički račun?</string>
+
     <array name="your_gender">
         <item>@string/male</item>
         <item>@string/female</item>

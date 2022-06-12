@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imageView"
                     android:layout_width="144dp"
                     android:layout_height="130dp"
@@ -39,6 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/linear_layout_margin"
                     android:hint="Korisničko ime"
+                    app:errorEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageView"
@@ -58,6 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/linear_layout_margin"
                     android:hint="E-mail adresa"
+                    app:errorEnabled="true"
                     app:endIconMode="clear_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -79,6 +81,7 @@
                     android:layout_marginTop="32dp"
                     android:hint="Zaporka"
                     app:helperTextEnabled="true"
+                    app:helperText="Zaporka mora imati najmanje 8 znakova"
                     app:endIconMode="password_toggle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

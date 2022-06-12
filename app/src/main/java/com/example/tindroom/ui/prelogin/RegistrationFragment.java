@@ -1,24 +1,27 @@
 package com.example.tindroom.ui.prelogin;
 
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.tindroom.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.SignInMethodQueryResult;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
-
-import java.util.Objects;
 
 public class RegistrationFragment extends Fragment {
 
@@ -27,10 +30,16 @@ public class RegistrationFragment extends Fragment {
 
     private TextInputLayout passwordInput, passwordAgainInput, usernameInput, emailInput;
     private TextInputEditText passwordEditText, passwordAgainEditText, usernameEditText, emailEditText;
+    private String email, password, passwordAgain,  username;
+    static boolean flag = false;
+
+    private FirebaseAuth mAuth;
+    //private FirebaseDatabase database;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -89,18 +98,63 @@ public class RegistrationFragment extends Fragment {
         });
     }
 
-    public boolean checkRegisterForm(){
+    private boolean checkRegisterForm(){
+        email = emailEditText.getText().toString();
+        password = passwordEditText.getText().toString().trim();
+        passwordAgain = passwordAgainEditText.getText().toString().trim();
+        username = usernameEditText.getText().toString();
 
-        if (passwordEditText.getText().length() < 8) {
-            passwordInput.setHelperText("Zaporka mora imati najmanje 8 znakova");
-            return false;
-        }
-        /*else if (!passwordEditText.getText().equals(passwordAgainEditText.getText())){
-            passwordAgainInput.setError("Zaporke se ne podudaraju");
+        /*if (username vec postoji u bazi){
+            usernameInput.setError("Korisničko ime već postoji!");
             return false;
         }*/
 
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            emailInput.setError("Email nije u dobrom obliku");
+            return false;
+        }else if(!checkEmailExistsOrNot()){
+            emailInput.setError("Email već postoji");
+            return false;
+        }
+
+        if (passwordEditText.getText().length() < 8) {
+            passwordInput.setError("Zaporka mora imati najmanje 8 znakova");
+            return false;
+        }
+
+        if (!(password.equals(passwordAgain))){
+            passwordAgainInput.setError("Zaporke se ne podudaraju");
+            return false;
+        }
+
+        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Andela ovjde cemo upisat ID
+                    //FirebaseDatabase database = FirebaseDatabase.getInstance("Users");
+                    //DatabaseReference myRef = database.getReference("message");
+                    //myRef.setValue("Hello, World!");
+                }
+            }
+        });
+
         return true;
 
+    }
+    private boolean checkEmailExistsOrNot() {
+        mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+            @Override
+            public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                if (task.getResult().getSignInMethods().size() == 0) {
+                    flag = true;
+                } else {
+                    // email existed
+                    flag = false;
+                }
+
+            }
+        });
+        return flag;
     }
 }
