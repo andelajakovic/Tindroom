@@ -44,4 +44,9 @@
         <item>@string/any</item>
     </array>
 
+    <string name="email" translatable="false">Email</string>
+    <string name="dalje" translatable="false">Dalje</string>
+    <string name="registriraj_se" translatable="false">Registriraj se!</string>
+    <string name="nema_korisni_ki_ra_un" translatable="false">Nemaš korisnički račun?</string>
+
 </resources>
