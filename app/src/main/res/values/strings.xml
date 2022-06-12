@@ -9,6 +9,12 @@
     <string name="faculty">Faculty</string>
     <string name="about_you">About you</string>
     <string name="next">Next</string>
+    <string name="roommates_gender">Roommate\'s gender</string>
+    <string name="have_apartment">I have an apartment: </string>
+    <string name="apartment_price">Apartment price (HRK per person)</string>
+    <string name="neighborhood">Neighborhood</string>
+    <string name="roommate_age_limit">Roommate\'s age limit: %s - %s</string>
+    <string name="apartment_price_limit">Apartment price limit (HRK per person): %s</string>
 
     <string name="about_you_fragment_male_option" translatable="false">@string/male</string>
     <string name="about_you_fragment_female_option" translatable="false">@string/female</string>
@@ -18,12 +24,16 @@
     <string name="about_you_fragment_faculty_hint" translatable="false">@string/faculty</string>
     <string name="about_you_fragment_about_you_hint" translatable="false">@string/about_you</string>
     <string name="about_you_fragment_next_button_label" translatable="false">@string/next</string>
-    <string name="email">Email</string>
-    <string name="dalje">Dalje</string>
-    <string name="registriraj_se">Registriraj se!</string>
-    <string name="nema_korisni_ki_ra_un">Nemaš korisnički račun?</string>
 
-    <array name="your_gender">
+    <string name="roommate_form_fragment_roommate_gender_hint" translatable="false">@string/roommates_gender</string>
+    <string name="roommate_form_fragment_have_apartment_label" translatable="false">@string/have_apartment</string>
+    <string name="roommate_form_fragment_price_hint" translatable="false">@string/apartment_price</string>
+    <string name="roommate_form_fragment_neighborhood_hint" translatable="false">@string/neighborhood</string>
+    <string name="roommate_form_fragment_roommate_age_title" translatable="false">@string/roommate_age_limit</string>
+    <string name="roommate_form_fragment_price_range_title" translatable="false">@string/apartment_price_limit</string>
+    <string name="roommate_form_fragment_next_button_label" translatable="false">@string/next</string>
+
+    <array name="your_gender_items">
         <item>@string/male</item>
         <item>@string/female</item>
     </array>
@@ -33,5 +43,10 @@
         <item>@string/female</item>
         <item>@string/any</item>
     </array>
+
+    <string name="email" translatable="false">Email</string>
+    <string name="dalje" translatable="false">Dalje</string>
+    <string name="registriraj_se" translatable="false">Registriraj se!</string>
+    <string name="nema_korisni_ki_ra_un" translatable="false">Nemaš korisnički račun?</string>
 
 </resources>

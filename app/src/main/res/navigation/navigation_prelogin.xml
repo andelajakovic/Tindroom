@@ -59,7 +59,7 @@
         android:id="@+id/roomateFormFragment"
         android:name="com.example.tindroom.ui.prelogin.RoommateFormFragment"
         android:label="fragment_roomate_form"
-        tools:layout="@layout/fragment_roomate_form" >
+        tools:layout="@layout/fragment_roommate_form" >
         <action
             android:id="@+id/action_roomateFormFragment_to_homeActivity"
             app:destination="@id/homeActivity" />
