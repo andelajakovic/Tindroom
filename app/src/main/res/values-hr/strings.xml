@@ -15,5 +15,13 @@
     <string name="neighborhood">Kvart</string>
     <string name="roommate_age_limit">Dobna granica cimera: %s - %s</string>
     <string name="apartment_price_limit">Cijena stana do (kuna po osobi): %s</string>
+    <string name="username">Korisničko ime</string>
+    <string name="email">Adresa e-pošte</string>
+    <string name="password">Zaporka</string>
+    <string name="repeat_password">Ponovni unos zaporke</string>
+    <string name="not_registered_yet">Nemaš korisnički račun?</string>
+    <string name="register_now"><u>Registriraj se!</u></string>
+    <string name="login">Prijava</string>
+    <string name="password_must_have_at_least_eight_characters">Zaporka mora imati najmanje 8 znakova.</string>
 
 </resources>

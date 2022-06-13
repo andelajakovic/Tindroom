@@ -15,7 +15,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.SignInMethodQueryResult;
-import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -72,8 +71,8 @@ public class RegistrationFragment extends Fragment {
         passwordEditText = rootView.findViewById(R.id.passwordEditText);
         passwordInput = rootView.findViewById(R.id.passwordInput);
 
-        passwordAgainEditText = rootView.findViewById(R.id.passwordAgainEditText);
-        passwordAgainInput = rootView.findViewById(R.id.passwordInput);
+        passwordAgainEditText = rootView.findViewById(R.id.repeatPasswordEditText);
+        passwordAgainInput = rootView.findViewById(R.id.repeatPasswordInput);
 
         usernameInput = rootView.findViewById(R.id.usernameInput);
         usernameEditText = rootView.findViewById(R.id.usernameEditText);

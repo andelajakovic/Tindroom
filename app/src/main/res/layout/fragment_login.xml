@@ -21,16 +21,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <ImageView
                 android:id="@+id/imageButton"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginTop="32dp"
                 android:src="@drawable/avatar_placeholder"
-                app:layout_constraintBottom_toTopOf="@+id/emailInput"
+                app:layout_constraintBottom_toTopOf="@id/emailInput"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -44,7 +43,7 @@
                 app:helperTextEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageButton"
+                app:layout_constraintTop_toBottomOf="@id/imageButton"
                 app:startIconDrawable="@drawable/ic_baseline_email_24">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -62,6 +61,7 @@
                 android:layout_margin="@dimen/linear_layout_margin"
                 app:endIconMode="password_toggle"
                 app:errorEnabled="true"
+                android:hint="@string/login_fragment_password_hint"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/emailInput"
@@ -80,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/dalje"
+                android:text="@string/login_fragment_login_button_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/passwordInput" />
@@ -90,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="@string/nema_korisni_ki_ra_un"
+                android:text="@string/login_fragment_not_registered_yet_label"
                 app:layout_constraintStart_toStartOf="@+id/passwordInput"
                 app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:textColor="@color/black"
-                android:text="@string/registriraj_se"
+                android:text="@string/login_fragment_register_now_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.053"
                 app:layout_constraintStart_toEndOf="@+id/textForRegistration"
