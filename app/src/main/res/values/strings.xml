@@ -23,14 +23,23 @@
     <string name="not_registered_yet">Not registered yet?</string>
     <string name="register_now"><u>Register now!</u></string>
     <string name="login">Login</string>
-    <string name="password_must_have_at_least_eight_characters">Password must have at least 8 characters.</string>
 
+    <!-- Error messages -->
+    <string name="user_with_this_email_address_already_exists">A user with this email address already exists.</string>
+    <string name="please_enter_a_valid_email_address">Please enter a valid email address.</string>
+    <string name="password_must_have_at_least_eight_characters">Password must have at least 8 characters.</string>
+    <string name="passwords_do_not_match">Passwords do not match.</string>
+    <string name="incorrect_email_or_password">Incorrect email or password.</string>
+    <string name="this_field_is_mandatory">This field is mandatory.</string>
+
+    <!-- Login fragment -->
     <string name="login_fragment_email_hint" translatable="false">@string/email</string>
     <string name="login_fragment_password_hint" translatable="false">@string/password</string>
     <string name="login_fragment_login_button_label" translatable="false">@string/login</string>
     <string name="login_fragment_not_registered_yet_label" translatable="false">@string/not_registered_yet</string>
     <string name="login_fragment_register_now_label" translatable="false">@string/register_now</string>
 
+    <!-- Registration fragment -->
     <string name="registration_fragment_username_hint" translatable="false">@string/username</string>
     <string name="registration_fragment_email_hint" translatable="false">@string/email</string>
     <string name="registration_fragment_password_hint" translatable="false">@string/password</string>
@@ -38,6 +47,7 @@
     <string name="registration_fragment_password_helper_text" translatable="false">@string/password_must_have_at_least_eight_characters</string>
     <string name="registration_fragment_next_button_label" translatable="false">@string/next</string>
 
+    <!-- About you fragment -->
     <string name="about_you_fragment_male_option" translatable="false">@string/male</string>
     <string name="about_you_fragment_female_option" translatable="false">@string/female</string>
     <string name="about_you_fragment_name_hint" translatable="false">@string/name</string>
@@ -47,6 +57,7 @@
     <string name="about_you_fragment_about_you_hint" translatable="false">@string/about_you</string>
     <string name="about_you_fragment_next_button_label" translatable="false">@string/next</string>
 
+    <!-- Roommate form fragment -->
     <string name="roommate_form_fragment_roommate_gender_hint" translatable="false">@string/roommates_gender</string>
     <string name="roommate_form_fragment_have_apartment_label" translatable="false">@string/have_apartment</string>
     <string name="roommate_form_fragment_price_hint" translatable="false">@string/apartment_price</string>
@@ -55,11 +66,11 @@
     <string name="roommate_form_fragment_price_range_title" translatable="false">@string/apartment_price_limit</string>
     <string name="roommate_form_fragment_next_button_label" translatable="false">@string/next</string>
 
+    <!-- Arrays -->
     <array name="your_gender_items">
         <item>@string/male</item>
         <item>@string/female</item>
     </array>
-
     <array name="roommates_gender_items">
         <item>@string/male</item>
         <item>@string/female</item>

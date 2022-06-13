@@ -110,7 +110,7 @@ public class LoginFragment extends Fragment {
                     FirebaseUser user = mAuth.getCurrentUser();
                     navigateToHomeActivity(rootView);
                 } else {
-                    Toast.makeText(getActivity(), "Krivo korisničko ime ili zaporka", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.incorrect_email_or_password), Toast.LENGTH_LONG).show();
                 }
             }
         });

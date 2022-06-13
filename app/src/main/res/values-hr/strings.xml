@@ -22,6 +22,13 @@
     <string name="not_registered_yet">Nemaš korisnički račun?</string>
     <string name="register_now"><u>Registriraj se!</u></string>
     <string name="login">Prijava</string>
+
+    <!-- Error messages -->
+    <string name="user_with_this_email_address_already_exists">Korisnik s ovom adresom e-pošte već postoji.</string>
+    <string name="please_enter_a_valid_email_address">Unesite ispravnu adresu e-pošte.</string>
     <string name="password_must_have_at_least_eight_characters">Zaporka mora imati najmanje 8 znakova.</string>
+    <string name="passwords_do_not_match">Zaporke se ne podudaraju.</string>
+    <string name="incorrect_email_or_password">Pogrešna adresa e-pošte ili zaporka.</string>
+    <string name="this_field_is_mandatory">Ovo polje je obavezno.</string>
 
 </resources>

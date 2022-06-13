@@ -27,9 +27,9 @@ public class RegistrationFragment extends Fragment {
     private View rootView;
     Button registrationConfirm;
 
-    private TextInputLayout passwordInput, passwordAgainInput, usernameInput, emailInput;
-    private TextInputEditText passwordEditText, passwordAgainEditText, usernameEditText, emailEditText;
-    private String email, password, passwordAgain,  username;
+    private TextInputLayout passwordInput, repeatPasswordInput, usernameInput, emailInput;
+    private TextInputEditText passwordEditText, repeatPasswordEditText, usernameEditText, emailEditText;
+    private String email, password, repeatPassword,  username;
     static boolean flag = false;
 
     private FirebaseAuth mAuth;
@@ -71,8 +71,8 @@ public class RegistrationFragment extends Fragment {
         passwordEditText = rootView.findViewById(R.id.passwordEditText);
         passwordInput = rootView.findViewById(R.id.passwordInput);
 
-        passwordAgainEditText = rootView.findViewById(R.id.repeatPasswordEditText);
-        passwordAgainInput = rootView.findViewById(R.id.repeatPasswordInput);
+        repeatPasswordEditText = rootView.findViewById(R.id.repeatPasswordEditText);
+        repeatPasswordInput = rootView.findViewById(R.id.repeatPasswordInput);
 
         usernameInput = rootView.findViewById(R.id.usernameInput);
         usernameEditText = rootView.findViewById(R.id.usernameEditText);
@@ -100,7 +100,7 @@ public class RegistrationFragment extends Fragment {
     private boolean checkRegisterForm(){
         email = emailEditText.getText().toString();
         password = passwordEditText.getText().toString().trim();
-        passwordAgain = passwordAgainEditText.getText().toString().trim();
+        repeatPassword = repeatPasswordEditText.getText().toString().trim();
         username = usernameEditText.getText().toString();
 
         /*if (username vec postoji u bazi){
@@ -109,20 +109,20 @@ public class RegistrationFragment extends Fragment {
         }*/
 
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            emailInput.setError("Email nije u dobrom obliku");
+            emailInput.setError(getResources().getString(R.string.please_enter_a_valid_email_address));
             return false;
         }else if(!checkEmailExistsOrNot()){
-            emailInput.setError("Email već postoji");
+            emailInput.setError(getResources().getString(R.string.user_with_this_email_address_already_exists));
             return false;
         }
 
         if (passwordEditText.getText().length() < 8) {
-            passwordInput.setError("Zaporka mora imati najmanje 8 znakova");
+            passwordInput.setError(getResources().getString(R.string.password_must_have_at_least_eight_characters));
             return false;
         }
 
-        if (!(password.equals(passwordAgain))){
-            passwordAgainInput.setError("Zaporke se ne podudaraju");
+        if (!(password.equals(repeatPassword))){
+            repeatPasswordInput.setError(getResources().getString(R.string.passwords_do_not_match));
             return false;
         }
 
