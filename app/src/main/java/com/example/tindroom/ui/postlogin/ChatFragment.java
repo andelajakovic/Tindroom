@@ -6,12 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tindroom.R;
+import com.example.tindroom.data.model.User;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 public class ChatFragment extends Fragment {
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -24,4 +33,6 @@ public class ChatFragment extends Fragment {
         NavDirections action = ChatFragmentDirections.actionChatFragmentToMessageFragment();
         Navigation.findNavController(view).navigate(action);
     }
+
+
 }
