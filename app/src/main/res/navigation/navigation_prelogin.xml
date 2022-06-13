@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_prelogin"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/registrationFragment">
 
     <fragment
         android:id="@+id/welcomeFragment"
@@ -47,8 +47,11 @@
         android:label="fragment_about_you"
         tools:layout="@layout/fragment_about_you" >
         <action
-            android:id="@+id/action_aboutYouFragment_to_roomateFormFragment"
-            app:destination="@id/roomateFormFragment" />
+            android:id="@+id/action_aboutYouFragment_to_roommateFormFragment"
+            app:destination="@id/roommateFormFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.example.tindroom.data.model.User" />
     </fragment>
     <activity
         android:id="@+id/homeActivity"
@@ -56,12 +59,12 @@
         android:label="activity_home"
         tools:layout="@layout/activity_home" />
     <fragment
-        android:id="@+id/roomateFormFragment"
+        android:id="@+id/roommateFormFragment"
         android:name="com.example.tindroom.ui.prelogin.RoommateFormFragment"
-        android:label="fragment_roomate_form"
+        android:label="fragment_roommate_form"
         tools:layout="@layout/fragment_roommate_form" >
         <action
-            android:id="@+id/action_roomateFormFragment_to_homeActivity"
+            android:id="@+id/action_roommateFormFragment_to_homeActivity"
             app:destination="@id/homeActivity" />
         <argument
             android:name="user"

@@ -1,28 +1,44 @@
 package com.example.tindroom.ui.prelogin;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.tindroom.R;
+import com.example.tindroom.data.model.User;
+import com.example.tindroom.network.RetrofitService;
+import com.example.tindroom.network.TindroomApiService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
+
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class RegistrationFragment extends Fragment {
+
+    private Retrofit retrofit;
+    private TindroomApiService tindroomApiService;
+    private User user;
 
     private View rootView;
     Button registrationConfirm;
@@ -30,7 +46,7 @@ public class RegistrationFragment extends Fragment {
     private TextInputLayout passwordInput, repeatPasswordInput, usernameInput, emailInput;
     private TextInputEditText passwordEditText, repeatPasswordEditText, usernameEditText, emailEditText;
     private String email, password, repeatPassword,  username;
-    static boolean flag = false;
+
 
     private FirebaseAuth mAuth;
     //private FirebaseDatabase database;
@@ -45,8 +61,14 @@ public class RegistrationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_registration, container, false);
 
+        retrofit = RetrofitService.getRetrofit();
+        tindroomApiService = retrofit.create(TindroomApiService.class);
+
+        user = new User();
+
         initViews();
         initListeners();
+
 
         return rootView;
     }
@@ -57,7 +79,7 @@ public class RegistrationFragment extends Fragment {
     }
 
     public void navigateToAboutYouFragment (View view) {
-        NavDirections action = RegistrationFragmentDirections.actionRegistrationFragmentToAboutYouFragment();
+        NavDirections action = RegistrationFragmentDirections.actionRegistrationFragmentToAboutYouFragment(user);
         Navigation.findNavController(view).navigate(action);
     }
 
@@ -88,16 +110,12 @@ public class RegistrationFragment extends Fragment {
         registrationConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (checkRegisterForm()){
-                    navigateToAboutYouFragment(rootView);
-                }else{
-                    // error
-                }
+                checkRegisterForm();
             }
         });
     }
 
-    private boolean checkRegisterForm(){
+    private void checkRegisterForm(){
         email = emailEditText.getText().toString();
         password = passwordEditText.getText().toString().trim();
         repeatPassword = repeatPasswordEditText.getText().toString().trim();
@@ -108,52 +126,61 @@ public class RegistrationFragment extends Fragment {
             return false;
         }*/
 
+        boolean emailPatternFlag = true, passwordLengthFlag = true, passwordsMatchFlag = true;
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             emailInput.setError(getResources().getString(R.string.please_enter_a_valid_email_address));
-            return false;
-        }else if(!checkEmailExistsOrNot()){
-            emailInput.setError(getResources().getString(R.string.user_with_this_email_address_already_exists));
-            return false;
+            emailPatternFlag = false;
         }
-
         if (passwordEditText.getText().length() < 8) {
             passwordInput.setError(getResources().getString(R.string.password_must_have_at_least_eight_characters));
-            return false;
+            passwordLengthFlag = false;
         }
-
         if (!(password.equals(repeatPassword))){
             repeatPasswordInput.setError(getResources().getString(R.string.passwords_do_not_match));
-            return false;
+            passwordsMatchFlag = false;
+        }
+        if (emailPatternFlag && passwordLengthFlag && passwordsMatchFlag) {
+            checkEmailExistsOrNot();
         }
 
+    }
+
+    private void insertUserToFirebase () {
         mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    // Andela ovjde cemo upisat ID
-                    //FirebaseDatabase database = FirebaseDatabase.getInstance("Users");
-                    //DatabaseReference myRef = database.getReference("message");
-                    //myRef.setValue("Hello, World!");
+                    user.setUserId(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
+                    user.setRegistered(false);
+                    Call<User> userCall = tindroomApiService.registerUser(user);
+                    userCall.enqueue(new Callback<User>() {
+
+                        @Override
+                        public void onResponse(final Call<User> call, final Response<User> response) {
+                            navigateToAboutYouFragment(rootView);
+                        }
+
+                        @Override
+                        public void onFailure(final Call<User> call, final Throwable t) {
+                            Toast.makeText(getContext(), getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });
-
-        return true;
-
     }
-    private boolean checkEmailExistsOrNot() {
+
+    private void checkEmailExistsOrNot() {
         mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
             @Override
             public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
                 if (task.getResult().getSignInMethods().size() == 0) {
-                    flag = true;
+                    insertUserToFirebase();
                 } else {
                     // email existed
-                    flag = false;
+                    emailInput.setError(getResources().getString(R.string.user_with_this_email_address_already_exists));
                 }
-
             }
         });
-        return flag;
     }
 }

@@ -50,6 +50,8 @@ import static android.app.Activity.RESULT_OK;
 
 public class AboutYouFragment extends Fragment {
 
+    private User user;
+
     private TextInputLayout nameInput, dateOfBirthInput, genderInput, facultyInput;
     private TextInputEditText nameEditText, dateOfBirthEditText, descriptionEditText;
     private AutoCompleteTextView genderDropdown, facultyDropdown;
@@ -65,6 +67,9 @@ public class AboutYouFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            user = getArguments().getParcelable("user");
+        }
     }
 
     @Override
@@ -221,12 +226,12 @@ public class AboutYouFragment extends Fragment {
                 && inputValidator.isInputEditTextFilled(genderDropdown, genderInput)
                 && inputValidator.isInputEditTextFilled(facultyDropdown, facultyInput)) {
 
-            User user = new User();
             user.setName(String.valueOf(nameEditText.getText()));
-            user.setDateOfBirth(String.valueOf(dateOfBirthEditText.getText()));
-            if (String.valueOf(genderDropdown.getText()).equals(getString(R.string.about_you_fragment_male_option))) {
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            user.setDateOfBirth(dateFormatter.format(dateCalendar.getTime()));
+            if (String.valueOf(genderDropdown.getText()).equals(getString(R.string.male))) {
                 user.setSex('M');
-            } else if (String.valueOf(genderDropdown.getText()).equals(getString(R.string.about_you_fragment_female_option))) {
+            } else if (String.valueOf(genderDropdown.getText()).equals(getString(R.string.female))) {
                 user.setSex('F');
             }
             for (Faculty faculty : facultyList) {
@@ -237,7 +242,7 @@ public class AboutYouFragment extends Fragment {
             }
             user.setDescription(String.valueOf(descriptionEditText.getText()));
 
-            NavDirections action = AboutYouFragmentDirections.actionAboutYouFragmentToRoomateFormFragment(user);
+            NavDirections action = AboutYouFragmentDirections.actionAboutYouFragmentToRoommateFormFragment(user);
             Navigation.findNavController(view).navigate(action);
 
         }

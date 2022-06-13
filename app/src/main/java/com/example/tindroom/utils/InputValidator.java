@@ -2,11 +2,13 @@ package com.example.tindroom.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 
+import com.example.tindroom.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -19,7 +21,7 @@ public class InputValidator {
     }
 
     public boolean isInputEditTextFilled(TextInputEditText textInputEditText, TextInputLayout textInputLayout) {
-        String message = "Ovo polje je obavezno.";
+        String message = context.getResources().getString(R.string.this_field_is_mandatory);
         String value = textInputEditText.getText().toString().trim();
         if (value.isEmpty()) {
             textInputLayout.setError(message);
@@ -32,7 +34,7 @@ public class InputValidator {
     }
 
     public boolean isInputEditTextFilled(AutoCompleteTextView autoCompleteTextView, TextInputLayout textInputLayout) {
-        String message = "Ovo polje je obavezno.";
+        String message = context.getResources().getString(R.string.this_field_is_mandatory);
         String value = autoCompleteTextView.getText().toString().trim();
         if (value.isEmpty()) {
             textInputLayout.setError(message);

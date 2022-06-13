@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Neighborhood {
     @SerializedName("neighborhood_id")
-    private long neighborhoodId;
+    private Long neighborhoodId;
 
     @SerializedName("name")
     private String name;
@@ -12,7 +12,7 @@ public class Neighborhood {
     @SerializedName("area")
     private String area;
 
-    public float getNeighborhoodId() {
+    public Long getNeighborhoodId() {
         return neighborhoodId;
     }
 

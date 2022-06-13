@@ -9,7 +9,10 @@ import com.google.gson.annotations.SerializedName;
 @SuppressLint("ParcelCreator")
 public class User implements Parcelable {
     @SerializedName("user_id")
-    private int userId;
+    private String userId;
+
+    @SerializedName("is_registered")
+    private int isRegistered;
 
     @SerializedName("name")
     private String name;
@@ -45,10 +48,22 @@ public class User implements Parcelable {
     private double priceTo;
 
     @SerializedName("neighborhood_id")
-    private Long idNeighborhood;
+    private long idNeighborhood;
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
+    }
+
+    public void setUserId(final String userId) {
+        this.userId = userId;
+    }
+
+    public boolean isRegistered() {
+        return  isRegistered > 0 ;
+    }
+
+    public void setRegistered(final boolean isRegistered) {
+        this.isRegistered = isRegistered ? 1 : 0;
     }
 
     public String getName() {
@@ -139,11 +154,11 @@ public class User implements Parcelable {
         this.priceTo = priceTo;
     }
 
-    public Long getIdNeighborhood() {
+    public long getIdNeighborhood() {
         return idNeighborhood;
     }
 
-    public void setIdNeighborhood(final Long idNeighborhood) {
+    public void setIdNeighborhood(final long idNeighborhood) {
         this.idNeighborhood = idNeighborhood;
     }
 
@@ -158,6 +173,7 @@ public class User implements Parcelable {
     public String toString() {
         return "User{" +
                 "userId=" + userId +
+                ", isRegistered=" + (isRegistered > 0) +
                 ", name='" + name + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", description='" + description + '\'' +

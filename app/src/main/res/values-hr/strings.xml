@@ -14,7 +14,7 @@
     <string name="apartment_price">Cijena stana (kuna po osobi)</string>
     <string name="neighborhood">Kvart</string>
     <string name="roommate_age_limit">Dobna granica cimera: %s - %s</string>
-    <string name="apartment_price_limit">Cijena stana do (kuna po osobi): %s</string>
+    <string name="apartment_price_range">Raspon cijene stana (kuna po osobi): %s - %s kn</string>
     <string name="username">Korisničko ime</string>
     <string name="email">Adresa e-pošte</string>
     <string name="password">Zaporka</string>
@@ -30,5 +30,6 @@
     <string name="passwords_do_not_match">Zaporke se ne podudaraju.</string>
     <string name="incorrect_email_or_password">Pogrešna adresa e-pošte ili zaporka.</string>
     <string name="this_field_is_mandatory">Ovo polje je obavezno.</string>
+    <string name="unexpected_error_occurred">Došlo je do neočekivane pogreške.</string>
 
 </resources>

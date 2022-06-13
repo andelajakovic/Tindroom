@@ -28,15 +28,15 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
+            android:id="@+id/roommateAgeLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/linear_layout_margin"
-            android:layout_marginStart="@dimen/title_start_margin"
-            android:layout_marginEnd="@dimen/linear_layout_margin"
+            android:layout_margin="@dimen/linear_layout_margin"
             style="@style/TitleTextViewStyle"
             android:text="@string/roommate_form_fragment_roommate_age_title" />
 
         <com.google.android.material.slider.RangeSlider
+            android:id="@+id/roommateAgeSlider"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_margin="@dimen/linear_layout_margin"
@@ -46,6 +46,7 @@
             app:values="@array/initial_age_range_values" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/haveApartmentSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/linear_layout_margin"
@@ -54,7 +55,7 @@
             android:text="@string/roommate_form_fragment_have_apartment_label"/>
 
         <LinearLayout
-            android:id="@+id/have_apartment_layout"
+            android:id="@+id/haveApartmentLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -84,7 +85,7 @@
                 android:hint="@string/roommate_form_fragment_neighborhood_hint">
 
                 <AutoCompleteTextView
-                    android:id="@+id/facultyDropdown"
+                    android:id="@+id/neighborhoodDropdown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none" />
@@ -93,33 +94,34 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/need_apartment_layout"
+            android:id="@+id/needApartmentLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:visibility="gone"
-            android:orientation="vertical">
+            tools:visibility="visible">
 
             <TextView
+                android:id="@+id/apartmentPriceLabel"
+                style="@style/TitleTextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/linear_layout_margin"
-                android:layout_marginStart="@dimen/title_start_margin"
-                android:layout_marginEnd="@dimen/linear_layout_margin"
-                style="@style/TitleTextViewStyle"
+                android:layout_margin="@dimen/linear_layout_margin"
                 android:text="@string/roommate_form_fragment_price_range_title" />
 
-            <com.google.android.material.slider.Slider
-                android:layout_height="wrap_content"
+            <com.google.android.material.slider.RangeSlider
+                android:id="@+id/apartmentPriceSlider"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/linear_layout_margin"
                 android:valueFrom="500"
                 android:valueTo="5000"
-                android:value="2500"/>
+                app:values="@array/initial_price_range_values" />
 
         </LinearLayout>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/navigateToHomeActivityButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

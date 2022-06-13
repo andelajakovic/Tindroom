@@ -15,7 +15,7 @@
     <string name="apartment_price">Apartment price (HRK per person)</string>
     <string name="neighborhood">Neighborhood</string>
     <string name="roommate_age_limit">Roommate\'s age limit: %s - %s</string>
-    <string name="apartment_price_limit">Apartment price limit (HRK per person): %s</string>
+    <string name="apartment_price_range">Apartment price range (HRK per person): %s - %s HRK </string>
     <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -31,6 +31,7 @@
     <string name="passwords_do_not_match">Passwords do not match.</string>
     <string name="incorrect_email_or_password">Incorrect email or password.</string>
     <string name="this_field_is_mandatory">This field is mandatory.</string>
+    <string name="unexpected_error_occurred">An unexpected error occurred.</string>
 
     <!-- Login fragment -->
     <string name="login_fragment_email_hint" translatable="false">@string/email</string>
@@ -63,7 +64,7 @@
     <string name="roommate_form_fragment_price_hint" translatable="false">@string/apartment_price</string>
     <string name="roommate_form_fragment_neighborhood_hint" translatable="false">@string/neighborhood</string>
     <string name="roommate_form_fragment_roommate_age_title" translatable="false">@string/roommate_age_limit</string>
-    <string name="roommate_form_fragment_price_range_title" translatable="false">@string/apartment_price_limit</string>
+    <string name="roommate_form_fragment_price_range_title" translatable="false">@string/apartment_price_range</string>
     <string name="roommate_form_fragment_next_button_label" translatable="false">@string/next</string>
 
     <!-- Arrays -->

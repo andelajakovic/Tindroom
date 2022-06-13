@@ -37,6 +37,6 @@ public interface TindroomApiService {
     Call<User> registerUser(@Body User post);
 
     @PATCH("users/update/{user_id}")
-    Call<User> updateUserById(@Path("user_id") int user_id, @Body User user);
+    Call<User> updateUserById(@Path("user_id") String user_id, @Body User user);
 }
 
