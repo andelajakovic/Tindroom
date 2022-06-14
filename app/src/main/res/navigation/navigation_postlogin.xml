@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_postlogin"
-    app:startDestination="@id/swipeFragment">
+    app:startDestination="@id/myProfileFragment">
 
     <fragment
         android:id="@+id/swipeFragment"
