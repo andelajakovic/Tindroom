@@ -68,7 +68,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
             holder.message.setText(last.toString());
         }*/
 
-        int idOfUser = model.getUserId();
+        String idOfUser = model.getUserId();
         mStorageReference = FirebaseStorage.getInstance().getReference().child("images/" + FOLDER_NAME + "/usr" + idOfUser + "/pic1");
 
         Context cont = context.getApplicationContext();
@@ -77,8 +77,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
                 .error(R.drawable.avatar_placeholder)
                 .into(holder.profilePic);
 
-        String myid = Integer.toString(sessionUser.getUserId());
-        String userId = Integer.toString(model.getUserId());
+        String myid = sessionUser.getUserId();
+        String userId = model.getUserId();
         ArrayList<Chat> chatList = new ArrayList<Chat>();
 
         DatabaseReference reference = FirebaseDatabase.getInstance("https://com-example-cn-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Chats");

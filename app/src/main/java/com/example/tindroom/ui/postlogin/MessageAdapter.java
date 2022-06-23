@@ -52,7 +52,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Viewhold
         // to set data to textview and imageview of each card layout
         Chat model = chatList.get(position);
 
-        String sessionId = Integer.toString(sessionUser.getUserId());
+        String sessionId = sessionUser.getUserId();
 
         if(chatList.get(position).getSender().equals(sessionId)){
             holder.myMessage.setText("" + model.getMessage());
@@ -89,7 +89,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Viewhold
             myMessage = itemView.findViewById(R.id.myMessage);
             othersLayout = itemView.findViewById(R.id.othersLayout);
 
-            int idOfUser = chatUser.getUserId();
+            String idOfUser = chatUser.getUserId();
             mStorageReference = FirebaseStorage.getInstance().getReference().child("images/"+FOLDER_NAME+"/usr" + idOfUser + "/pic1");
 
             Context cont = context.getApplicationContext();

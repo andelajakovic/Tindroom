@@ -59,7 +59,6 @@ public class RoommateFormFragment extends Fragment {
 
     private Retrofit retrofit;
     private TindroomApiService tindroomApiService;
-    private DatabaseReference databaseReference;
     private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
     private View rootView;
@@ -81,7 +80,6 @@ public class RoommateFormFragment extends Fragment {
         if (getArguments() != null) {
             user = getArguments().getParcelable("user");
         }
-        FirebaseDatabase.getInstance().getReference().child("Images");
 
     }
 
