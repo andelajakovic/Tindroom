@@ -20,8 +20,11 @@
     <string name="password">Zaporka</string>
     <string name="repeat_password">Ponovni unos zaporke</string>
     <string name="not_registered_yet">Nemaš korisnički račun?</string>
-    <string name="register_now"><u>Registriraj se!</u></string>
+    <string name="register_now">Registriraj se!</string>
     <string name="login">Prijava</string>
+    <string name="already_have_an_account">Već imaš račun?</string>
+    <string name="login_now">Prijavi se!</string>
+    <string name="register">Registriraj se</string>
 
     <!-- Error messages -->
     <string name="user_with_this_email_address_already_exists">Korisnik s ovom adresom e-pošte već postoji.</string>

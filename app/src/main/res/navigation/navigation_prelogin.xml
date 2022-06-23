@@ -3,19 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_prelogin"
-    app:startDestination="@id/registrationFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
-        android:id="@+id/welcomeFragment"
-        android:name="com.example.tindroom.ui.prelogin.WelcomeFragment"
-        android:label="fragment_welcome"
-        tools:layout="@layout/fragment_welcome" >
+        android:id="@+id/splashFragment"
+        android:name="com.example.tindroom.ui.prelogin.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
         <action
-            android:id="@+id/action_welcomeFragment_to_loginFragment"
+            android:id="@+id/action_splashFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
-            android:id="@+id/action_welcomeFragment_to_registrationFragment"
-            app:destination="@id/registrationFragment" />
+            android:id="@+id/action_splashFragment_to_homeActivity"
+            app:destination="@id/homeActivity" />
+        <action
+            android:id="@+id/action_splashFragment_to_aboutYouFragment"
+            app:destination="@id/aboutYouFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"

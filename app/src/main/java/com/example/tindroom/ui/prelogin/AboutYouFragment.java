@@ -3,6 +3,7 @@ package com.example.tindroom.ui.prelogin;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -56,13 +57,13 @@ public class AboutYouFragment extends Fragment {
     private TextInputEditText nameEditText, dateOfBirthEditText, descriptionEditText;
     private AutoCompleteTextView genderDropdown, facultyDropdown;
     private List<Faculty> facultyList;
-    private Retrofit retrofit;
     private TindroomApiService tindroomApiService;
     private View rootView;
     private Calendar dateCalendar;
     private ImageView avatarImageView;
     private ImageButton editImageButton;
     private Button nextButton;
+    private Uri imageUri;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,7 @@ public class AboutYouFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_about_you, container, false);
 
-        retrofit = RetrofitService.getRetrofit();
+        Retrofit retrofit = RetrofitService.getRetrofit();
         tindroomApiService = retrofit.create(TindroomApiService.class);
 
         initViews();
@@ -117,11 +118,11 @@ public class AboutYouFragment extends Fragment {
 
         setGenderMenuItems();
         setFacultyMenuItems();
+
     }
 
     private void initListeners() {
         dateOfBirthEditText.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(final View view) {
                 SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
@@ -150,40 +151,19 @@ public class AboutYouFragment extends Fragment {
 
         nextButton.setOnClickListener(new View.OnClickListener() {
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(final View view) {
-                navigateToRoommateFormFragment(view);
+                if (checkUserInput()) {
+                    updateUserInfo();
+                    navigateToRoommateFormFragment(view);
+                }
             }
         });
     }
 
-    private void chooseImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, ""), 1);
-    }
-
-    @Override
-    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
-            try {
-                Bitmap avatar = ImageHandler.handleSamplingAndRotationBitmap(getContext(), data.getData());
-                Glide.with(rootView)
-                     .asBitmap()
-                     .load(avatar)
-                     .into(avatarImageView);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            editImageButton.setImageDrawable(getResources().getDrawable(R.drawable.edit_icon));
-        }
-    }
-
     private void setGenderMenuItems() {
-        String[] items =  getResources().getStringArray(R.array.your_gender_items);
+        String[] items = getResources().getStringArray(R.array.your_gender_items);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items);
         genderDropdown.setAdapter(arrayAdapter);
@@ -217,37 +197,66 @@ public class AboutYouFragment extends Fragment {
         });
     }
 
-    public void navigateToRoommateFormFragment(View view) {
+    private void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, ""), 1);
+    }
 
+    @Override
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            try {
+                imageUri = data.getData();
+                Bitmap bitmap = ImageHandler.handleSamplingAndRotationBitmap(requireContext(), data.getData());
+                Glide.with(rootView)
+                     .asBitmap()
+                     .load(bitmap)
+                     .into(avatarImageView);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private boolean checkUserInput() {
         InputValidator inputValidator = new InputValidator(getContext());
 
-        if (inputValidator.isInputEditTextFilled(nameEditText, nameInput)
-                && inputValidator.isInputEditTextFilled(dateOfBirthEditText, dateOfBirthInput)
-                && inputValidator.isInputEditTextFilled(genderDropdown, genderInput)
-                && inputValidator.isInputEditTextFilled(facultyDropdown, facultyInput)) {
+        boolean nameNotEmptyFlag = inputValidator.isInputEditTextFilled(nameEditText, nameInput);
+        boolean dateOfBirthNotEmptyFlag = inputValidator.isInputEditTextFilled(dateOfBirthEditText, dateOfBirthInput);
+        boolean genderNotEmptyFlag = inputValidator.isInputEditTextFilled(genderDropdown, genderInput);
+        boolean facultyNotEmptyFlag = inputValidator.isInputEditTextFilled(facultyDropdown, facultyInput);
 
-            user.setName(String.valueOf(nameEditText.getText()));
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            user.setDateOfBirth(dateFormatter.format(dateCalendar.getTime()));
-            if (String.valueOf(genderDropdown.getText()).equals(getString(R.string.male))) {
-                user.setSex('M');
-            } else if (String.valueOf(genderDropdown.getText()).equals(getString(R.string.female))) {
-                user.setSex('F');
-            }
-            for (Faculty faculty : facultyList) {
-                if (faculty.getName().equals(String.valueOf(facultyDropdown.getText()))) {
-                    user.setIdFaculty(faculty.getFacultyId());
-                    break;
-                }
-            }
-            user.setDescription(String.valueOf(descriptionEditText.getText()));
+        return nameNotEmptyFlag && dateOfBirthNotEmptyFlag && genderNotEmptyFlag && facultyNotEmptyFlag;
+    }
 
-            NavDirections action = AboutYouFragmentDirections.actionAboutYouFragmentToRoommateFormFragment(user);
-            Navigation.findNavController(view).navigate(action);
-
+    private void updateUserInfo() {
+        if(imageUri != null) {
+            user.setImageUri(imageUri.toString());
         }
+        user.setName(String.valueOf(nameEditText.getText()));
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        user.setDateOfBirth(dateFormatter.format(dateCalendar.getTime()));
+        if (String.valueOf(genderDropdown.getText()).equals(getString(R.string.male))) {
+            user.setGender('M');
+        } else if (String.valueOf(genderDropdown.getText()).equals(getString(R.string.female))) {
+            user.setGender('F');
+        }
+        for (Faculty faculty : facultyList) {
+            if (faculty.getName().equals(String.valueOf(facultyDropdown.getText()))) {
+                user.setIdFaculty(faculty.getFacultyId());
+                break;
+            }
+        }
+        user.setDescription(String.valueOf(descriptionEditText.getText()));
+    }
 
-
+    public void navigateToRoommateFormFragment(View view) {
+        NavDirections action = AboutYouFragmentDirections.actionAboutYouFragmentToRoommateFormFragment(user);
+        Navigation.findNavController(view).navigate(action);
     }
 
 }

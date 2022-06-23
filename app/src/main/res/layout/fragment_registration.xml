@@ -6,33 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".ui.prelogin.RegistrationFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/register_constraint_layout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
-
-        <Button
-            android:id="@+id/registrationButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/registration_fragment_next_button_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/repeatPasswordInput" />
+        android:orientation="vertical"
+        android:padding="16dp" >
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_marginTop="24dp"
-            android:layout_weight="1"
-            android:src="@drawable/avatar_placeholder"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_margin="@dimen/linear_layout_margin"
+            android:layout_gravity="center"
+            android:src="@drawable/logo_placeholder" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailInput"
@@ -42,9 +28,6 @@
             android:hint="@string/registration_fragment_email_hint"
             app:endIconMode="clear_text"
             app:errorEnabled="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/usernameInput"
             app:startIconDrawable="@drawable/ic_baseline_email_24">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -52,6 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -59,21 +43,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/linear_layout_margin"
-            android:layout_marginTop="32dp"
             android:hint="@string/registration_fragment_password_hint"
-            app:endIconMode="password_toggle"
+            app:passwordToggleEnabled="true"
             app:helperText="@string/registration_fragment_password_helper_text"
             app:helperTextEnabled="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emailInput"
             app:startIconDrawable="@drawable/ic_baseline_vpn_key_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -83,41 +63,47 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/linear_layout_margin"
             android:hint="@string/registration_fragment_repeat_password_hint"
-            app:endIconMode="password_toggle"
+            app:passwordToggleEnabled="true"
             app:errorEnabled="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/passwordInput"
             app:startIconDrawable="@drawable/ic_baseline_vpn_key_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/repeatPasswordEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/usernameInput"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/registrationButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/linear_layout_margin"
-            android:hint="@string/registration_fragment_username_hint"
-            app:errorEnabled="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:startIconDrawable="@drawable/my_profile_icon">
+            android:layout_gravity="center"
+            style="@style/PrimaryButtonStyle"
+            android:text="@string/registration_fragment_register_button_label" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/usernameEditText"
-                android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/linear_layout_margin"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:text="@string/registration_fragment_already_have_an_account_label"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/linkToLoginFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_marginStart="4dp"
+                android:text="@string/registration_fragment_login_now_label" />
+        </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </ScrollView>
 

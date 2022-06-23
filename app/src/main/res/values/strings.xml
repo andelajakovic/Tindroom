@@ -21,8 +21,11 @@
     <string name="password">Password</string>
     <string name="repeat_password">Repeat password</string>
     <string name="not_registered_yet">Not registered yet?</string>
-    <string name="register_now"><u>Register now!</u></string>
-    <string name="login">Login</string>
+    <string name="register_now">Register now!</string>
+    <string name="login">Log in</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="login_now">Log in!</string>
+    <string name="register">Register</string>
 
     <!-- Error messages -->
     <string name="user_with_this_email_address_already_exists">A user with this email address already exists.</string>
@@ -47,6 +50,9 @@
     <string name="registration_fragment_repeat_password_hint" translatable="false">@string/repeat_password</string>
     <string name="registration_fragment_password_helper_text" translatable="false">@string/password_must_have_at_least_eight_characters</string>
     <string name="registration_fragment_next_button_label" translatable="false">@string/next</string>
+    <string name="registration_fragment_already_have_an_account_label" translatable="false">@string/already_have_an_account</string>
+    <string name="registration_fragment_login_now_label" translatable="false">@string/login_now</string>
+    <string name="registration_fragment_register_button_label" translatable="false">@string/register</string>
 
     <!-- About you fragment -->
     <string name="about_you_fragment_male_option" translatable="false">@string/male</string>
@@ -72,6 +78,7 @@
         <item>@string/male</item>
         <item>@string/female</item>
     </array>
+
     <array name="roommates_gender_items">
         <item>@string/male</item>
         <item>@string/female</item>

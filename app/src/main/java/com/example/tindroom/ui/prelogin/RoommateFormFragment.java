@@ -1,5 +1,7 @@
 package com.example.tindroom.ui.prelogin;
 
+import android.content.ContentResolver;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -17,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -26,17 +29,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tindroom.R;
-import com.example.tindroom.data.model.Faculty;
+import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.Neighborhood;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
 import com.example.tindroom.utils.InputValidator;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.slider.RangeSlider;
-import com.google.android.material.slider.Slider;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +59,9 @@ public class RoommateFormFragment extends Fragment {
 
     private Retrofit retrofit;
     private TindroomApiService tindroomApiService;
+    private DatabaseReference databaseReference;
+    private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+
     private View rootView;
 
     private List<Neighborhood> neighborhoodList;
@@ -68,6 +81,8 @@ public class RoommateFormFragment extends Fragment {
         if (getArguments() != null) {
             user = getArguments().getParcelable("user");
         }
+        FirebaseDatabase.getInstance().getReference().child("Images");
+
     }
 
     @Override
@@ -149,48 +164,8 @@ public class RoommateFormFragment extends Fragment {
             @Override
             public void onClick(final View view) {
                 if(checkUserInput()) {
-                    if (String.valueOf(roommateGenderDropdown.getText()).equals(getString(R.string.male))) {
-                        user.setRoommateSex('M');
-                    } else if (String.valueOf(roommateGenderDropdown.getText()).equals(getString(R.string.female))) {
-                        user.setRoommateSex('F');
-                    } else {
-                        user.setRoommateSex('A');
-                    }
-                    user.setRoommateAgeFrom(roommateAgeSlider.getValues().get(0).intValue());
-                    user.setRoommateAgeTo(roommateAgeSlider.getValues().get(1).intValue());
-                    if (haveApartmentSwitch.isChecked()) {
-                        user.setHasApartment(true);
-                        user.setPriceFrom(Double.parseDouble(String.valueOf((priceEditText.getText()))));
-                        for (Neighborhood neighborhood : neighborhoodList) {
-                            if (neighborhood.getName().equals(String.valueOf(neighborhoodDropdown.getText()))) {
-                                user.setIdNeighborhood(neighborhood.getNeighborhoodId());
-                                break;
-                            }
-                        }
-                    } else {
-                        user.setHasApartment(false);
-                        user.setPriceFrom(apartmentPriceSlider.getValues().get(0));
-                        user.setPriceTo(apartmentPriceSlider.getValues().get(1));
-                    }
-                    user.setRegistered(true);
-                    updateUser();
+                    updateUserInfo();
                 }
-            }
-        });
-    }
-
-    private void updateUser() {
-        Call<User> userCall = tindroomApiService.updateUserById(user.getUserId(), user);
-        userCall.enqueue(new Callback<User>() {
-
-            @Override
-            public void onResponse(final Call<User> call, final Response<User> response) {
-                navigateToHomeActivity(rootView);
-            }
-
-            @Override
-            public void onFailure(final Call<User> call, final Throwable t) {
-                Toast.makeText(getContext(), getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -236,6 +211,91 @@ public class RoommateFormFragment extends Fragment {
                 Log.d("neighborhoods FAILURE", t.toString());
             }
         });
+    }
+
+    private void updateUserInfo() {
+        if (String.valueOf(roommateGenderDropdown.getText()).equals(getString(R.string.male))) {
+            user.setRoommateGender('M');
+        } else if (String.valueOf(roommateGenderDropdown.getText()).equals(getString(R.string.female))) {
+            user.setRoommateGender('F');
+        } else {
+            user.setRoommateGender('A');
+        }
+        user.setRoommateAgeFrom(roommateAgeSlider.getValues().get(0).intValue());
+        user.setRoommateAgeTo(roommateAgeSlider.getValues().get(1).intValue());
+        if (haveApartmentSwitch.isChecked()) {
+            user.setHasApartment(true);
+            user.setPriceFrom(Double.parseDouble(String.valueOf((priceEditText.getText()))));
+            for (Neighborhood neighborhood : neighborhoodList) {
+                if (neighborhood.getName().equals(String.valueOf(neighborhoodDropdown.getText()))) {
+                    user.setIdNeighborhood(neighborhood.getNeighborhoodId());
+                    break;
+                } else {
+                    user.setIdNeighborhood(null);
+                }
+            }
+        } else {
+            user.setHasApartment(false);
+            user.setPriceFrom(apartmentPriceSlider.getValues().get(0));
+            user.setPriceTo(apartmentPriceSlider.getValues().get(1));
+        }
+        if(user.getImageUri() != null) {
+            uploadImageToFirebase(Uri.parse(user.getImageUri()));
+        } else {
+            updateUser();
+        }
+    }
+
+    private void updateUser() {
+        Call<User> userCall = tindroomApiService.updateUserById(user.getUserId(), user);
+        userCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(final Call<User> call, final Response<User> response) {
+                SharedPreferencesStorage.setSessionUser(requireContext(), user);
+                navigateToHomeActivity(rootView);
+            }
+
+            @Override
+            public void onFailure(final Call<User> call, final Throwable t) {
+                Toast.makeText(getContext(), getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void uploadImageToFirebase(Uri uri) {
+        StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(uri));
+        fileRef.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+            @Override
+            public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+
+                    @Override
+                    public void onSuccess(final Uri uri) {
+                        user.setImageUrl(uri.toString());
+                        updateUser();
+                    }
+                });
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+
+            @Override
+            public void onProgress(@NonNull final UploadTask.TaskSnapshot taskSnapshot) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+
+            @Override
+            public void onFailure(@NonNull final Exception e) {
+
+            }
+        });
+    }
+
+    private String getFileExtension(final Uri uri) {
+        ContentResolver contentResolver = requireContext().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
     private boolean checkUserInput() {

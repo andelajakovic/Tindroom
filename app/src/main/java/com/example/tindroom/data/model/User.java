@@ -1,6 +1,7 @@
 package com.example.tindroom.data.model;
 
 import android.annotation.SuppressLint;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -23,14 +24,14 @@ public class User implements Parcelable {
     @SerializedName("description")
     private String description;
 
-    @SerializedName("sex")
-    private char sex;
+    @SerializedName("gender")
+    private char gender;
 
     @SerializedName("faculty_id")
     private long idFaculty;
 
-    @SerializedName("roommate_sex")
-    private char roommateSex;
+    @SerializedName("roommate_gender")
+    private char roommateGender;
 
     @SerializedName("roommate_age_from")
     private int roommateAgeFrom;
@@ -48,7 +49,12 @@ public class User implements Parcelable {
     private double priceTo;
 
     @SerializedName("neighborhood_id")
-    private long idNeighborhood;
+    private Long idNeighborhood;
+
+    @SerializedName("image_url")
+    private String imageUrl;
+
+    private String imageUri;
 
     public String getUserId() {
         return userId;
@@ -90,12 +96,12 @@ public class User implements Parcelable {
         this.description = description;
     }
 
-    public char getSex() {
-        return sex;
+    public char getGender() {
+        return gender;
     }
 
-    public void setSex(final char sex) {
-        this.sex = sex;
+    public void setGender(final char gender) {
+        this.gender = gender;
     }
 
     public long getIdFaculty() {
@@ -106,12 +112,12 @@ public class User implements Parcelable {
         this.idFaculty = idFaculty;
     }
 
-    public char getRoommateSex() {
-        return roommateSex;
+    public char getRoommateGender() {
+        return roommateGender;
     }
 
-    public void setRoommateSex(final char roommateSex) {
-        this.roommateSex = roommateSex;
+    public void setRoommateGender(final char roommateGender) {
+        this.roommateGender = roommateGender;
     }
 
     public int getRoommateAgeFrom() {
@@ -154,12 +160,28 @@ public class User implements Parcelable {
         this.priceTo = priceTo;
     }
 
-    public long getIdNeighborhood() {
+    public Long getIdNeighborhood() {
         return idNeighborhood;
     }
 
-    public void setIdNeighborhood(final long idNeighborhood) {
+    public void setIdNeighborhood(final Long idNeighborhood) {
         this.idNeighborhood = idNeighborhood;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(final String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(final String imageUri) {
+        this.imageUri = imageUri;
     }
 
     @SerializedName("feedback")
@@ -177,9 +199,9 @@ public class User implements Parcelable {
                 ", name='" + name + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", description='" + description + '\'' +
-                ", sex=" + sex +
+                ", sex=" + gender +
                 ", idFaculty=" + idFaculty +
-                ", roommateSex=" + roommateSex +
+                ", roommateSex=" + roommateGender +
                 ", roommateAgeFrom=" + roommateAgeFrom +
                 ", roommateAgeTo=" + roommateAgeTo +
                 ", hasApartment=" + (hasApartment > 0) +
@@ -198,4 +220,5 @@ public class User implements Parcelable {
     public void writeToParcel(final Parcel parcel, final int i) {
 
     }
+
 }

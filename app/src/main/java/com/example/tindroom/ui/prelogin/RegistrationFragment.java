@@ -1,15 +1,16 @@
 package com.example.tindroom.ui.prelogin;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tindroom.R;
+import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
@@ -19,7 +20,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
 
 import java.util.Objects;
@@ -36,20 +36,19 @@ import retrofit2.Retrofit;
 
 public class RegistrationFragment extends Fragment {
 
+    private FirebaseAuth mAuth;
     private Retrofit retrofit;
     private TindroomApiService tindroomApiService;
     private User user;
 
     private View rootView;
-    Button registrationConfirm;
+    private Button registrationConfirm;
+    private TextView linkToLoginFragment;
+    private TextInputLayout passwordInput, repeatPasswordInput, emailInput;
+    private TextInputEditText passwordEditText, repeatPasswordEditText, emailEditText;
 
-    private TextInputLayout passwordInput, repeatPasswordInput, usernameInput, emailInput;
-    private TextInputEditText passwordEditText, repeatPasswordEditText, usernameEditText, emailEditText;
-    private String email, password, repeatPassword,  username;
+    private String email, password, repeatPassword;
 
-
-    private FirebaseAuth mAuth;
-    //private FirebaseDatabase database;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +68,6 @@ public class RegistrationFragment extends Fragment {
         initViews();
         initListeners();
 
-
         return rootView;
     }
 
@@ -79,6 +77,7 @@ public class RegistrationFragment extends Fragment {
     }
 
     public void navigateToAboutYouFragment (View view) {
+        SharedPreferencesStorage.setSessionUser(requireContext(), user);
         NavDirections action = RegistrationFragmentDirections.actionRegistrationFragmentToAboutYouFragment(user);
         Navigation.findNavController(view).navigate(action);
     }
@@ -96,14 +95,11 @@ public class RegistrationFragment extends Fragment {
         repeatPasswordEditText = rootView.findViewById(R.id.repeatPasswordEditText);
         repeatPasswordInput = rootView.findViewById(R.id.repeatPasswordInput);
 
-        usernameInput = rootView.findViewById(R.id.usernameInput);
-        usernameEditText = rootView.findViewById(R.id.usernameEditText);
-
         emailInput = rootView.findViewById(R.id.emailInput);
         emailEditText = rootView.findViewById(R.id.emailEditText);
 
         registrationConfirm = rootView.findViewById(R.id.registrationButton);
-
+        linkToLoginFragment = rootView.findViewById(R.id.linkToLoginFragment);
     }
 
     public void initListeners(){
@@ -113,18 +109,20 @@ public class RegistrationFragment extends Fragment {
                 checkRegisterForm();
             }
         });
+
+        linkToLoginFragment.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(final View view) {
+                navigateToLoginFragment(view);
+            }
+        });
     }
 
     private void checkRegisterForm(){
         email = emailEditText.getText().toString();
         password = passwordEditText.getText().toString().trim();
         repeatPassword = repeatPasswordEditText.getText().toString().trim();
-        username = usernameEditText.getText().toString();
-
-        /*if (username vec postoji u bazi){
-            usernameInput.setError("Korisničko ime već postoji!");
-            return false;
-        }*/
 
         boolean emailPatternFlag = true, passwordLengthFlag = true, passwordsMatchFlag = true;
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
@@ -140,21 +138,36 @@ public class RegistrationFragment extends Fragment {
             passwordsMatchFlag = false;
         }
         if (emailPatternFlag && passwordLengthFlag && passwordsMatchFlag) {
-            checkEmailExistsOrNot();
+            checkIfEmailExists();
         }
 
     }
 
+    private void checkIfEmailExists() {
+        mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+            // TODO (Andrea: napraviti loading)
+            @Override
+            public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                if (task.getResult().getSignInMethods().size() == 0) {
+                    insertUserToFirebase();
+                } else {
+                    emailInput.setError(getResources().getString(R.string.user_with_this_email_address_already_exists));
+                }
+            }
+        });
+    }
+
     private void insertUserToFirebase () {
         mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            // TODO (Andrea: napraviti loading)
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     user.setUserId(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
                     user.setRegistered(false);
                     Call<User> userCall = tindroomApiService.registerUser(user);
-                    userCall.enqueue(new Callback<User>() {
 
+                    userCall.enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(final Call<User> call, final Response<User> response) {
                             navigateToAboutYouFragment(rootView);
@@ -165,20 +178,6 @@ public class RegistrationFragment extends Fragment {
                             Toast.makeText(getContext(), getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_SHORT).show();
                         }
                     });
-                }
-            }
-        });
-    }
-
-    private void checkEmailExistsOrNot() {
-        mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
-            @Override
-            public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
-                if (task.getResult().getSignInMethods().size() == 0) {
-                    insertUserToFirebase();
-                } else {
-                    // email existed
-                    emailInput.setError(getResources().getString(R.string.user_with_this_email_address_already_exists));
                 }
             }
         });
