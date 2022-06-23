@@ -106,7 +106,7 @@ public class AboutYouFragment extends Fragment {
         genderInput = rootView.findViewById(R.id.genderInput);
         genderDropdown = rootView.findViewById(R.id.genderDropdown);
 
-        avatarImageView = rootView.findViewById(R.id.avatarImageView);
+        avatarImageView = rootView.findViewById(R.id.profilePicture);
 
         editImageButton = rootView.findViewById(R.id.editImageButton);
 
