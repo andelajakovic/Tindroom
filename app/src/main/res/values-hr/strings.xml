@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="male">Muško</string>
+    <string name="female">Žensko</string>
+    <string name="any">Svejedno</string>
+    <string name="name">Ime</string>
+    <string name="date_of_birth">Datum rođenja</string>
+    <string name="gender">Spol</string>
+    <string name="faculty">Fakultet</string>
+    <string name="about_you">O tebi</string>
+    <string name="next">Dalje</string>
+    <string name="roommates_gender">Spol cimera</string>
+    <string name="have_apartment">Imam stan: </string>
+    <string name="apartment_price">Cijena stana (kuna po osobi)</string>
+    <string name="neighborhood">Kvart</string>
+    <string name="roommate_age_limit">Dobna granica cimera: %s - %s</string>
+    <string name="apartment_price_range">Raspon cijene stana (kuna po osobi): %s - %s kn</string>
+    <string name="username">Korisničko ime</string>
+    <string name="email">Adresa e-pošte</string>
+    <string name="password">Zaporka</string>
+    <string name="repeat_password">Ponovni unos zaporke</string>
+    <string name="not_registered_yet">Nemaš korisnički račun?</string>
+    <string name="register_now">Registriraj se!</string>
+    <string name="login">Prijava</string>
+    <string name="already_have_an_account">Već imaš račun?</string>
+    <string name="login_now">Prijavi se!</string>
+    <string name="register">Registriraj se</string>
+
+    <!-- Error messages -->
+    <string name="user_with_this_email_address_already_exists">Korisnik s ovom adresom e-pošte već postoji.</string>
+    <string name="please_enter_a_valid_email_address">Unesite ispravnu adresu e-pošte.</string>
+    <string name="password_must_have_at_least_eight_characters">Zaporka mora imati najmanje 8 znakova.</string>
+    <string name="passwords_do_not_match">Zaporke se ne podudaraju.</string>
+    <string name="incorrect_email_or_password">Pogrešna adresa e-pošte ili zaporka.</string>
+    <string name="this_field_is_mandatory">Ovo polje je obavezno.</string>
+    <string name="unexpected_error_occurred">Došlo je do neočekivane pogreške.</string>
+
+</resources>

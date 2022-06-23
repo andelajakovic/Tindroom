@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "212010773",
+    "project_id": "tindroom-64323",
+    "storage_bucket": "tindroom-64323.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212010773:android:da70f322c846bbe17fcb1c",
+        "android_client_info": {
+          "package_name": "com.example.tindroom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "212010773-ndr7en2u3v0r35gd0nbce787vn2rihvb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAScgAXCUlUgjNTPzcbo1AFFxxUKHBYTfA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "212010773-ndr7en2u3v0r35gd0nbce787vn2rihvb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

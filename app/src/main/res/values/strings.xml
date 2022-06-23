@@ -1,3 +1,88 @@
 <resources>
-    <string name="app_name">Tindroom</string>
+    <string name="app_name" translatable="false">Tindroom</string>
+
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="any">Any</string>
+    <string name="name">Name</string>
+    <string name="date_of_birth">Date of birth</string>
+    <string name="gender">Gender</string>
+    <string name="faculty">Faculty</string>
+    <string name="about_you">About you</string>
+    <string name="next">Next</string>
+    <string name="roommates_gender">Roommate\'s gender</string>
+    <string name="have_apartment">I have an apartment: </string>
+    <string name="apartment_price">Apartment price (HRK per person)</string>
+    <string name="neighborhood">Neighborhood</string>
+    <string name="roommate_age_limit">Roommate\'s age limit: %s - %s</string>
+    <string name="apartment_price_range">Apartment price range (HRK per person): %s - %s HRK </string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="not_registered_yet">Not registered yet?</string>
+    <string name="register_now">Register now!</string>
+    <string name="login">Log in</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="login_now">Log in!</string>
+    <string name="register">Register</string>
+
+    <!-- Error messages -->
+    <string name="user_with_this_email_address_already_exists">A user with this email address already exists.</string>
+    <string name="please_enter_a_valid_email_address">Please enter a valid email address.</string>
+    <string name="password_must_have_at_least_eight_characters">Password must have at least 8 characters.</string>
+    <string name="passwords_do_not_match">Passwords do not match.</string>
+    <string name="incorrect_email_or_password">Incorrect email or password.</string>
+    <string name="this_field_is_mandatory">This field is mandatory.</string>
+    <string name="unexpected_error_occurred">An unexpected error occurred.</string>
+
+    <!-- Login fragment -->
+    <string name="login_fragment_email_hint" translatable="false">@string/email</string>
+    <string name="login_fragment_password_hint" translatable="false">@string/password</string>
+    <string name="login_fragment_login_button_label" translatable="false">@string/login</string>
+    <string name="login_fragment_not_registered_yet_label" translatable="false">@string/not_registered_yet</string>
+    <string name="login_fragment_register_now_label" translatable="false">@string/register_now</string>
+
+    <!-- Registration fragment -->
+    <string name="registration_fragment_username_hint" translatable="false">@string/username</string>
+    <string name="registration_fragment_email_hint" translatable="false">@string/email</string>
+    <string name="registration_fragment_password_hint" translatable="false">@string/password</string>
+    <string name="registration_fragment_repeat_password_hint" translatable="false">@string/repeat_password</string>
+    <string name="registration_fragment_password_helper_text" translatable="false">@string/password_must_have_at_least_eight_characters</string>
+    <string name="registration_fragment_next_button_label" translatable="false">@string/next</string>
+    <string name="registration_fragment_already_have_an_account_label" translatable="false">@string/already_have_an_account</string>
+    <string name="registration_fragment_login_now_label" translatable="false">@string/login_now</string>
+    <string name="registration_fragment_register_button_label" translatable="false">@string/register</string>
+
+    <!-- About you fragment -->
+    <string name="about_you_fragment_male_option" translatable="false">@string/male</string>
+    <string name="about_you_fragment_female_option" translatable="false">@string/female</string>
+    <string name="about_you_fragment_name_hint" translatable="false">@string/name</string>
+    <string name="about_you_fragment_date_of_birth_hint" translatable="false">@string/date_of_birth</string>
+    <string name="about_you_fragment_gender_hint" translatable="false">@string/gender</string>
+    <string name="about_you_fragment_faculty_hint" translatable="false">@string/faculty</string>
+    <string name="about_you_fragment_about_you_hint" translatable="false">@string/about_you</string>
+    <string name="about_you_fragment_next_button_label" translatable="false">@string/next</string>
+
+    <!-- Roommate form fragment -->
+    <string name="roommate_form_fragment_roommate_gender_hint" translatable="false">@string/roommates_gender</string>
+    <string name="roommate_form_fragment_have_apartment_label" translatable="false">@string/have_apartment</string>
+    <string name="roommate_form_fragment_price_hint" translatable="false">@string/apartment_price</string>
+    <string name="roommate_form_fragment_neighborhood_hint" translatable="false">@string/neighborhood</string>
+    <string name="roommate_form_fragment_roommate_age_title" translatable="false">@string/roommate_age_limit</string>
+    <string name="roommate_form_fragment_price_range_title" translatable="false">@string/apartment_price_range</string>
+    <string name="roommate_form_fragment_next_button_label" translatable="false">@string/next</string>
+
+    <!-- Arrays -->
+    <array name="your_gender_items">
+        <item>@string/male</item>
+        <item>@string/female</item>
+    </array>
+
+    <array name="roommates_gender_items">
+        <item>@string/male</item>
+        <item>@string/female</item>
+        <item>@string/any</item>
+    </array>
+
 </resources>

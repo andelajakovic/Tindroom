@@ -1,8 +1,10 @@
-package com.example.tindroom;
+package com.example.tindroom.ui.prelogin;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.tindroom.R;
 
 public class MainActivity extends AppCompatActivity {
 

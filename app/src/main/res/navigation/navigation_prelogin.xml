@@ -3,19 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_prelogin"
-    app:startDestination="@id/welcomeFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
-        android:id="@+id/welcomeFragment"
-        android:name="com.example.tindroom.ui.prelogin.WelcomeFragment"
-        android:label="fragment_welcome"
-        tools:layout="@layout/fragment_welcome" >
+        android:id="@+id/splashFragment"
+        android:name="com.example.tindroom.ui.prelogin.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
         <action
-            android:id="@+id/action_welcomeFragment_to_loginFragment"
+            android:id="@+id/action_splashFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
-            android:id="@+id/action_welcomeFragment_to_registrationFragment"
-            app:destination="@id/registrationFragment" />
+            android:id="@+id/action_splashFragment_to_homeActivity"
+            app:destination="@id/homeActivity" />
+        <action
+            android:id="@+id/action_splashFragment_to_aboutYouFragment"
+            app:destination="@id/aboutYouFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -47,12 +50,27 @@
         android:label="fragment_about_you"
         tools:layout="@layout/fragment_about_you" >
         <action
-            android:id="@+id/action_aboutYouFragment_to_homeActivity"
-            app:destination="@id/homeActivity" />
+            android:id="@+id/action_aboutYouFragment_to_roommateFormFragment"
+            app:destination="@id/roommateFormFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.example.tindroom.data.model.User" />
     </fragment>
     <activity
         android:id="@+id/homeActivity"
-        android:name="com.example.tindroom.HomeActivity"
+        android:name="com.example.tindroom.ui.postlogin.HomeActivity"
         android:label="activity_home"
         tools:layout="@layout/activity_home" />
+    <fragment
+        android:id="@+id/roommateFormFragment"
+        android:name="com.example.tindroom.ui.prelogin.RoommateFormFragment"
+        android:label="fragment_roommate_form"
+        tools:layout="@layout/fragment_roommate_form" >
+        <action
+            android:id="@+id/action_roommateFormFragment_to_homeActivity"
+            app:destination="@id/homeActivity" />
+        <argument
+            android:name="user"
+            app:argType="com.example.tindroom.data.model.User" />
+    </fragment>
 </navigation>
