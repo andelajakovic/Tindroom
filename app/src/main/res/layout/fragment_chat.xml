@@ -5,10 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.postlogin.ChatFragment">
 
-    <TextView
-        android:id="@+id/textView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Chat Fragment" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>
