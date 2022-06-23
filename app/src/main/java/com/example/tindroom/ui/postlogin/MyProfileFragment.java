@@ -60,10 +60,13 @@ public class MyProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_my_profile, container, false);
 
+        Retrofit retrofit = RetrofitService.getRetrofit();
+        tindroomApiService = retrofit.create(TindroomApiService.class);
+
         initViews();
         initListeners();
         initData();
-        mAuth.getCurrentUser();
+        //mAuth.getCurrentUser();
 
         return rootView;
     }

@@ -251,7 +251,7 @@ public class RoommateFormFragment extends Fragment {
         userCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(final Call<User> call, final Response<User> response) {
-                SharedPreferencesStorage.setSessionUser(requireContext(), user);
+                user.setRegistered(true);
                 navigateToHomeActivity(rootView);
             }
 
@@ -312,6 +312,7 @@ public class RoommateFormFragment extends Fragment {
     }
 
     public void navigateToHomeActivity(View view) {
+        SharedPreferencesStorage.setSessionUser(requireContext(), user);
         NavDirections action = RoommateFormFragmentDirections.actionRoommateFormFragmentToHomeActivity();
         Navigation.findNavController(view).navigate(action);
     }
