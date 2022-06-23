@@ -32,8 +32,8 @@
                 android:id="@+id/editImageButton"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:background="@drawable/circle_button_background"
-                android:src="@drawable/add_icon"
+                android:background="@drawable/primary_button_selector"
+                android:src="@drawable/edit_icon"
                 app:layout_constraintBottom_toBottomOf="@id/avatarImageView"
                 app:layout_constraintEnd_toEndOf="@id/avatarImageView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -128,7 +128,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/linear_layout_margin"
-            android:text="Next" />
+            style="@style/PrimaryButtonStyle"
+            android:text="@string/about_you_fragment_next_button_label" />
 
     </LinearLayout>
 </ScrollView>

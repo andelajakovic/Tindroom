@@ -2,4 +2,9 @@
 <resources>
     <dimen name="linear_layout_margin">8dp</dimen>
     <dimen name="title_start_margin">16dp</dimen>
+
+    <!-- TODO (Andrea: postaviti radius i padding za sve buttone) -->
+    <dimen name="button_radius">32dp</dimen>
+    <dimen name="button_padding">32dp</dimen>
+
 </resources>

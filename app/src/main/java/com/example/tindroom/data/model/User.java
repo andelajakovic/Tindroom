@@ -1,6 +1,7 @@
 package com.example.tindroom.data.model;
 
 import android.annotation.SuppressLint;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -9,7 +10,10 @@ import com.google.gson.annotations.SerializedName;
 @SuppressLint("ParcelCreator")
 public class User implements Parcelable {
     @SerializedName("user_id")
-    private int userId;
+    private String userId;
+
+    @SerializedName("is_registered")
+    private int isRegistered;
 
     @SerializedName("name")
     private String name;
@@ -20,14 +24,14 @@ public class User implements Parcelable {
     @SerializedName("description")
     private String description;
 
-    @SerializedName("sex")
-    private char sex;
+    @SerializedName("gender")
+    private char gender;
 
     @SerializedName("faculty_id")
     private long idFaculty;
 
-    @SerializedName("roommate_sex")
-    private char roommateSex;
+    @SerializedName("roommate_gender")
+    private char roommateGender;
 
     @SerializedName("roommate_age_from")
     private int roommateAgeFrom;
@@ -47,8 +51,25 @@ public class User implements Parcelable {
     @SerializedName("neighborhood_id")
     private Long idNeighborhood;
 
-    public int getUserId() {
+    @SerializedName("image_url")
+    private String imageUrl;
+
+    private String imageUri;
+
+    public String getUserId() {
         return userId;
+    }
+
+    public void setUserId(final String userId) {
+        this.userId = userId;
+    }
+
+    public boolean isRegistered() {
+        return  isRegistered > 0 ;
+    }
+
+    public void setRegistered(final boolean isRegistered) {
+        this.isRegistered = isRegistered ? 1 : 0;
     }
 
     public String getName() {
@@ -75,12 +96,12 @@ public class User implements Parcelable {
         this.description = description;
     }
 
-    public char getSex() {
-        return sex;
+    public char getGender() {
+        return gender;
     }
 
-    public void setSex(final char sex) {
-        this.sex = sex;
+    public void setGender(final char gender) {
+        this.gender = gender;
     }
 
     public long getIdFaculty() {
@@ -91,12 +112,12 @@ public class User implements Parcelable {
         this.idFaculty = idFaculty;
     }
 
-    public char getRoommateSex() {
-        return roommateSex;
+    public char getRoommateGender() {
+        return roommateGender;
     }
 
-    public void setRoommateSex(final char roommateSex) {
-        this.roommateSex = roommateSex;
+    public void setRoommateGender(final char roommateGender) {
+        this.roommateGender = roommateGender;
     }
 
     public int getRoommateAgeFrom() {
@@ -147,6 +168,22 @@ public class User implements Parcelable {
         this.idNeighborhood = idNeighborhood;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(final String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(final String imageUri) {
+        this.imageUri = imageUri;
+    }
+
     @SerializedName("feedback")
     private Object feedback;
 
@@ -158,12 +195,13 @@ public class User implements Parcelable {
     public String toString() {
         return "User{" +
                 "userId=" + userId +
+                ", isRegistered=" + (isRegistered > 0) +
                 ", name='" + name + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", description='" + description + '\'' +
-                ", sex=" + sex +
+                ", sex=" + gender +
                 ", idFaculty=" + idFaculty +
-                ", roommateSex=" + roommateSex +
+                ", roommateSex=" + roommateGender +
                 ", roommateAgeFrom=" + roommateAgeFrom +
                 ", roommateAgeTo=" + roommateAgeTo +
                 ", hasApartment=" + (hasApartment > 0) +
@@ -182,4 +220,5 @@ public class User implements Parcelable {
     public void writeToParcel(final Parcel parcel, final int i) {
 
     }
+
 }

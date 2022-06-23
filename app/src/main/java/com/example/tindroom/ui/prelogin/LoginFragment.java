@@ -7,7 +7,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +25,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 public class LoginFragment extends Fragment {
 
-    View rootView;
+    private View rootView;
     private FirebaseAuth mAuth;
 
     private TextInputLayout passwordInput, emailInput;
     private TextInputEditText passwordEditText, emailEditText;
-    private TextView toRegistration;
-    private String email, password;
-    private Button login;
+    private TextView linkToRegistrationFragment;
+    private Button loginButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,69 +53,91 @@ public class LoginFragment extends Fragment {
         return rootView;
     }
 
-
-    public void navigateToRegistrationFragment (View view) {
-        NavDirections action = LoginFragmentDirections.actionLoginFragmentToRegistrationFragment();
-        Navigation.findNavController(view).navigate(action);
-    }
-
-    // Prijava
-    public void navigateToHomeActivity (View view) {
-        NavDirections action = LoginFragmentDirections.actionLoginFragmentToHomeActivity();
-        Navigation.findNavController(view).navigate(action);
-    }
-
-    private void initViews(){
+    private void initViews() {
         passwordEditText = rootView.findViewById(R.id.passwordEditText);
         passwordInput = rootView.findViewById(R.id.passwordInput);
 
         emailInput = rootView.findViewById(R.id.emailInput);
         emailEditText = rootView.findViewById(R.id.emailEditText);
 
-        login = rootView.findViewById(R.id.loginButton);
-        toRegistration = rootView.findViewById(R.id.toRegistrationFragment);
+        loginButton = rootView.findViewById(R.id.loginButton);
+        linkToRegistrationFragment = rootView.findViewById(R.id.linkToRegistrationFragment);
     }
 
-    private void initUser(){
+    private void initUser() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
+        if (currentUser != null) {
             navigateToHomeActivity(rootView);
         }
     }
 
-    private void initListeners(){
+    private void initListeners() {
 
-        toRegistration.setOnClickListener(new View.OnClickListener() {
+        linkToRegistrationFragment.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 navigateToRegistrationFragment(rootView);
             }
         });
 
-        login.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 checkLoginForm();
             }
         });
+
+        TextWatcher textWatcher = new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(final CharSequence charSequence, final int i, final int i1, final int i2) {
+            }
+
+            @Override
+            public void onTextChanged(final CharSequence charSequence, final int i, final int i1, final int i2) {
+                updateButtonState();
+            }
+
+            @Override
+            public void afterTextChanged(final Editable editable) {
+            }
+        };
+
+        emailEditText.addTextChangedListener(textWatcher);
+        passwordEditText.addTextChangedListener(textWatcher);
     }
 
-    private void checkLoginForm(){
-        email = emailEditText.getText().toString();
-        password = passwordEditText.getText().toString().trim();
+    private void updateButtonState() {
+        loginButton.setEnabled(!Objects.requireNonNull(emailEditText.getText()).toString().isEmpty() && !Objects.requireNonNull(passwordEditText.getText()).toString().isEmpty());
+    }
 
-        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    navigateToHomeActivity(rootView);
-                } else {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.incorrect_email_or_password), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+    private void checkLoginForm() {
 
+        mAuth.signInWithEmailAndPassword(Objects.requireNonNull(emailEditText.getText()).toString().trim(), Objects.requireNonNull(passwordEditText.getText()).toString().trim())
+             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                 // TODO (Andrea: napraviti loading)
+                 @Override
+                 public void onComplete(@NonNull Task<AuthResult> task) {
+                     if (task.isSuccessful()) {
+                         // Sign in success, update UI with the signed-in user's information
+                         FirebaseUser user = mAuth.getCurrentUser();
+                         navigateToHomeActivity(rootView);
+                     } else {
+                         Toast.makeText(getActivity(), getResources().getString(R.string.incorrect_email_or_password), Toast.LENGTH_LONG).show();
+                     }
+                 }
+             });
+    }
+
+    public void navigateToRegistrationFragment(View view) {
+        NavDirections action = LoginFragmentDirections.actionLoginFragmentToRegistrationFragment();
+        Navigation.findNavController(view).navigate(action);
+    }
+
+    public void navigateToHomeActivity(View view) {
+        NavDirections action = LoginFragmentDirections.actionLoginFragmentToHomeActivity();
+        Navigation.findNavController(view).navigate(action);
     }
 }
