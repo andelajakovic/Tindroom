@@ -5,10 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.prelogin.SplashFragment">
 
+    <!-- TODO (Andrea: napraviti splash screen) -->
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Welcome Fragment" />
+        android:text="Splash Fragment" />
 
 </FrameLayout>
