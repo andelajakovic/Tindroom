@@ -25,6 +25,10 @@
     <string name="already_have_an_account">Već imaš račun?</string>
     <string name="login_now">Prijavi se!</string>
     <string name="register">Registriraj se</string>
+    <string name="change_profile_picture">Promijeni sliku profila</string>
+    <string name="edit_profile">Uredi profil</string>
+    <string name="logout">Odjava</string>
+    <!-- TODO (Ivana: ovdje pises stringove na hrvatski, varijabla mora biti istog naziva kao i na eng) -->
 
     <!-- Error messages -->
     <string name="user_with_this_email_address_already_exists">Korisnik s ovom adresom e-pošte već postoji.</string>

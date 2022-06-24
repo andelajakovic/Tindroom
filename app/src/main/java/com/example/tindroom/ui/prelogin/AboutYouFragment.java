@@ -106,8 +106,6 @@ public class AboutYouFragment extends Fragment {
         genderInput = rootView.findViewById(R.id.genderInput);
         genderDropdown = rootView.findViewById(R.id.genderDropdown);
 
-        avatarImageView = rootView.findViewById(R.id.profilePicture);
-
         editImageButton = rootView.findViewById(R.id.editImageButton);
 
         descriptionEditText = rootView.findViewById(R.id.descriptionEditText);
@@ -151,7 +149,6 @@ public class AboutYouFragment extends Fragment {
 
         nextButton.setOnClickListener(new View.OnClickListener() {
 
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(final View view) {
                 if (checkUserInput()) {
@@ -175,7 +172,7 @@ public class AboutYouFragment extends Fragment {
         Call<List<Faculty>> facultiesCall = tindroomApiService.getFaculties();
 
         facultiesCall.enqueue(new Callback<List<Faculty>>() {
-
+            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(@NonNull final Call<List<Faculty>> call, @NonNull final Response<List<Faculty>> response) {

@@ -145,7 +145,7 @@ public class RegistrationFragment extends Fragment {
 
     private void checkIfEmailExists() {
         mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
-            // TODO (Andrea: napraviti loading)
+            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
             @Override
             public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
                 if (task.getResult().getSignInMethods().size() == 0) {
@@ -159,7 +159,7 @@ public class RegistrationFragment extends Fragment {
 
     private void insertUserToFirebase () {
         mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            // TODO (Andrea: napraviti loading)
+            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {

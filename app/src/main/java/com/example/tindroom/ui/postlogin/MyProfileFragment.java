@@ -1,5 +1,7 @@
 package com.example.tindroom.ui.postlogin;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -18,42 +20,45 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.tindroom.R;
+import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.Faculty;
+import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
+import com.example.tindroom.utils.ImageHandler;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static android.app.Activity.RESULT_OK;
+
 public class MyProfileFragment extends Fragment {
 
-    private TextInputLayout nameInput, dateOfBirthInput, genderInput, facultyInput;
-    private TextInputEditText nameEditText, dateOfBirthEditText, descriptionEditText;
-    private AutoCompleteTextView genderDropdown, facultyDropdown;
-    private TextInputLayout roommateGenderInput;
-    private AutoCompleteTextView roommateGenderDropdown;
-    private List<Faculty> facultyList;
-    private Button signOut, updateInfo;
-    private TextView deleteAccount;
-
+    TextView changeProfilePicture, usersName, usersFaculty;
+    ImageButton editProfile, logout;
+    ImageView profilePicture;
 
     View rootView;
-    FirebaseAuth mAuth;
-    private Retrofit retrofit;
     private TindroomApiService tindroomApiService;
+    User sessionUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,134 +68,76 @@ public class MyProfileFragment extends Fragment {
         Retrofit retrofit = RetrofitService.getRetrofit();
         tindroomApiService = retrofit.create(TindroomApiService.class);
 
+        sessionUser = SharedPreferencesStorage.getSessionUser(requireContext());
+
         initViews();
         initListeners();
         initData();
-        //mAuth.getCurrentUser();
 
         return rootView;
     }
 
-    // Odjava
-    public void navigateToMainActivity (View view) {
-        NavDirections action = MyProfileFragmentDirections.actionMyProfileFragmentToMainActivity();
-        Navigation.findNavController(view).navigate(action);
-
-    }
-
     private void initViews(){
-
-        signOut = rootView.findViewById(R.id.signOut);
-        deleteAccount = rootView.findViewById(R.id.deleteAccount);
-        updateInfo = rootView.findViewById(R.id.save);
-
-        nameInput = rootView.findViewById(R.id.usernameInput);
-        nameEditText = rootView.findViewById(R.id.usernameEditText);
-
-        dateOfBirthInput = rootView.findViewById(R.id.dateOfBirthInput);
-        dateOfBirthEditText = rootView.findViewById(R.id.dateOfBirthEditText);
-
-        genderInput = rootView.findViewById(R.id.genderInput);
-        genderDropdown = rootView.findViewById(R.id.genderDropdown);
-
-        facultyInput = rootView.findViewById(R.id.facultyInput);
-        facultyDropdown = rootView.findViewById(R.id.facultyDropdown);
-
-        descriptionEditText = rootView.findViewById(R.id.descriptionEditText);
-        descriptionEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        descriptionEditText.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-
-        roommateGenderInput = rootView.findViewById(R.id.roommateGenderInput);
-        roommateGenderDropdown = rootView.findViewById(R.id.roommateGenderDropdown);
-
-        setGenderMenuItems();
-        setFacultyMenuItems();
-
-    }
-
-    private void initData(){
-        // Dohvati zapise iz baze i upisi ih na profil
+        changeProfilePicture = rootView.findViewById(R.id.changeProfilePicture);
+        usersName = rootView.findViewById(R.id.name);
+        usersFaculty = rootView.findViewById(R.id.faculty);
+        editProfile = rootView.findViewById(R.id.editProfileButton);
+        logout = rootView.findViewById(R.id.logoutButton);
     }
 
     private void initListeners(){
-        signOut.setOnClickListener(new View.OnClickListener() {
+        changeProfilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                mAuth.signOut();
-                navigateToMainActivity(rootView);
+            public void onClick(final View view) {
+                // TODO (Anđela: bottom popup dialog s opcijama "Nova slika profila" i "Ukloni sliku profila")
             }
         });
 
-        deleteAccount.setOnClickListener(new View.OnClickListener() {
+        editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                deleteUser();
+            public void onClick(final View view) {
+                navigateToSettingsFragment(view);
             }
         });
 
-        updateInfo.setOnClickListener(new View.OnClickListener() {
+        logout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                updateUserInfo();
-            }
-        });
-
-
-    }
-
-
-
-    private void updateUserInfo(){
-        //nameEditText.getText() = "zapis u bazi";
-
-    }
-
-
-    private void deleteUser(){
-        mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    navigateToMainActivity(rootView);
-                }
+            public void onClick(final View view) {
+                SharedPreferencesStorage.setSessionUser(requireContext(), null);
+                navigateToMainActivity(view);
+                requireActivity().finish();
             }
         });
     }
 
-    private void setGenderMenuItems(){
+    private void initData(){
+        usersName.setText(sessionUser.getName());
 
-    }
+        Call<Faculty> usersFacultyCall = tindroomApiService.getFacultyById(sessionUser.getIdFaculty());
+        usersFacultyCall.enqueue(new Callback<Faculty>() {
 
-    private void setFacultyMenuItems(){
-        // Dohvati iz baze zapisan
-        roommateGenderDropdown.setText("Zamet");
-
-        facultyList = new ArrayList<>();
-
-        Call<List<Faculty>> facultiesCall = tindroomApiService.getFaculties();
-
-        facultiesCall.enqueue(new Callback<List<Faculty>>() {
-
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public void onResponse(@NonNull final Call<List<Faculty>> call, @NonNull final Response<List<Faculty>> response) {
-                assert response.body() != null;
-                facultyList.addAll(response.body());
-                String[] items = facultyList.stream().map(Faculty::getName).toArray(String[]::new);
-
-                ArrayAdapter<String> spinnerArrayAdapter;
-                spinnerArrayAdapter = new ArrayAdapter<>(getContext(),
-                        android.R.layout.simple_spinner_dropdown_item,
-                        items);
-                facultyDropdown.setAdapter(spinnerArrayAdapter);
+            public void onResponse(final Call<Faculty> call, final Response<Faculty> response) {
+                usersFaculty.setText(response.body() != null ? response.body().getName() : "");
             }
 
             @Override
-            public void onFailure(@NonNull final Call<List<Faculty>> call, @NonNull final Throwable t) {
-                Log.d("faculties FAILURE", t.toString());
+            public void onFailure(final Call<Faculty> call, final Throwable t) {
+
             }
         });
-
     }
+
+
+    public void navigateToMainActivity (View view) {
+        NavDirections action = MyProfileFragmentDirections.actionMyProfileFragmentToMainActivity();
+        Navigation.findNavController(view).navigate(action);
+    }
+
+    public void navigateToSettingsFragment (View view) {
+        NavDirections action = MyProfileFragmentDirections.actionMyProfileFragmentToSettingsFragment();
+        Navigation.findNavController(view).navigate(action);
+    }
+
 
 }

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.postlogin.SettingsFragment">
+
+    <!-- TODO (Ivana: hardkodirane stringove izvuci u strings.xml i prevesti) -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/aboutYou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="@dimen/linear_layout_margin"
+            android:layout_marginEnd="@dimen/linear_layout_margin"
+            android:layout_marginBottom="@dimen/linear_layout_margin"
+            android:text="Uredi informacije o sebi" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/usernameInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/linear_layout_margin"
+            android:hint="Uredi ime">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/usernameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text="Korisničko ime" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dateOfBirthInput"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/linear_layout_margin"
+            android:hint="@string/about_you_fragment_date_of_birth_hint">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/dateOfBirthEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="16.6.1999."
+                android:focusableInTouchMode="false"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/genderInput"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/linear_layout_margin"
+            android:hint="@string/about_you_fragment_gender_hint"
+            tools:layout_editor_absoluteX="16dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/genderDropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Zensko"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/facultyInput"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/linear_layout_margin"
+            android:layout_marginTop="196dp"
+            android:hint="@string/about_you_fragment_faculty_hint"
+            tools:layout_editor_absoluteX="51dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/facultyDropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:text="Tehnički fakultet Rijeka" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/descriptionInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/linear_layout_margin"
+            android:hint="Uredi svoj opis">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/descriptionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|left"
+                android:inputType="textMultiLine"
+                android:lines="3"
+                android:maxLength="255"
+                android:minLines="3"
+                android:scrollbars="vertical"
+                android:singleLine="false"
+                android:text="O tebi" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- TODO (Ivana: dodati link za promijeni lozinku) -->
+
+        <TextView
+            android:id="@+id/roommate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="@dimen/linear_layout_margin"
+            android:layout_marginEnd="@dimen/linear_layout_margin"
+            android:layout_marginBottom="@dimen/linear_layout_margin"
+            android:text="Uredi svoje preference"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/roommateGenderInput"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/linear_layout_margin"
+            android:hint="M">
+
+            <AutoCompleteTextView
+                android:id="@+id/roommateGenderDropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/roommateLimit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/linear_layout_margin"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="@dimen/linear_layout_margin"
+            style="@style/TitleTextViewStyle"
+            android:text="@string/roommate_form_fragment_roommate_age_title"/>
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/slider"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_margin="@dimen/linear_layout_margin"
+            android:valueFrom="18"
+            android:valueTo="35"
+            android:stepSize="1" />
+
+        <!-- TODO (Ivana: cini mi se da tu fale neka polja) -->
+
+        <LinearLayout
+            android:id="@+id/have_apartment_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/priceInput"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/linear_layout_margin"
+                android:hint="Promijeni cijenu stana po osobi">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/priceEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:text="Unesena cijena"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/neighbourhoodInput"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/linear_layout_margin"
+                android:hint="Promijeni kvart">
+
+                <AutoCompleteTextView
+                    android:id="@+id/neighborhoodDropdown"
+                    android:text="Zamet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Spremi promjene"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/linear_layout_margin"
+            style="@style/PrimaryButtonStyle"/>
+
+        <TextView
+            android:id="@+id/deleteAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Izbriši korisnički račun"
+            android:textSize="12sp"
+            android:layout_margin="@dimen/linear_layout_margin"
+            android:layout_gravity="center"
+            android:textColor="@color/design_default_color_error"/>
+    </LinearLayout>
+
+</ScrollView>

@@ -19,7 +19,7 @@ public interface TindroomApiService {
     Call<List<Faculty>> getFaculties();
 
     @GET("faculties/{faculty_id}")
-    Call<Faculty> getFacultyById(@Path("faculty_id") int facultyId);
+    Call<Faculty> getFacultyById(@Path("faculty_id") Long facultyId);
 
     @GET("neighborhoods")
     Call<List<Neighborhood>> getNeighborhoods();
@@ -31,7 +31,7 @@ public interface TindroomApiService {
     Call<List<User>> getUsers();
 
     @GET("users/{user_id}")
-    Call<User> getUserById(@Path("user_id") int userId);
+    Call<User> getUserById(@Path("user_id") String userId);
 
     @POST("users/register")
     Call<User> registerUser(@Body User post);

@@ -6,6 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,6 +21,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tindroom.R;
+import com.example.tindroom.data.local.SharedPreferencesStorage;
+import com.example.tindroom.data.model.User;
+import com.example.tindroom.network.RetrofitService;
+import com.example.tindroom.network.TindroomApiService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -31,6 +39,7 @@ public class LoginFragment extends Fragment {
 
     private View rootView;
     private FirebaseAuth mAuth;
+    private TindroomApiService tindroomApiService;
 
     private TextInputLayout passwordInput, emailInput;
     private TextInputEditText passwordEditText, emailEditText;
@@ -47,6 +56,11 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_login, container, false);
+
+        Retrofit retrofit = RetrofitService.getRetrofit();
+        tindroomApiService = retrofit.create(TindroomApiService.class);
+
+
         initViews();
         initListeners();
 
@@ -117,13 +131,28 @@ public class LoginFragment extends Fragment {
 
         mAuth.signInWithEmailAndPassword(Objects.requireNonNull(emailEditText.getText()).toString().trim(), Objects.requireNonNull(passwordEditText.getText()).toString().trim())
              .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                 // TODO (Andrea: napraviti loading)
+                 // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
                  @Override
                  public void onComplete(@NonNull Task<AuthResult> task) {
                      if (task.isSuccessful()) {
                          // Sign in success, update UI with the signed-in user's information
                          FirebaseUser user = mAuth.getCurrentUser();
+
+                         Call<User> userCall = tindroomApiService.getUserById(user.getUid());
+                         userCall.enqueue(new Callback<User>() {
+
+                             @Override
+                             public void onResponse(final Call<User> call, final Response<User> response) {
+                                 SharedPreferencesStorage.setSessionUser(requireContext(), response.body());
+                             }
+
+                             @Override
+                             public void onFailure(final Call<User> call, final Throwable t) {
+
+                             }
+                         });
                          navigateToHomeActivity(rootView);
+                         requireActivity().finish();
                      } else {
                          Toast.makeText(getActivity(), getResources().getString(R.string.incorrect_email_or_password), Toast.LENGTH_LONG).show();
                      }

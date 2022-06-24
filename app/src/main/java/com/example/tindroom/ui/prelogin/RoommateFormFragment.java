@@ -189,6 +189,7 @@ public class RoommateFormFragment extends Fragment {
         Call<List<Neighborhood>> neighborhoodsCall = tindroomApiService.getNeighborhoods();
 
         neighborhoodsCall.enqueue(new Callback<List<Neighborhood>>() {
+            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
 
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -247,6 +248,8 @@ public class RoommateFormFragment extends Fragment {
     private void updateUser() {
         Call<User> userCall = tindroomApiService.updateUserById(user.getUserId(), user);
         userCall.enqueue(new Callback<User>() {
+            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
+
             @Override
             public void onResponse(final Call<User> call, final Response<User> response) {
                 user.setRegistered(true);
@@ -263,6 +266,7 @@ public class RoommateFormFragment extends Fragment {
     private void uploadImageToFirebase(Uri uri) {
         StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(uri));
         fileRef.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
 
             @Override
             public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
@@ -313,6 +317,7 @@ public class RoommateFormFragment extends Fragment {
         SharedPreferencesStorage.setSessionUser(requireContext(), user);
         NavDirections action = RoommateFormFragmentDirections.actionRoommateFormFragmentToHomeActivity();
         Navigation.findNavController(view).navigate(action);
+        requireActivity().finish();
     }
 
 }
