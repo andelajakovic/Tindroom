@@ -25,6 +25,7 @@
     <string name="login">Log in</string>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="change_profile_picture">Change profile picture</string>
+    <string name="apartment_description">He has an apartment in %s, at a price of %s HRK per person.</string>
     <!-- TODO (Ivana: ovdje pises stringove na engleski na koje se onda dolje referenciras) -->
 
     <!-- Error messages -->
@@ -84,6 +85,9 @@
 
     <!-- Settings fragment -->
     <!-- TODO (Ivana: ovdje ces definirati reference na stringove koje pozivas u fragmentu fragment_settings.xml) -->
+
+    <!-- Swipe fragment -->
+    <string name="swipe_fragment_apartment_description" translatable="false">@string/apartment_description</string>
 
     <!-- Arrays -->
     <array name="your_gender_items">

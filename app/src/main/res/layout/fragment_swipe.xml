@@ -1,13 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.postlogin.SwipeFragment">
 
-    <TextView
+
+    <ImageView
+        android:id="@+id/imageView3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Swipe Fragment" />
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/swipe_description_background"
+        android:padding="16dp"
+        android:orientation="vertical"
+        android:gravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/faculty"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Maja, 19" />
+
+        <TextView
+            android:id="@+id/faculty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Sveučilište u Rijeci" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            tools:text="Lorem ipsum dolor sit amet, eu mea aeque graecis eligendi, bonorum inciderint qui ei. Eripuit splendide ius cu, est detracto explicari reprehendunt eu, pro et appareat fabellas. Vis te vidit perfecto, odio soleat et vis, pro rationibus adipiscing ad. Ius ut illum ignota iuvaret. An soleat iisque aliquip sed, et."
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:padding="10dp"
+                app:srcCompat="@drawable/home_icon" />
+
+            <TextView
+                android:id="@+id/apartmentDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                tools:text="Ima stan u kvartu Banderovo, po cijeni od 1200 kuna po osobi."
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
