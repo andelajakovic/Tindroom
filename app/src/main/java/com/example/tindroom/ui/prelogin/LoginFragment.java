@@ -144,6 +144,8 @@ public class LoginFragment extends Fragment {
                              @Override
                              public void onResponse(final Call<User> call, final Response<User> response) {
                                  SharedPreferencesStorage.setSessionUser(requireContext(), response.body());
+                                 navigateToHomeActivity(rootView);
+                                 requireActivity().finish();
                              }
 
                              @Override
@@ -151,8 +153,7 @@ public class LoginFragment extends Fragment {
 
                              }
                          });
-                         navigateToHomeActivity(rootView);
-                         requireActivity().finish();
+
                      } else {
                          Toast.makeText(getActivity(), getResources().getString(R.string.incorrect_email_or_password), Toast.LENGTH_LONG).show();
                      }
