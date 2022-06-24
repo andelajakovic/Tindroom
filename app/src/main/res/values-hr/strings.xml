@@ -28,6 +28,7 @@
     <string name="change_profile_picture">Promijeni sliku profila</string>
     <string name="edit_profile">Uredi profil</string>
     <string name="logout">Odjava</string>
+    <string name="apartment_description">Ima stan u kvartu %s, po cijeni od %s kuna po osobi.</string>
     <!-- TODO (Ivana: ovdje pises stringove na hrvatski, varijabla mora biti istog naziva kao i na eng) -->
 
     <!-- Error messages -->
