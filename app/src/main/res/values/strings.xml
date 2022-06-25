@@ -1,6 +1,9 @@
 <resources>
 
     <string name="app_name" translatable="false">Tindroom</string>
+    <string name="my_profile">My Profile</string>
+    <string name="swipe">Swipe</string>
+    <string name="chat">Chat</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="any">Any</string>
@@ -36,6 +39,11 @@
     <string name="user_with_this_email_address_already_exists">A user with this email address already exists.</string>
     <string name="please_enter_a_valid_email_address">Please enter a valid email address.</string>
     <string name="password_must_have_at_least_eight_characters">Password must have at least 8 characters.</string>
+
+    <!-- Menu items -->
+    <string name="menu_item_my_profile" translatable="false">@string/my_profile</string>
+    <string name="menu_item_swipe" translatable="false">@string/swipe</string>
+    <string name="menu_item_my_chat" translatable="false">@string/chat</string>
 
     <!-- Login fragment -->
     <string name="passwords_do_not_match">Passwords do not match.</string>

@@ -12,11 +12,22 @@ import com.example.tindroom.R;
 
 public class SwipeFragment extends Fragment {
 
+    View rootView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_swipe, container, false);
+        rootView = inflater.inflate(R.layout.fragment_swipe, container, false);
+
+        initViews();
+        initListeners();
+
+        return rootView;
     }
 
+    private void initViews() {
+    }
+
+    private void initListeners() {
+    }
 }
