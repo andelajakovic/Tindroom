@@ -6,15 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.postlogin.SwipeFragment">
 
-
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/profilePicture"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         tools:src="@tools:sample/avatars" />
 
     <LinearLayout
+        android:id="@+id/userDescriptionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/swipe_description_background"
@@ -45,7 +45,7 @@
             tools:text="Sveučilište u Rijeci" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
@@ -56,13 +56,13 @@
 
 
         <LinearLayout
+            android:id="@+id/apartmentDescriptionLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
             tools:visibility="visible">
 
             <ImageView
-                android:id="@+id/imageView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
@@ -74,9 +74,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                tools:text="Ima stan u kvartu Banderovo, po cijeni od 1200 kuna po osobi."
+                android:padding="10dp"
+                tools:text="Banderovo, 1200 kuna po osobi."
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
