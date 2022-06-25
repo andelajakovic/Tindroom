@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_myProfileFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_myProfileFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"

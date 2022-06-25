@@ -60,7 +60,6 @@ public class LoginFragment extends Fragment {
         Retrofit retrofit = RetrofitService.getRetrofit();
         tindroomApiService = retrofit.create(TindroomApiService.class);
 
-
         initViews();
         initListeners();
 
