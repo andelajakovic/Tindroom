@@ -1,8 +1,11 @@
 package com.example.tindroom.ui.prelogin;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +29,7 @@ import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
 import com.example.tindroom.utils.ImageHandler;
 import com.example.tindroom.utils.InputValidator;
+import com.example.tindroom.utils.NetworkChangeListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -64,6 +68,8 @@ public class AboutYouFragment extends Fragment {
     private ImageButton editImageButton;
     private Button nextButton;
     private Uri imageUri;
+
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -168,6 +174,7 @@ public class AboutYouFragment extends Fragment {
 
     private void setFacultyMenuItems() {
         facultyList = new ArrayList<>();
+        final ProgressDialog progressDialog = ProgressDialog.show(getContext(),"Loading...", "Please wait",true);
 
         Call<List<Faculty>> facultiesCall = tindroomApiService.getFaculties();
 
@@ -176,6 +183,7 @@ public class AboutYouFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(@NonNull final Call<List<Faculty>> call, @NonNull final Response<List<Faculty>> response) {
+                progressDialog.dismiss();
                 assert response.body() != null;
                 facultyList.addAll(response.body());
                 String[] items = facultyList.stream().map(Faculty::getName).toArray(String[]::new);
@@ -254,6 +262,19 @@ public class AboutYouFragment extends Fragment {
     public void navigateToRoommateFormFragment(View view) {
         NavDirections action = AboutYouFragmentDirections.actionAboutYouFragmentToRoommateFormFragment(user);
         Navigation.findNavController(view).navigate(action);
+    }
+
+    @Override
+    public void onStart() {
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        getActivity().registerReceiver(networkChangeListener,intentFilter);
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        getActivity().unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 
 }

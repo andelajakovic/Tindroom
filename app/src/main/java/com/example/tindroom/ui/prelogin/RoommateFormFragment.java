@@ -1,6 +1,9 @@
 package com.example.tindroom.ui.prelogin;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +38,7 @@ import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
 import com.example.tindroom.utils.InputValidator;
+import com.example.tindroom.utils.NetworkChangeListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.slider.RangeSlider;
@@ -73,6 +77,8 @@ public class RoommateFormFragment extends Fragment {
     private TextInputEditText priceEditText;
     private Button navigateToHomeActivityButton;
     private TextView roommateAgeLabel, apartmentPriceLabel;
+
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -185,6 +191,7 @@ public class RoommateFormFragment extends Fragment {
 
     private void setNeighborhoodMenuItems() {
         neighborhoodList = new ArrayList<>();
+        final ProgressDialog progressDialog = ProgressDialog.show(getContext(),"Loading...", "Please wait",true);
 
         Call<List<Neighborhood>> neighborhoodsCall = tindroomApiService.getNeighborhoods();
 
@@ -194,6 +201,7 @@ public class RoommateFormFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(@NonNull final Call<List<Neighborhood>> call, @NonNull final Response<List<Neighborhood>> response) {
+                progressDialog.dismiss();
                 assert response.body() != null;
                 neighborhoodList.addAll(response.body());
                 String[] items = neighborhoodList.stream().map(Neighborhood::getName).toArray(String[]::new);
@@ -246,12 +254,15 @@ public class RoommateFormFragment extends Fragment {
     }
 
     private void updateUser() {
+        final ProgressDialog progressDialog = ProgressDialog.show(getContext(),"Loading...", "Please wait",true);
         Call<User> userCall = tindroomApiService.updateUserById(user.getUserId(), user);
+
         userCall.enqueue(new Callback<User>() {
             // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
 
             @Override
             public void onResponse(final Call<User> call, final Response<User> response) {
+                progressDialog.dismiss();
                 user.setRegistered(true);
                 navigateToHomeActivity(rootView);
             }
@@ -264,12 +275,14 @@ public class RoommateFormFragment extends Fragment {
     }
 
     private void uploadImageToFirebase(Uri uri) {
+        final ProgressDialog progressDialog = ProgressDialog.show(getContext(),"Loading...", "Please wait",true);
         StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(uri));
         fileRef.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
 
             @Override
             public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+                progressDialog.dismiss();
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
 
                     @Override
@@ -318,6 +331,19 @@ public class RoommateFormFragment extends Fragment {
         NavDirections action = RoommateFormFragmentDirections.actionRoommateFormFragmentToHomeActivity();
         Navigation.findNavController(view).navigate(action);
         requireActivity().finish();
+    }
+
+    @Override
+    public void onStart() {
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        getActivity().registerReceiver(networkChangeListener,intentFilter);
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        getActivity().unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 
 }
