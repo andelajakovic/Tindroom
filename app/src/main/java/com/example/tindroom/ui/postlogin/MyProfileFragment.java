@@ -37,6 +37,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,21 +54,26 @@ import static android.app.Activity.RESULT_OK;
 public class MyProfileFragment extends Fragment {
 
     TextView changeProfilePicture, usersName, usersFaculty;
-    ImageButton editProfile, logout;
+    ImageButton editProfile, logout, safety;
     ImageView profilePicture;
 
     View rootView;
     private TindroomApiService tindroomApiService;
     User sessionUser;
 
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_my_profile, container, false);
 
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
         Retrofit retrofit = RetrofitService.getRetrofit();
         tindroomApiService = retrofit.create(TindroomApiService.class);
-
         sessionUser = SharedPreferencesStorage.getSessionUser(requireContext());
 
         initViews();
@@ -83,6 +89,7 @@ public class MyProfileFragment extends Fragment {
         usersFaculty = rootView.findViewById(R.id.faculty);
         editProfile = rootView.findViewById(R.id.editProfileButton);
         logout = rootView.findViewById(R.id.logoutButton);
+        safety = rootView.findViewById(R.id.safetyButton);
     }
 
     private void initListeners(){
@@ -104,8 +111,16 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onClick(final View view) {
                 SharedPreferencesStorage.setSessionUser(requireContext(), null);
+                mAuth.signOut();
                 navigateToMainActivity(view);
                 requireActivity().finish();
+            }
+        });
+
+        safety.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateToChangePasswordFragment(view);
             }
         });
     }
@@ -136,6 +151,11 @@ public class MyProfileFragment extends Fragment {
 
     public void navigateToSettingsFragment (View view) {
         NavDirections action = MyProfileFragmentDirections.actionMyProfileFragmentToSettingsFragment();
+        Navigation.findNavController(view).navigate(action);
+    }
+
+    public void navigateToChangePasswordFragment (View view) {
+        NavDirections action = MyProfileFragmentDirections.actionMyProfileFragmentToChangePasswordFragment();
         Navigation.findNavController(view).navigate(action);
     }
 

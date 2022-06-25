@@ -90,6 +90,10 @@
     <string name="my_profile_fragment_edit_profile_label" translatable="false">@string/edit_profile</string>
     <string name="my_profile_fragment_logout_label" translatable="false">@string/logout</string>
     <string name="my_profile_fragment_change_profile_picture_label" translatable="false">@string/change_profile_picture</string>
+    <string name="change">Change</string>
+    <string name="re_enter_new_password">Re-enter new password</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="enter_old_password">Enter old password</string>
 
     <!-- Settings fragment -->
     <!-- TODO (Ivana: ovdje ces definirati reference na stringove koje pozivas u fragmentu fragment_settings.xml) -->
