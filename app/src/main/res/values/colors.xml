@@ -9,4 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#FF606060</color>
     <color name="light_gray">#FF888888</color>
+    <color name="tindroom_pink_200">#fa5788</color>
+    <color name="tindroom_pink_500">#c2165b</color>
+    <color name="tindroom_pink_700">#8c0032</color>
+
 </resources>
