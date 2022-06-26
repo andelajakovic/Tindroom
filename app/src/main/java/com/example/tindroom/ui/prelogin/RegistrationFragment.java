@@ -17,6 +17,7 @@ import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
+import com.example.tindroom.utils.LoadingDialogBar;
 import com.example.tindroom.utils.NetworkChangeListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -52,6 +53,7 @@ public class RegistrationFragment extends Fragment {
     private TextInputEditText passwordEditText, repeatPasswordEditText, emailEditText;
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+    LoadingDialogBar loadingDialogBar;
 
     private String email, password, repeatPassword;
 
@@ -70,6 +72,7 @@ public class RegistrationFragment extends Fragment {
         tindroomApiService = retrofit.create(TindroomApiService.class);
 
         user = new User();
+        loadingDialogBar = new LoadingDialogBar(getActivity());
 
         initViews();
         initListeners();
@@ -150,11 +153,11 @@ public class RegistrationFragment extends Fragment {
     }
 
     private void checkIfEmailExists() {
-        final ProgressDialog progressDialog = ProgressDialog.show(getContext(),"Loading...", "Please wait",true);
+        loadingDialogBar.startLoadingDialog();
         mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
             @Override
             public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
-                progressDialog.dismiss();
+                loadingDialogBar.dismissDialog();
                 if (task.getResult().getSignInMethods().size() == 0) {
                     insertUserToFirebase();
                 } else {
@@ -165,11 +168,13 @@ public class RegistrationFragment extends Fragment {
     }
 
     private void insertUserToFirebase () {
-        final ProgressDialog progressDialog = ProgressDialog.show(getContext(),"Loading...", "Please wait",true);
+
+        loadingDialogBar.startLoadingDialog();
         mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                progressDialog.dismiss();
+
+                loadingDialogBar.dismissDialog();
                 if (task.isSuccessful()) {
                     user.setUserId(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
                     user.setRegistered(false);

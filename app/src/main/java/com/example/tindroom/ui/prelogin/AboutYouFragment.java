@@ -29,6 +29,7 @@ import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
 import com.example.tindroom.utils.ImageHandler;
 import com.example.tindroom.utils.InputValidator;
+import com.example.tindroom.utils.LoadingDialogBar;
 import com.example.tindroom.utils.NetworkChangeListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -68,6 +69,7 @@ public class AboutYouFragment extends Fragment {
     private ImageButton editImageButton;
     private Button nextButton;
     private Uri imageUri;
+    LoadingDialogBar loadingDialogBar;
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
@@ -86,6 +88,7 @@ public class AboutYouFragment extends Fragment {
 
         Retrofit retrofit = RetrofitService.getRetrofit();
         tindroomApiService = retrofit.create(TindroomApiService.class);
+        loadingDialogBar = new LoadingDialogBar(getActivity());
 
         initViews();
         initListeners();
@@ -174,7 +177,7 @@ public class AboutYouFragment extends Fragment {
 
     private void setFacultyMenuItems() {
         facultyList = new ArrayList<>();
-        final ProgressDialog progressDialog = ProgressDialog.show(getContext(),"Loading...", "Please wait",true);
+        loadingDialogBar.startLoadingDialog();
 
         Call<List<Faculty>> facultiesCall = tindroomApiService.getFaculties();
 
@@ -182,7 +185,7 @@ public class AboutYouFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(@NonNull final Call<List<Faculty>> call, @NonNull final Response<List<Faculty>> response) {
-                progressDialog.dismiss();
+                loadingDialogBar.dismissDialog();
                 assert response.body() != null;
                 facultyList.addAll(response.body());
                 String[] items = facultyList.stream().map(Faculty::getName).toArray(String[]::new);

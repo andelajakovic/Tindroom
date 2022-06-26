@@ -28,6 +28,7 @@ import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
+import com.example.tindroom.utils.LoadingDialogBar;
 import com.example.tindroom.utils.NetworkChangeListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -49,6 +50,7 @@ public class LoginFragment extends Fragment {
     private TextInputEditText passwordEditText, emailEditText;
     private TextView linkToRegistrationFragment;
     private Button loginButton;
+    LoadingDialogBar loadingDialogBar;
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
@@ -66,6 +68,7 @@ public class LoginFragment extends Fragment {
 
         Retrofit retrofit = RetrofitService.getRetrofit();
         tindroomApiService = retrofit.create(TindroomApiService.class);
+        loadingDialogBar = new LoadingDialogBar(getActivity());
 
         initViews();
         initListeners();
@@ -136,14 +139,14 @@ public class LoginFragment extends Fragment {
 
     private void checkLoginForm() {
 
-        final ProgressDialog progressDialog = ProgressDialog.show(getContext(),"Loading...", "Please wait",true);
+        loadingDialogBar.startLoadingDialog();
 
         mAuth.signInWithEmailAndPassword(Objects.requireNonNull(emailEditText.getText()).toString().trim(), Objects.requireNonNull(passwordEditText.getText()).toString().trim())
              .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 
                  @Override
                  public void onComplete(@NonNull Task<AuthResult> task) {
-                     progressDialog.dismiss();
+                     loadingDialogBar.dismissDialog();
                      if (task.isSuccessful()) {
                          // Sign in success, update UI with the signed-in user's information
                          FirebaseUser user = mAuth.getCurrentUser();
