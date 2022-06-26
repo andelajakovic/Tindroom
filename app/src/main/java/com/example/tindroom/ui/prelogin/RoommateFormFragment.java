@@ -184,7 +184,6 @@ public class RoommateFormFragment extends Fragment {
 
     private void setGenderMenuItems() {
         String[] items =  getResources().getStringArray(R.array.roommates_gender_items);
-
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items);
         roommateGenderDropdown.setAdapter(arrayAdapter);
     }
@@ -196,8 +195,6 @@ public class RoommateFormFragment extends Fragment {
         Call<List<Neighborhood>> neighborhoodsCall = tindroomApiService.getNeighborhoods();
 
         neighborhoodsCall.enqueue(new Callback<List<Neighborhood>>() {
-            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
-
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(@NonNull final Call<List<Neighborhood>> call, @NonNull final Response<List<Neighborhood>> response) {

@@ -90,16 +90,21 @@
     <string name="my_profile_fragment_edit_profile_label" translatable="false">@string/edit_profile</string>
     <string name="my_profile_fragment_logout_label" translatable="false">@string/logout</string>
     <string name="my_profile_fragment_change_profile_picture_label" translatable="false">@string/change_profile_picture</string>
-    <string name="change">Change</string>
-    <string name="re_enter_new_password">Re-enter new password</string>
-    <string name="enter_new_password">Enter new password</string>
-    <string name="enter_old_password">Enter old password</string>
+    <string name="change" translatable="false">Change</string>
+    <string name="re_enter_new_password" translatable="false">Re-enter new password</string>
+    <string name="enter_new_password" translatable="false">Enter new password</string>
+    <string name="enter_old_password" translatable="false">Enter old password</string>
 
     <!-- Settings fragment -->
     <!-- TODO (Ivana: ovdje ces definirati reference na stringove koje pozivas u fragmentu fragment_settings.xml) -->
 
     <!-- Swipe fragment -->
     <string name="swipe_fragment_apartment_description" translatable="false">@string/apartment_description</string>
+    <string name="delete_account">Delete account</string>
+    <string name="edit_name">Edit name</string>
+    <string name="edit_your_roommate_choices">Edit your roommate choices</string>
+    <string name="edit_your_personal_info">Edit your personal info</string>
+    <string name="save_preferences">Save preferences</string>
 
     <!-- Arrays -->
     <array name="your_gender_items">

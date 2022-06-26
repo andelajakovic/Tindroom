@@ -25,7 +25,7 @@ public interface TindroomApiService {
     Call<List<Neighborhood>> getNeighborhoods();
 
     @GET("neighborhoods/{neighborhood_id}")
-    Call<Neighborhood> getNeighborhoodById(@Path("neighborhood_id") int neighborhoodId);
+    Call<Neighborhood> getNeighborhoodById(@Path("neighborhood_id") Long neighborhoodId);
 
     @GET("users")
     Call<List<User>> getUsers();
