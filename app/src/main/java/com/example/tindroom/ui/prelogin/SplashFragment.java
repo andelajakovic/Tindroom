@@ -35,7 +35,6 @@ public class SplashFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // TODO (Andrea: napraviti odgodu 1500-3000 ms)
         final Handler handler = new Handler();
 
         handler.postDelayed(new Runnable() {

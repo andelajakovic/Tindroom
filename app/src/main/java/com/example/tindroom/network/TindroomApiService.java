@@ -3,6 +3,7 @@ package com.example.tindroom.network;
 
 import com.example.tindroom.data.model.Faculty;
 import com.example.tindroom.data.model.Neighborhood;
+import com.example.tindroom.data.model.Swipe;
 import com.example.tindroom.data.model.User;
 
 import java.util.List;
@@ -38,5 +39,14 @@ public interface TindroomApiService {
 
     @PATCH("users/update/{user_id}")
     Call<User> updateUserById(@Path("user_id") String user_id, @Body User user);
+
+    @POST("/swipes/update")
+    Call<Swipe> updateSwipe(@Body Swipe swipe);
+
+    @POST("/swipes/insert")
+    Call<Swipe> insertSwipe(@Body Swipe swipe);
+
+    @GET("/swipes/{user_id}")
+    Call<List<Swipe>> getUsersSwipes(@Path("user_id") String userId);
 }
 

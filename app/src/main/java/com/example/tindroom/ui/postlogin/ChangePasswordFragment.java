@@ -25,7 +25,6 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-// TODO (Ivana: implementirati promjenu lozinke preko Firebasea)
 
 public class ChangePasswordFragment extends Fragment {
 

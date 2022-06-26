@@ -2,7 +2,6 @@
     <!-- Base application theme. -->
     <style name="Theme.Tindroom" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <!-- TODO (Andrea: izabrati boje) -->
         <item name="colorPrimary">@color/tindroom_pink_500</item>
         <item name="colorPrimaryVariant">@color/tindroom_pink_700</item>
         <item name="colorOnPrimary">@color/white</item>

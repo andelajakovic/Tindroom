@@ -152,7 +152,6 @@ public class RegistrationFragment extends Fragment {
     private void checkIfEmailExists() {
         final ProgressDialog progressDialog = ProgressDialog.show(getContext(),"Loading...", "Please wait",true);
         mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
-            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
             @Override
             public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
                 progressDialog.dismiss();
@@ -168,7 +167,6 @@ public class RegistrationFragment extends Fragment {
     private void insertUserToFirebase () {
         final ProgressDialog progressDialog = ProgressDialog.show(getContext(),"Loading...", "Please wait",true);
         mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 progressDialog.dismiss();

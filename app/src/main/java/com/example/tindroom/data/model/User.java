@@ -56,6 +56,10 @@ public class User implements Parcelable {
 
     private String imageUri;
 
+    private Faculty faculty;
+
+    private Neighborhood neighborhood;
+
     public String getUserId() {
         return userId;
     }
@@ -184,6 +188,22 @@ public class User implements Parcelable {
         this.imageUri = imageUri;
     }
 
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(final Faculty faculty) {
+        this.faculty = faculty;
+    }
+
+    public Neighborhood getNeighborhood() {
+        return neighborhood;
+    }
+
+    public void setNeighborhood(final Neighborhood neighborhood) {
+        this.neighborhood = neighborhood;
+    }
+
     @SerializedName("feedback")
     private Object feedback;
 
@@ -208,6 +228,7 @@ public class User implements Parcelable {
                 ", priceFrom=" + priceFrom +
                 ", priceTo=" + priceTo +
                 ", idNeighborhood=" + idNeighborhood +
+                ", imageUrl=" + imageUrl +
                 '}';
     }
 

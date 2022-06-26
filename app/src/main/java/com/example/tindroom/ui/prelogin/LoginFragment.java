@@ -140,7 +140,6 @@ public class LoginFragment extends Fragment {
 
         mAuth.signInWithEmailAndPassword(Objects.requireNonNull(emailEditText.getText()).toString().trim(), Objects.requireNonNull(passwordEditText.getText()).toString().trim())
              .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                 // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
 
                  @Override
                  public void onComplete(@NonNull Task<AuthResult> task) {
