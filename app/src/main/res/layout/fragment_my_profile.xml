@@ -54,6 +54,31 @@
             android:layout_margin="@dimen/linear_layout_margin">
 
             <ImageButton
+                android:id="@+id/safetyButton"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:background="@drawable/white_button_selector"
+                android:src="@drawable/privacy_icon_gray" />
+
+            <TextView
+                android:id="@+id/safetyLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Safety"
+                android:textAllCaps="true"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/safetyButton"
+                app:layout_constraintStart_toStartOf="@+id/safetyButton"
+                app:layout_constraintTop_toBottomOf="@+id/safetyButton" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/linear_layout_margin">
+
+            <ImageButton
                 android:id="@+id/editProfileButton"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
@@ -80,8 +105,8 @@
 
             <ImageButton
                 android:id="@+id/logoutButton"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:background="@drawable/white_button_selector"
                 android:src="@drawable/logout_icon_gray" />
 
@@ -96,31 +121,6 @@
                 app:layout_constraintEnd_toEndOf="@+id/logoutButton"
                 app:layout_constraintStart_toStartOf="@+id/logoutButton"
                 app:layout_constraintTop_toBottomOf="@+id/logoutButton" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/linear_layout_margin">
-
-            <ImageButton
-                android:id="@+id/safetyButton"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:background="@drawable/white_button_selector"
-                android:src="@drawable/ic_baseline_privacy_tip_24" />
-
-            <TextView
-                android:id="@+id/safetyLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Safety"
-                android:textAllCaps="true"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="@+id/safetyButton"
-                app:layout_constraintStart_toStartOf="@+id/safetyButton"
-                app:layout_constraintTop_toBottomOf="@+id/safetyButton" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
