@@ -137,7 +137,6 @@ public class SettingsFragment extends Fragment {
         userHasApartment();
         setGenderMenuItems();
         setFacultyMenuItems();
-        setNeighborhoodMenuItems();
     }
 
     private void userHasApartment(){
@@ -201,7 +200,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void userFaculty(){
-        Long faculty = user.getIdFaculty();
+        /*Long faculty = user.getIdFaculty();
         final String[] userFaculty = {""};
 
         Call<Faculty> facultyCall = tindroomApiService.getFacultyById(faculty);
@@ -215,12 +214,12 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onFailure(Call<Faculty> call, Throwable t) {
             }
-        });
-        facultyDropdown.setText(userFaculty[0], false);
+        });*/
+        facultyDropdown.setText(user.getFaculty().getName(), false);
     }
 
     private void userNeighborhood(){
-        Long neighborId = user.getIdNeighborhood();
+        /*Long neighborId = user.getIdNeighborhood();
         final String[] neighborhood = {""};
         Call<Neighborhood> neighborhoodCall = tindroomApiService.getNeighborhoodById(neighborId);
         neighborhoodCall.enqueue(new Callback<Neighborhood>() {
@@ -233,7 +232,8 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onFailure(Call<Neighborhood> call, Throwable t) {
             }
-        });
+        });*/
+        neighbourhoodDropdown.setText(user.getNeighborhood().getName(), false);
     }
 
     private void setGenderMenuItems(){
@@ -259,7 +259,6 @@ public class SettingsFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(@NonNull final Call<List<Faculty>> call, @NonNull final Response<List<Faculty>> response) {
-                loadingDialogBar.dismissDialog();
                 assert response.body() != null;
                 facultyList.addAll(response.body());
                 String[] items = facultyList.stream().map(Faculty::getName).toArray(String[]::new);
@@ -269,6 +268,7 @@ public class SettingsFragment extends Fragment {
                         android.R.layout.simple_spinner_dropdown_item,
                         items);
                 facultyDropdown.setAdapter(spinnerArrayAdapter);
+                setNeighborhoodMenuItems();
             }
 
             @Override
@@ -281,7 +281,6 @@ public class SettingsFragment extends Fragment {
 
     private void setNeighborhoodMenuItems() {
         neighborhoodList = new ArrayList<>();
-        loadingDialogBar.startLoadingDialog();
 
         Call<List<Neighborhood>> neighborhoodsCall = tindroomApiService.getNeighborhoods();
 

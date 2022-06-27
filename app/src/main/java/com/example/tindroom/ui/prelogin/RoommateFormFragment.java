@@ -238,6 +238,7 @@ public class RoommateFormFragment extends Fragment {
             for (Neighborhood neighborhood : neighborhoodList) {
                 if (neighborhood.getName().equals(String.valueOf(neighborhoodDropdown.getText()))) {
                     user.setIdNeighborhood(neighborhood.getNeighborhoodId());
+                    user.setNeighborhood(neighborhood);
                     break;
                 } else {
                     user.setIdNeighborhood(null);
@@ -279,7 +280,6 @@ public class RoommateFormFragment extends Fragment {
         loadingDialogBar.startLoadingDialog();
         StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(uri));
         fileRef.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
 
             @Override
             public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {

@@ -10,7 +10,6 @@
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
         tools:visibility="visible">
 
         <ImageView
@@ -95,6 +94,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout2"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

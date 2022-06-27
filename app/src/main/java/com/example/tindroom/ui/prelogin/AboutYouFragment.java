@@ -254,6 +254,7 @@ public class AboutYouFragment extends Fragment {
         for (Faculty faculty : facultyList) {
             if (faculty.getName().equals(String.valueOf(facultyDropdown.getText()))) {
                 user.setIdFaculty(faculty.getFacultyId());
+                user.setFaculty(faculty);
                 break;
             }
         }

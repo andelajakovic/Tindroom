@@ -7,6 +7,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Calendar;
+
 @SuppressLint("ParcelCreator")
 public class User implements Parcelable {
     @SerializedName("user_id")
@@ -59,6 +61,8 @@ public class User implements Parcelable {
     private Faculty faculty;
 
     private Neighborhood neighborhood;
+
+    public double grade = 0.0;
 
     public String getUserId() {
         return userId;
@@ -211,6 +215,29 @@ public class User implements Parcelable {
         return feedback;
     }
 
+    public String getAge(){
+
+        int month = Integer.parseInt(this.getDateOfBirth().substring(5,7));
+        int day = Integer.parseInt(this.getDateOfBirth().substring(9,10));
+        int year = Integer.parseInt(this.getDateOfBirth().substring(0,4));
+
+        Calendar dob = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+
+        dob.set(year, month, day);
+
+        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)){
+            age--;
+        }
+
+        Integer ageInt = new Integer(age);
+        String ageS = ageInt.toString();
+
+        return ageS;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -229,6 +256,7 @@ public class User implements Parcelable {
                 ", priceTo=" + priceTo +
                 ", idNeighborhood=" + idNeighborhood +
                 ", imageUrl=" + imageUrl +
+                ", grade=" + grade +
                 '}';
     }
 

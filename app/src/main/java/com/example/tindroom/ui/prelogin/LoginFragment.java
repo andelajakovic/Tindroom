@@ -26,9 +26,12 @@ import android.widget.Toast;
 
 import com.example.tindroom.R;
 import com.example.tindroom.data.local.SharedPreferencesStorage;
+import com.example.tindroom.data.model.Faculty;
+import com.example.tindroom.data.model.Neighborhood;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
+import com.example.tindroom.utils.InputValidator;
 import com.example.tindroom.utils.LoadingDialogBar;
 import com.example.tindroom.utils.NetworkChangeListener;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -109,34 +112,20 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                checkLoginForm();
+                if(checkUserInput()) checkLoginForm();
             }
         });
 
-        TextWatcher textWatcher = new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(final CharSequence charSequence, final int i, final int i1, final int i2) {
-            }
-
-            @Override
-            public void onTextChanged(final CharSequence charSequence, final int i, final int i1, final int i2) {
-                updateButtonState();
-            }
-
-            @Override
-            public void afterTextChanged(final Editable editable) {
-            }
-        };
-
-        emailEditText.addTextChangedListener(textWatcher);
-        passwordEditText.addTextChangedListener(textWatcher);
     }
 
-    private void updateButtonState() {
-        loginButton.setEnabled(!Objects.requireNonNull(emailEditText.getText()).toString().isEmpty() && !Objects.requireNonNull(passwordEditText.getText()).toString().isEmpty());
-    }
+    private boolean checkUserInput() {
+        InputValidator inputValidator = new InputValidator(getContext());
 
+        boolean emailNotEmptyFlag = inputValidator.isInputEditTextFilled(emailEditText, emailInput);
+        boolean passwordNotEmptyFlag = inputValidator.isInputEditTextFilled(passwordEditText, passwordInput);
+
+        return emailNotEmptyFlag && passwordNotEmptyFlag;
+    }
 
     private void checkLoginForm() {
 
@@ -147,7 +136,6 @@ public class LoginFragment extends Fragment {
 
                  @Override
                  public void onComplete(@NonNull Task<AuthResult> task) {
-                     loadingDialogBar.dismissDialog();
                      if (task.isSuccessful()) {
                          // Sign in success, update UI with the signed-in user's information
                          FirebaseUser user = mAuth.getCurrentUser();
@@ -157,9 +145,8 @@ public class LoginFragment extends Fragment {
 
                              @Override
                              public void onResponse(final Call<User> call, final Response<User> response) {
-                                 SharedPreferencesStorage.setSessionUser(requireContext(), response.body());
-                                 navigateToHomeActivity(rootView);
-                                 requireActivity().finish();
+                                 User user = response.body();
+                                 setUsersFaculty(user);
                              }
 
                              @Override
@@ -173,6 +160,50 @@ public class LoginFragment extends Fragment {
                      }
                  }
              });
+    }
+
+    private void setUsersFaculty(User user) {
+        Call<Faculty> facultyCall = tindroomApiService.getFacultyById(user.getIdFaculty());
+        facultyCall.enqueue(new Callback<Faculty>() {
+
+            @Override
+            public void onResponse(final Call<Faculty> call, final Response<Faculty> response) {
+                user.setFaculty(response.body());
+                if(user.isHasApartment()) {
+                    setUsersNeighborhood(user);
+                } else {
+                    loadingDialogBar.dismissDialog();
+                    SharedPreferencesStorage.setSessionUser(requireContext(), user);
+                    navigateToHomeActivity(rootView);
+                    requireActivity().finish();
+                }
+            }
+
+            @Override
+            public void onFailure(final Call<Faculty> call, final Throwable t) {
+
+            }
+        });
+    }
+
+    private void setUsersNeighborhood (User user) {
+        Call<Neighborhood> neighborhoodCall = tindroomApiService.getNeighborhoodById(user.getIdNeighborhood());
+        neighborhoodCall.enqueue(new Callback<Neighborhood>() {
+
+            @Override
+            public void onResponse(final Call<Neighborhood> call, final Response<Neighborhood> response) {
+                loadingDialogBar.dismissDialog();
+                user.setNeighborhood(response.body());
+                SharedPreferencesStorage.setSessionUser(requireContext(), user);
+                navigateToHomeActivity(rootView);
+                requireActivity().finish();
+            }
+
+            @Override
+            public void onFailure(final Call<Neighborhood> call, final Throwable t) {
+
+            }
+        });
     }
 
 

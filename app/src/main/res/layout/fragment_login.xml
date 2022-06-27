@@ -62,7 +62,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/linear_layout_margin"
             android:layout_gravity="center"
-            android:enabled="false"
             style="@style/PrimaryButtonStyle"
             android:text="@string/login_fragment_login_button_label"/>
 

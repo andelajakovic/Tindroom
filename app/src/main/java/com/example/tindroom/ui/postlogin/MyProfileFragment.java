@@ -126,21 +126,8 @@ public class MyProfileFragment extends Fragment {
     }
 
     private void initData(){
-        usersName.setText(sessionUser.getName());
-
-        Call<Faculty> usersFacultyCall = tindroomApiService.getFacultyById(sessionUser.getIdFaculty());
-        usersFacultyCall.enqueue(new Callback<Faculty>() {
-
-            @Override
-            public void onResponse(final Call<Faculty> call, final Response<Faculty> response) {
-                usersFaculty.setText(response.body() != null ? response.body().getName() : "");
-            }
-
-            @Override
-            public void onFailure(final Call<Faculty> call, final Throwable t) {
-
-            }
-        });
+        usersName.setText( sessionUser.getName());
+        usersFaculty.setText(sessionUser.getFaculty().getName());
     }
 
 

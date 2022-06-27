@@ -41,7 +41,11 @@ import com.example.tindroom.network.TindroomApiService;
 import com.example.tindroom.utils.LoadingDialogBar;
 import com.example.tindroom.utils.OnSwipeTouchListener;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class SwipeFragment extends Fragment {
@@ -96,6 +100,7 @@ public class SwipeFragment extends Fragment {
         settings = rootView.findViewById(R.id.settings);
         layout = rootView.findViewById(R.id.layout);
         layout2 = rootView.findViewById(R.id.layout2);
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -182,7 +187,6 @@ public class SwipeFragment extends Fragment {
         if (swipeUsers.isEmpty()) {
             layout.setVisibility(View.GONE);
             layout2.setVisibility(View.VISIBLE);
-            // TODO (Andrea: dodati layout kada vise nema korisnika za swipeanje)
         } else {
             displayUser(swipeUsers.get(0));
         }
@@ -190,15 +194,15 @@ public class SwipeFragment extends Fragment {
 
     private void displayUser(User swipeUser) {
 
-        //long ageInMillis = new Date().getTime() - new Date(swipeUser.getDateOfBirth()).getTime();
-        //Date age = new Date(ageInMillis);
+
 
         Glide.with(rootView)
              .asBitmap()
              .load(swipeUser.getImageUrl())
              .error(getResources().getDrawable(R.drawable.avatar_placeholder))
              .into(profilePicture);
-        roommatesName.setText(swipeUser.getName());
+
+        roommatesName.setText(String.format("%s, %s", swipeUser.getName(), swipeUser.getAge()));
 
         roommatesFaculty.setText(swipeUser.getFaculty().getName());
 
@@ -212,17 +216,19 @@ public class SwipeFragment extends Fragment {
             apartmentDescriptionLayout.setVisibility(View.VISIBLE);
             apartmentDescription.setText(getResources().getString(R.string.swipe_fragment_apartment_description,
                                                                   swipeUser.getNeighborhood().getName(),
-                                                                  String.valueOf(swipeUser.getPriceFrom())));
+                                                                  String.valueOf((int)swipeUser.getPriceFrom())));
         } else {
-            apartmentDescription.setVisibility(View.GONE);
+            apartmentDescriptionLayout.setVisibility(View.GONE);
         }
     }
 
+    @SuppressLint("NewApi")
     private List<User> sortSwipeUsers(List<User> swipeUsers) {
         List<User> sortedUsers = new ArrayList<>();
 
         for (User swipeUser: swipeUsers) {
-            if(!swipeUser.isRegistered() || swipeUser.getUserId().equals(sessionUser.getUserId())) {
+
+            if(!swipeUser.isRegistered() || swipeUser.getUserId().equals(sessionUser.getUserId()) || checkIfUserIsAlreadySwiped(swipeUser)) {
                 continue;
             }
 
@@ -242,11 +248,112 @@ public class SwipeFragment extends Fragment {
                 }
             }
 
-            if (!checkIfUserIsAlreadySwiped(swipeUser)) {
-                sortedUsers.add(swipeUser);
+            int divider = 1;
+
+            if (Integer.parseInt(sessionUser.getAge()) >= swipeUser.getRoommateAgeFrom() && Integer.parseInt(sessionUser.getAge()) <= swipeUser.getRoommateAgeTo()) {
+                swipeUser.grade += 10;
+            } else if (Integer.parseInt(sessionUser.getAge()) >= (swipeUser.getRoommateAgeFrom() - 1) && Integer.parseInt(sessionUser.getAge()) <= (swipeUser.getRoommateAgeTo() + 1)) {
+                swipeUser.grade += 8;
+            } else if (Integer.parseInt(sessionUser.getAge()) >= (swipeUser.getRoommateAgeFrom() - 2) && Integer.parseInt(sessionUser.getAge()) <= (swipeUser.getRoommateAgeTo() + 2)) {
+                swipeUser.grade += 6;
+            } else if (Integer.parseInt(sessionUser.getAge()) >= (swipeUser.getRoommateAgeFrom() - 3) && Integer.parseInt(sessionUser.getAge()) <= (swipeUser.getRoommateAgeTo() + 3)) {
+                swipeUser.grade += 4;
+            } else if (Integer.parseInt(sessionUser.getAge()) >= (swipeUser.getRoommateAgeFrom() - 4) && Integer.parseInt(sessionUser.getAge()) <= (swipeUser.getRoommateAgeTo() + 4)) {
+                swipeUser.grade += 2;
             }
 
+            if (Integer.parseInt(swipeUser.getAge()) >= sessionUser.getRoommateAgeFrom() && Integer.parseInt(swipeUser.getAge()) <= sessionUser.getRoommateAgeTo()) {
+                swipeUser.grade += 10;
+            } else if (Integer.parseInt(swipeUser.getAge()) >= (sessionUser.getRoommateAgeFrom() - 1) && Integer.parseInt(swipeUser.getAge()) <= (sessionUser.getRoommateAgeTo() + 1)) {
+                swipeUser.grade += 8;
+            } else if (Integer.parseInt(swipeUser.getAge()) >= (sessionUser.getRoommateAgeFrom() - 2) && Integer.parseInt(swipeUser.getAge()) <= (sessionUser.getRoommateAgeTo() + 2)) {
+                swipeUser.grade += 6;
+            } else if (Integer.parseInt(swipeUser.getAge()) >= (sessionUser.getRoommateAgeFrom() - 3) && Integer.parseInt(swipeUser.getAge()) <= (sessionUser.getRoommateAgeTo() + 3)) {
+                swipeUser.grade += 4;
+            } else if (Integer.parseInt(swipeUser.getAge()) >= (sessionUser.getRoommateAgeFrom() - 4) && Integer.parseInt(swipeUser.getAge()) <= (sessionUser.getRoommateAgeTo() + 4)) {
+                swipeUser.grade += 2;
+            }
+
+            if (sessionUser.getRoommateGender() == 'A') {
+                swipeUser.grade += 10;
+            } else if (sessionUser.getRoommateGender() == swipeUser.getGender()) {
+                swipeUser.grade += 10;
+            } else {
+                divider++;
+            }
+
+            if (swipeUser.getRoommateGender() == 'A') {
+                swipeUser.grade += 10;
+            } else if (swipeUser.getRoommateGender() == sessionUser.getGender()) {
+                swipeUser.grade += 10;
+            } else {
+                divider++;
+            }
+
+            if (!sessionUser.isHasApartment() && !swipeUser.isHasApartment()) {
+                if (Math.abs(sessionUser.getPriceFrom() - swipeUser.getPriceFrom()) < 100) {
+                    swipeUser.grade += 10;
+                } else if (Math.abs(sessionUser.getPriceFrom() - swipeUser.getPriceFrom()) < 500) {
+                    swipeUser.grade += 7;
+                } else if (Math.abs(sessionUser.getPriceFrom() - swipeUser.getPriceFrom()) < 1000) {
+                    swipeUser.grade += 3;
+                }
+
+                if (Math.abs(sessionUser.getPriceTo() - swipeUser.getPriceTo()) < 100) {
+                    swipeUser.grade += 10;
+                } else if (Math.abs(sessionUser.getPriceTo() - swipeUser.getPriceTo()) < 500) {
+                    swipeUser.grade += 7;
+                } else if (Math.abs(sessionUser.getPriceTo() - swipeUser.getPriceTo()) < 1000) {
+                    swipeUser.grade += 3;
+                }
+
+            } else if (!sessionUser.isHasApartment() && swipeUser.isHasApartment()) {
+                if (sessionUser.getPriceFrom() <= swipeUser.getPriceFrom() && sessionUser.getPriceTo() >= swipeUser.getPriceFrom()) {
+                    swipeUser.grade += 10;
+                } else if ((sessionUser.getPriceFrom() - 500) <= swipeUser.getPriceFrom() && (sessionUser.getPriceTo() + 500) >= swipeUser.getPriceFrom()) {
+                    swipeUser.grade += 7;
+                } else if ((sessionUser.getPriceFrom() - 1000) <= swipeUser.getPriceFrom() && (sessionUser.getPriceTo() + 1000) >= swipeUser.getPriceFrom()) {
+                    swipeUser.grade += 3;
+                }
+
+                if(sessionUser.getFaculty().getArea().equals(swipeUser.getNeighborhood().getArea())) {
+                    swipeUser.grade += 20;
+                }
+
+            } else if (sessionUser.isHasApartment() && !swipeUser.isHasApartment()) {
+                if (swipeUser.getPriceFrom() <= sessionUser.getPriceFrom() && swipeUser.getPriceTo() >= sessionUser.getPriceFrom()) {
+                    swipeUser.grade += 10;
+                } else if ((swipeUser.getPriceFrom() - 500) <= sessionUser.getPriceFrom() && (swipeUser.getPriceTo() + 500) >= sessionUser.getPriceFrom()) {
+                    swipeUser.grade += 7;
+                } else if ((swipeUser.getPriceFrom() - 1000) <= sessionUser.getPriceFrom() && (swipeUser.getPriceTo() + 1000) >= sessionUser.getPriceFrom()) {
+                    swipeUser.grade += 3;
+                }
+
+                if(swipeUser.getFaculty().getArea().equals(sessionUser.getNeighborhood().getArea())) {
+                    swipeUser.grade += 20;
+                }
+
+            } else {
+                continue;
+            }
+
+            if (sessionUser.getFaculty().getFacultyId().equals(swipeUser.getFaculty().getFacultyId())) {
+                swipeUser.grade += 5;
+            }
+
+            swipeUser.grade /= divider;
+            sortedUsers.add(swipeUser);
+
+
         }
+        sortedUsers.sort(new Comparator<User>() {
+            @Override
+            public int compare(final User user, final User t1) {
+                return Double.compare(t1.grade, user.grade);
+            }
+        });
+
+        Log.d("!!!!!!!!!!!!", sortedUsers.toString());
 
         return sortedUsers;
     }
@@ -254,10 +361,8 @@ public class SwipeFragment extends Fragment {
     private boolean checkIfUserIsAlreadySwiped (User user) {
         for (Swipe swipe: swipes) {
             if (swipe.getUserId1().equals(user.getUserId()) && swipe.isSwipe_2() != null) {
-                Log.d("!!!!!!", user.toString());
                 return true;
             } else if (swipe.getUserId2().equals(user.getUserId()) && swipe.isSwipe_1() != null) {
-                Log.d("!!!!!!", user.toString());
                 return true;
             }
         }
