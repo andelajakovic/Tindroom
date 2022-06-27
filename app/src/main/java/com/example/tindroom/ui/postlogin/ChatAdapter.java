@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tindroom.R;
+import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.Chat;
 import com.example.tindroom.data.model.User;
 import com.google.firebase.database.DataSnapshot;
@@ -44,10 +45,31 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
         this.listener = listener;
     }
 
+    public class Viewholder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private CircleImageView profilePic;
+        private TextView name, message;
+
+        public Viewholder(@NonNull View itemView) {
+            super(itemView);
+            profilePic = itemView.findViewById(R.id.profilePic);
+            name = itemView.findViewById(R.id.name);
+            message = itemView.findViewById(R.id.message);
+
+            itemView.setOnClickListener(this);
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            listener.onClick(v, getAdapterPosition(), chatUsers);
+        }
+    }
+
     @NonNull
     @Override
     public ChatAdapter.Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout, parent, false);
+        sessionUser = SharedPreferencesStorage.getSessionUser(context.getApplicationContext());
         return new Viewholder(view);
     }
 
@@ -103,26 +125,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
 
     public interface RecyclerViewClickListener{
         void onClick(View v, int position, ArrayList<User> chatUsers);
-    }
-
-    public class Viewholder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private CircleImageView profilePic;
-        private TextView name, message;
-
-        public Viewholder(@NonNull View itemView) {
-            super(itemView);
-            profilePic = itemView.findViewById(R.id.profilePic);
-            name = itemView.findViewById(R.id.name);
-            message = itemView.findViewById(R.id.message);
-
-            itemView.setOnClickListener(this);
-
-        }
-
-        @Override
-        public void onClick(View v) {
-            listener.onClick(v, getAdapterPosition(), chatUsers);
-        }
     }
 
 }

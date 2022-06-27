@@ -61,7 +61,6 @@ public class SwipeFragment extends Fragment {
     private List<Neighborhood> neighborhoods;
     private List<Swipe> swipes;
 
-
     private ImageView profilePicture;
     private LinearLayout userDescriptionLayout, apartmentDescriptionLayout;
     private TextView roommatesName, roommatesFaculty, roommatesDescription, apartmentDescription;
