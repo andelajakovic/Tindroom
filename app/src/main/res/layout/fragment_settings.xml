@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ui.postlogin.SettingsFragment">
-
-    <!-- TODO (Ivana: hardkodirane stringove izvuci u strings.xml i prevesti) -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,25 +16,24 @@
             android:id="@+id/aboutYou"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:layout_marginStart="@dimen/linear_layout_margin"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="@dimen/linear_layout_margin"
             android:layout_marginBottom="@dimen/linear_layout_margin"
-            android:text="Uredi informacije o sebi" />
+            android:text="@string/edit_your_personal_info" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/usernameInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/linear_layout_margin"
-            android:hint="Uredi ime">
+            android:hint="@string/edit_name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/usernameEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:text="Korisničko ime" />
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -52,28 +50,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:text="16.6.1999."
                 android:focusableInTouchMode="false"
                 android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/genderInput"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/linear_layout_margin"
-            android:hint="@string/about_you_fragment_gender_hint"
-            tools:layout_editor_absoluteX="16dp">
-
-            <AutoCompleteTextView
-                android:id="@+id/genderDropdown"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Zensko"
-                android:inputType="none" />
-        </com.google.android.material.textfield.TextInputLayout>
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/facultyInput"
@@ -82,7 +61,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/linear_layout_margin"
             android:layout_marginTop="196dp"
-            android:hint="@string/about_you_fragment_faculty_hint"
             tools:layout_editor_absoluteX="51dp">
 
             <AutoCompleteTextView
@@ -90,15 +68,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                android:text="Tehnički fakultet Rijeka" />
+                android:hint="Faculty"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/descriptionInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/linear_layout_margin"
-            android:hint="Uredi svoj opis">
+            android:hint="Edit about you"
+            android:layout_margin="@dimen/linear_layout_margin">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/descriptionEditText"
@@ -110,21 +88,18 @@
                 android:maxLength="255"
                 android:minLines="3"
                 android:scrollbars="vertical"
-                android:singleLine="false"
-                android:text="O tebi" />
+                android:singleLine="false" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- TODO (Ivana: dodati link za promijeni lozinku) -->
 
         <TextView
             android:id="@+id/roommate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:layout_marginStart="@dimen/linear_layout_margin"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="@dimen/linear_layout_margin"
             android:layout_marginBottom="@dimen/linear_layout_margin"
-            android:text="Uredi svoje preference"/>
+            android:text="@string/edit_your_roommate_choices" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/roommateGenderInput"
@@ -132,35 +107,44 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/linear_layout_margin"
-            android:hint="M">
+            android:hint="Roommate gender">
 
             <AutoCompleteTextView
                 android:id="@+id/roommateGenderDropdown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none" />
+                android:hint=""
+                android:inputType="none"
+                android:text="" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/roommateLimit"
+            style="@style/TitleTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/linear_layout_margin"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="@dimen/linear_layout_margin"
             android:layout_marginEnd="@dimen/linear_layout_margin"
-            style="@style/TitleTextViewStyle"
-            android:text="@string/roommate_form_fragment_roommate_age_title"/>
+            android:text="@string/roommate_form_fragment_roommate_age_title" />
 
         <com.google.android.material.slider.RangeSlider
             android:id="@+id/slider"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/linear_layout_margin"
+            android:stepSize="1"
             android:valueFrom="18"
-            android:valueTo="35"
-            android:stepSize="1" />
+            android:valueTo="35" />
 
-        <!-- TODO (Ivana: cini mi se da tu fale neka polja) -->
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/haveApartmentSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/linear_layout_margin"
+            android:checked="false"
+            style="@style/TitleTextViewStyle"
+            android:text="@string/roommate_form_fragment_have_apartment_label"/>
 
         <LinearLayout
             android:id="@+id/have_apartment_layout"
@@ -168,20 +152,26 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit apartment settings">
+
+            </TextView>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/priceInput"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/linear_layout_margin"
-                android:hint="Promijeni cijenu stana po osobi">
+                android:hint="Change price per person">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/priceEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:text="Unesena cijena"
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -191,36 +181,83 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/linear_layout_margin"
-                android:hint="Promijeni kvart">
+                android:hint="Change neighborhood">
 
                 <AutoCompleteTextView
                     android:id="@+id/neighborhoodDropdown"
-                    android:text="Zamet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
-
         </LinearLayout>
 
-        <Button
-            android:id="@+id/save"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/needApartmentLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Spremi promjene"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/linear_layout_margin"
-            style="@style/PrimaryButtonStyle"/>
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/deleteAccount"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit desired apartment price">
+            </TextView>
+
+            <TextView
+                android:id="@+id/apartmentPriceLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/linear_layout_margin"
+                android:text="@string/roommate_form_fragment_price_range_title" />
+
+            <com.google.android.material.slider.RangeSlider
+                android:id="@+id/apartmentPriceSlider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/linear_layout_margin"
+                android:valueFrom="500"
+                android:valueTo="5000"
+                app:values="@array/initial_price_range_values" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Izbriši korisnički račun"
-            android:textSize="12sp"
-            android:layout_margin="@dimen/linear_layout_margin"
-            android:layout_gravity="center"
-            android:textColor="@color/design_default_color_error"/>
+            android:layout_margin="32dp"
+            android:layout_marginTop="32dp">
+
+            <Button
+                android:id="@+id/save"
+                style="@style/PrimaryButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/linear_layout_margin"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/save_preferences"
+                app:layout_constraintBottom_toTopOf="@+id/deleteAccount"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/deleteAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/linear_layout_margin"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="64dp"
+                android:text="@string/delete_account"
+                android:textColor="@color/design_default_color_error"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/save" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
+
 
 </ScrollView>
