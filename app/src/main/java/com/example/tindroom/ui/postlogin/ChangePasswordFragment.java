@@ -58,7 +58,7 @@ public class ChangePasswordFragment extends Fragment {
     }
 
     public void navigateToSettingsFragment(View view) {
-        NavDirections action = ChangePasswordFragmentDirections.actionChangePasswordFragmentToSettingsFragment();
+        NavDirections action = ChangePasswordFragmentDirections.actionChangePasswordFragmentToMyProfileFragment();
         Navigation.findNavController(view).navigate(action);
     }
 

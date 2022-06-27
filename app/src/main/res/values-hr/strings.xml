@@ -32,7 +32,18 @@
     <string name="edit_profile">Uredi profil</string>
     <string name="logout">Odjava</string>
     <string name="apartment_description">%s, %s kuna po osobi.</string>
-    <!-- TODO (Ivana: ovdje pises stringove na hrvatski, varijabla mora biti istog naziva kao i na eng) -->
+    <string name="edit_your_personal_info">Uredi svoje osobne podatke</string>
+    <string name="edit_your_preferences">Uredi svoje preference</string>
+    <string name="save_changes">Spremi promjene</string>
+    <string name="delete_account">Izbriši račun</string>
+    <string name="safety">Sigurnost</string>
+    <string name="change_password">Promjeni zaporku</string>
+    <string name="re_enter_new_password">Ponovno unesi novu zaporku</string>
+    <string name="enter_new_password">Unesi novu zaporku</string>
+    <string name="enter_old_password">Unesi staru zaporku</string>
+    <string name="loading">Učitavanje…</string>
+    <string name="settings">Postavke</string>
+    <string name="no_more_matches">Nema više podudaranja!</string>
 
     <!-- Error messages -->
     <string name="user_with_this_email_address_already_exists">Korisnik s ovom adresom e-pošte već postoji.</string>

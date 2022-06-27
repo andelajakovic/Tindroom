@@ -29,7 +29,18 @@
     <string name="already_have_an_account">Already have an account?</string>
     <string name="change_profile_picture">Change profile picture</string>
     <string name="apartment_description">%s, %s HRK per person.</string>
-    <!-- TODO (Ivana: ovdje pises stringove na engleski na koje se onda dolje referenciras) -->
+    <string name="edit_your_personal_info">Edit your personal information</string>
+    <string name="edit_your_preferences">Edit your preferences</string>
+    <string name="save_changes">Save changes</string>
+    <string name="delete_account">Delete account</string>
+    <string name="safety">Safety</string>
+    <string name="change_password">Change password</string>
+    <string name="re_enter_new_password">Re-enter new password</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="enter_old_password">Enter old password</string>
+    <string name="loading">Loading…</string>
+    <string name="settings">Settings</string>
+    <string name="no_more_matches">No more matches!</string>
 
     <!-- Error messages -->
     <string name="edit_profile">Edit profile</string>
@@ -90,22 +101,36 @@
     <string name="my_profile_fragment_edit_profile_label" translatable="false">@string/edit_profile</string>
     <string name="my_profile_fragment_logout_label" translatable="false">@string/logout</string>
     <string name="my_profile_fragment_change_profile_picture_label" translatable="false">@string/change_profile_picture</string>
-    <string name="change" translatable="false">Change</string>
-    <string name="re_enter_new_password" translatable="false">Re-enter new password</string>
-    <string name="enter_new_password" translatable="false">Enter new password</string>
-    <string name="enter_old_password" translatable="false">Enter old password</string>
+    <string name="my_profile_fragment_safety_label" translatable="false">@string/safety</string>
+
+    <!-- Change password fragment -->
+    <string name="change_password_fragment_change_password_button_label" translatable="false">@string/change_password</string>
+    <string name="change_password_fragment_enter_old_password_hint" translatable="false">@string/enter_old_password</string>
+    <string name="change_password_fragment_enter_new_password_hint" translatable="false">@string/enter_new_password</string>
+    <string name="change_password_fragment_re_enter_new_password_hint" translatable="false">@string/re_enter_new_password</string>
+    <string name="change_password_fragment_password_helper_text" translatable="false">@string/password_must_have_at_least_eight_characters</string>
 
     <!-- Settings fragment -->
-    <!-- TODO (Ivana: ovdje ces definirati reference na stringove koje pozivas u fragmentu fragment_settings.xml) -->
+    <string name="settings_fragment_edit_your_personal_info_label" translatable="false">@string/edit_your_personal_info</string>
+    <string name="settings_fragment_name_hint" translatable="false">@string/name</string>
+    <string name="settings_fragment_date_of_birth_hint" translatable="false">@string/date_of_birth</string>
+    <string name="settings_fragment_faculty_hint" translatable="false">@string/faculty</string>
+    <string name="settings_fragment_about_you_hint" translatable="false">@string/about_you</string>
+    <string name="settings_fragment_edit_your_preferences_label" translatable="false">@string/edit_your_preferences</string>
+    <string name="settings_fragment_roommate_gender_hint" translatable="false">@string/roommates_gender</string>
+    <string name="settings_fragment_roommate_age_title" translatable="false">@string/roommate_age_limit</string>
+    <string name="settings_fragment_have_apartment_label" translatable="false">@string/have_apartment</string>
+    <string name="settings_fragment_price_hint" translatable="false">@string/apartment_price</string>
+    <string name="settings_fragment_neighborhood_hint" translatable="false">@string/neighborhood</string>
+    <string name="settings_fragment_price_range_title" translatable="false">@string/apartment_price_range</string>
+    <string name="settings_fragment_save_changes_button_label" translatable="false">@string/save_changes</string>
+    <string name="settings_fragment_delete_account_label" translatable="false">@string/delete_account</string>
 
     <!-- Swipe fragment -->
     <string name="swipe_fragment_apartment_description" translatable="false">@string/apartment_description</string>
-    <string name="delete_account">Delete account</string>
-    <string name="edit_name">Edit name</string>
-    <string name="edit_your_roommate_choices">Edit your roommate choices</string>
-    <string name="edit_your_personal_info">Edit your personal info</string>
-    <string name="save_preferences">Save preferences</string>
-    <string name="no_matches">No more matches!</string>
+    <string name="swipe_fragment_edit_your_preferences_label" translatable="false">@string/edit_your_preferences</string>
+    <string name="swipe_fragment_settings_button_label" translatable="false">@string/settings</string>
+    <string name="swipe_fragment_no_more_matches_label">@string/no_more_matches</string>
 
     <!-- Arrays -->
     <array name="your_gender_items">

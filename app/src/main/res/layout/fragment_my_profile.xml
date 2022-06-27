@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Safety"
+                android:text="@string/my_profile_fragment_safety_label"
                 android:textAllCaps="true"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="@+id/safetyButton"
