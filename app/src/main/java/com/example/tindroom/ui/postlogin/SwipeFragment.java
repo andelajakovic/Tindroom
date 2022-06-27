@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
@@ -18,8 +19,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -65,6 +68,7 @@ public class SwipeFragment extends Fragment {
     private Button settings;
     private RelativeLayout layout;
     private ConstraintLayout layout2;
+    private CardView card;
     LoadingDialogBar loadingDialogBar;
 
     @Override
@@ -123,6 +127,7 @@ public class SwipeFragment extends Fragment {
                 navigateToSettingsFragment(view);
             }
         });
+
     }
 
     private void swipe (boolean swipeValue) {
@@ -185,8 +190,8 @@ public class SwipeFragment extends Fragment {
 
     private void nextUser(List<User> swipeUsers) {
         if (swipeUsers.isEmpty()) {
-            layout.setVisibility(View.GONE);
-            layout2.setVisibility(View.VISIBLE);
+//            layout.setVisibility(View.GONE);
+//            layout2.setVisibility(View.VISIBLE);
         } else {
             displayUser(swipeUsers.get(0));
         }

@@ -36,52 +36,41 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
     private RecyclerViewClickListener listener;
 
     private StorageReference mStorageReference;
-    private final String FOLDER_NAME = "volarevic";
+    private final String FOLDER_NAME = "";
 
-    // Constructor
-    public ChatAdapter(FragmentActivity context, ArrayList<User> chatUsers, User sessionUser, RecyclerViewClickListener listener) {
+    public ChatAdapter(FragmentActivity context, ArrayList<User> chatUsers, RecyclerViewClickListener listener) {
         this.context = context;
         this.chatUsers = chatUsers;
-        this.sessionUser = sessionUser;
         this.listener = listener;
     }
 
     @NonNull
     @Override
     public ChatAdapter.Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // to inflate the layout for each item of recycler view.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout, parent, false);
         return new Viewholder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ChatAdapter.Viewholder holder, int position) {
-        // to set data to textview and imageview of each card layout
         User model = chatUsers.get(position);
         holder.name.setText(String.valueOf(model.getName()));
 
-       /*ArrayList<Chat> last = model.getMessage();
-
-        if(last.isEmpty()){
-            holder.message.setText("Nemate poruka");
-        }else{
-            holder.message.setText(last.toString());
-        }*/
 
         String idOfUser = model.getUserId();
-        mStorageReference = FirebaseStorage.getInstance().getReference().child("images/" + FOLDER_NAME + "/usr" + idOfUser + "/pic1");
+//        mStorageReference = FirebaseStorage.getInstance().getReference().child("images/" + FOLDER_NAME + "/usr" + idOfUser + "/pic1");
 
         Context cont = context.getApplicationContext();
-        Glide.with(cont)
-                .load(mStorageReference)
-                .error(R.drawable.avatar_placeholder)
-                .into(holder.profilePic);
+//        Glide.with(cont)
+//                .load(mStorageReference)
+//                .error(R.drawable.avatar_placeholder)
+//                .into(holder.profilePic);
 
         String myid = sessionUser.getUserId();
         String userId = model.getUserId();
         ArrayList<Chat> chatList = new ArrayList<Chat>();
 
-        DatabaseReference reference = FirebaseDatabase.getInstance("https://com-example-cn-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Chats");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
@@ -109,44 +98,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
 
     @Override
     public int getItemCount() {
-        // this method is used for showing number
-        // of card items in recycler view.
         return chatUsers.size();
     }
 
-    private String readMessage(String myid, String userId) {
-        ArrayList<Chat> chatList = new ArrayList<Chat>();
-        String msg = "";
-
-        DatabaseReference reference = FirebaseDatabase.getInstance("https://com-example-cn-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Chats");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getReceiver().equals(myid) && chat.getSender().equals(userId) || chat.getReceiver().equals(userId) && chat.getSender().equals(myid)) {
-                        chatList.add(chat);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-            }
-        });
-
-        if (!chatList.isEmpty()) {
-            return chatList.get(chatList.size() - 1).getMessage();
-        } else return "Započnite razgovor!";
-
-    }
-
-    public interface RecyclerViewClickListener {
+    public interface RecyclerViewClickListener{
         void onClick(View v, int position, ArrayList<User> chatUsers);
     }
 
-    // View holder class for initializing of
-    // your views such as TextView and Imageview.
     public class Viewholder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private CircleImageView profilePic;
         private TextView name, message;

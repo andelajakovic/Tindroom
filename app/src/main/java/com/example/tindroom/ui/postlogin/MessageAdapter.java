@@ -32,11 +32,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Viewhold
     private final String FOLDER_NAME = "volarevic";
 
     // Constructor
-    public MessageAdapter(Context context, User sessionUser, User chatUser, ArrayList<Chat> chatList) {
+    public MessageAdapter(Context context, User chatUser, ArrayList<Chat> chatList) {
         this.context = context;
         this.chatUser = chatUser;
         this.chatList = chatList;
-        this.sessionUser = sessionUser;
     }
 
     @NonNull
@@ -64,19 +63,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Viewhold
             holder.myMessage.setVisibility(View.GONE);
         }
 
-        //holder.courseIV.setImageResource(model.getCourse_image());
     }
 
     @Override
     public int getItemCount() {
-        // this method is used for showing number
-        // of card items in recycler view.
-
         return chatList.size();
     }
 
-    // View holder class for initializing of
-    // your views such as TextView and Imageview.
+
     public class Viewholder extends RecyclerView.ViewHolder {
         private ImageView othersProfilePic;
         private TextView othersMessage, myMessage;
@@ -90,13 +84,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Viewhold
             othersLayout = itemView.findViewById(R.id.othersLayout);
 
             String idOfUser = chatUser.getUserId();
-            mStorageReference = FirebaseStorage.getInstance().getReference().child("images/"+FOLDER_NAME+"/usr" + idOfUser + "/pic1");
+//            mStorageReference = FirebaseStorage.getInstance().getReference().child("images/"+FOLDER_NAME+"/usr" + idOfUser + "/pic1");
 
             Context cont = context.getApplicationContext();
-            Glide.with(cont)
-                    .load(mStorageReference)
-                    .error(R.drawable.avatar_placeholder)
-                    .into(othersProfilePic);
+//            Glide.with(cont)
+//                    .load(mStorageReference)
+//                    .error(R.drawable.avatar_placeholder)
+//                    .into(othersProfilePic);
         }
     }
 }
