@@ -1,7 +1,6 @@
 package com.example.tindroom.ui.postlogin;
 
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +36,7 @@ import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
 import com.example.tindroom.utils.InputValidator;
+import com.example.tindroom.utils.LoadingDialogBar;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.slider.RangeSlider;
@@ -69,6 +69,7 @@ public class SettingsFragment extends Fragment {
     private RangeSlider roommateAgeSlider, apartmentPriceSlider;
     private boolean hasApartment = false;
     private SwitchMaterial haveApartmentSwitch;
+    LoadingDialogBar loadingDialogBar;
 
     SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
@@ -87,6 +88,7 @@ public class SettingsFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_settings, container, false);
         Retrofit retrofit = RetrofitService.getRetrofit();
         tindroomApiService = retrofit.create(TindroomApiService.class);
+        loadingDialogBar = new LoadingDialogBar(getActivity());
 
         initViews();
         initData();
@@ -250,14 +252,14 @@ public class SettingsFragment extends Fragment {
 
     private void setFacultyMenuItems() {
         facultyList = new ArrayList<>();
-        final ProgressDialog progressDialog = ProgressDialog.show(getContext(),"Loading...", "Please wait",true);
+        loadingDialogBar.startLoadingDialog();
         Call<List<Faculty>> facultiesCall = tindroomApiService.getFaculties();
 
         facultiesCall.enqueue(new Callback<List<Faculty>>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(@NonNull final Call<List<Faculty>> call, @NonNull final Response<List<Faculty>> response) {
-                progressDialog.dismiss();
+                loadingDialogBar.dismissDialog();
                 assert response.body() != null;
                 facultyList.addAll(response.body());
                 String[] items = facultyList.stream().map(Faculty::getName).toArray(String[]::new);
@@ -278,7 +280,7 @@ public class SettingsFragment extends Fragment {
 
     private void setNeighborhoodMenuItems() {
         neighborhoodList = new ArrayList<>();
-        final ProgressDialog progressDialog = ProgressDialog.show(getContext(),"Loading...", "Please wait",true);
+        loadingDialogBar.startLoadingDialog();
 
         Call<List<Neighborhood>> neighborhoodsCall = tindroomApiService.getNeighborhoods();
 
@@ -286,7 +288,7 @@ public class SettingsFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(@NonNull final Call<List<Neighborhood>> call, @NonNull final Response<List<Neighborhood>> response) {
-                progressDialog.dismiss();
+                loadingDialogBar.dismissDialog();
                 assert response.body() != null;
                 neighborhoodList.addAll(response.body());
                 String[] items = neighborhoodList.stream().map(Neighborhood::getName).toArray(String[]::new);

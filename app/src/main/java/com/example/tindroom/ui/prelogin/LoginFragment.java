@@ -2,6 +2,7 @@ package com.example.tindroom.ui.prelogin;
 
 import android.app.ProgressDialog;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 

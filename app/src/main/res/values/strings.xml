@@ -105,6 +105,7 @@
     <string name="edit_your_roommate_choices">Edit your roommate choices</string>
     <string name="edit_your_personal_info">Edit your personal info</string>
     <string name="save_preferences">Save preferences</string>
+    <string name="no_matches">No more matches!</string>
 
     <!-- Arrays -->
     <array name="your_gender_items">

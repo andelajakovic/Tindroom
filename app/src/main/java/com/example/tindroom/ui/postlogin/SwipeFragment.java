@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,12 +50,12 @@ public class SwipeFragment extends Fragment {
     private List<Neighborhood> neighborhoods;
     private List<Swipe> swipes;
 
-    private ProgressDialog progressDialog;
 
     private ImageView profilePicture;
     private LinearLayout userDescriptionLayout, apartmentDescriptionLayout;
     private TextView roommatesName, roommatesFaculty, roommatesDescription, apartmentDescription;
     private RelativeLayout layout;
+    private ConstraintLayout layout2;
     LoadingDialogBar loadingDialogBar;
 
     @Override
@@ -88,6 +89,7 @@ public class SwipeFragment extends Fragment {
         userDescriptionLayout = rootView.findViewById(R.id.userDescriptionLayout);
         apartmentDescriptionLayout = rootView.findViewById(R.id.apartmentDescriptionLayout);
         layout = rootView.findViewById(R.id.layout);
+        layout2 = rootView.findViewById(R.id.layout2);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -149,7 +151,7 @@ public class SwipeFragment extends Fragment {
                 @Override
                 public void onResponse(final Call<Swipe> call, final Response<Swipe> response) {
                     Log.d("!!!!!!!", String.valueOf(response));
-                    progressDialog.dismiss();
+                    loadingDialogBar.dismissDialog();
                     sortedUsers.remove(0);
                     nextUser(sortedUsers);
                 }
@@ -166,6 +168,7 @@ public class SwipeFragment extends Fragment {
     private void nextUser(List<User> swipeUsers) {
         if (swipeUsers.isEmpty()) {
             layout.setVisibility(View.GONE);
+            layout2.setVisibility(View.VISIBLE);
             // TODO (Andrea: dodati layout kada vise nema korisnika za swipeanje)
         } else {
             displayUser(swipeUsers.get(0));
@@ -250,7 +253,7 @@ public class SwipeFragment extends Fragment {
 
     private void getSwipes() {
         swipes = new ArrayList<>();
-        progressDialog = ProgressDialog.show(getContext(), "Loading...", "Please wait", true);
+        loadingDialogBar.startLoadingDialog();
 
         Call<List<Swipe>> usersSwipesCall = tindroomApiService.getUsersSwipes(sessionUser.getUserId());
         usersSwipesCall.enqueue(new Callback<List<Swipe>>() {
@@ -264,7 +267,7 @@ public class SwipeFragment extends Fragment {
 
             @Override
             public void onFailure(final Call<List<Swipe>> call, final Throwable t) {
-                progressDialog.dismiss();
+                loadingDialogBar.dismissDialog();
                 Toast.makeText(getContext(), getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_SHORT).show();
             }
         });
@@ -286,7 +289,7 @@ public class SwipeFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull final Call<List<Faculty>> call, @NonNull final Throwable t) {
-                progressDialog.dismiss();
+                loadingDialogBar.dismissDialog();
                 Toast.makeText(getContext(), getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_SHORT).show();
             }
         });
@@ -309,7 +312,7 @@ public class SwipeFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull final Call<List<Neighborhood>> call, @NonNull final Throwable t) {
-                progressDialog.dismiss();
+                loadingDialogBar.dismissDialog();
                 Toast.makeText(getContext(), getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_SHORT).show();            }
         });
     }
@@ -322,7 +325,7 @@ public class SwipeFragment extends Fragment {
 
             @Override
             public void onResponse(final Call<List<User>> call, final Response<List<User>> response) {
-                progressDialog.dismiss();
+                loadingDialogBar.dismissDialog();
                 if (response.body() != null)
                     swipeUsers = response.body();
                 sortedUsers = sortSwipeUsers(swipeUsers);
@@ -331,7 +334,7 @@ public class SwipeFragment extends Fragment {
 
             @Override
             public void onFailure(final Call<List<User>> call, final Throwable t) {
-                progressDialog.dismiss();
+                loadingDialogBar.dismissDialog();
                 Toast.makeText(getContext(), getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_SHORT).show();
             }
         });
