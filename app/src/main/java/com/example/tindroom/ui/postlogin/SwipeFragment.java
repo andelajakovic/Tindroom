@@ -33,6 +33,7 @@ import com.example.tindroom.data.model.Swipe;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
+import com.example.tindroom.utils.LoadingDialogBar;
 import com.example.tindroom.utils.OnSwipeTouchListener;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class SwipeFragment extends Fragment {
     private LinearLayout userDescriptionLayout, apartmentDescriptionLayout;
     private TextView roommatesName, roommatesFaculty, roommatesDescription, apartmentDescription;
     private RelativeLayout layout;
+    LoadingDialogBar loadingDialogBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,6 +65,7 @@ public class SwipeFragment extends Fragment {
         Retrofit retrofit = RetrofitService.getRetrofit();
         tindroomApiService = retrofit.create(TindroomApiService.class);
         sessionUser = SharedPreferencesStorage.getSessionUser(requireContext());
+        loadingDialogBar = new LoadingDialogBar(getActivity());
 
         initViews();
         initListeners();
@@ -140,7 +143,7 @@ public class SwipeFragment extends Fragment {
         }
 
         if (swipeCall != null) {
-            final ProgressDialog progressDialog = ProgressDialog.show(getContext(), "Loading...", "Please wait", true);
+            loadingDialogBar.startLoadingDialog();
             swipeCall.enqueue(new Callback<Swipe>() {
 
                 @Override
@@ -153,7 +156,7 @@ public class SwipeFragment extends Fragment {
 
                 @Override
                 public void onFailure(final Call<Swipe> call, final Throwable t) {
-                    progressDialog.dismiss();
+                    loadingDialogBar.dismissDialog();
                     Toast.makeText(getContext(), getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_SHORT).show();
                 }
             });

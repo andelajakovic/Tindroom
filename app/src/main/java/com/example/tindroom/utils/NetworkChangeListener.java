@@ -26,6 +26,7 @@ public class NetworkChangeListener extends BroadcastReceiver {
             dialog.show();
             dialog.setCancelable(false);
             dialog.getWindow().setGravity(Gravity.CENTER);
+            dialog.getWindow().setLayout(650,500);
 
             btnRetry.setOnClickListener(view1 -> {
                 dialog.dismiss();
