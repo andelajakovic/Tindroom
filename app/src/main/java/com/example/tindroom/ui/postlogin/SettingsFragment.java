@@ -25,6 +25,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -39,6 +40,7 @@ import com.example.tindroom.utils.InputValidator;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.slider.RangeSlider;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,6 +68,7 @@ public class SettingsFragment extends Fragment {
     private Calendar dateCalendar, defaultDateCalendar;
     private RangeSlider roommateAgeSlider, apartmentPriceSlider;
     private boolean hasApartment = false;
+    private SwitchMaterial haveApartmentSwitch;
 
     SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
@@ -127,6 +130,8 @@ public class SettingsFragment extends Fragment {
         apartmentPriceLabel = rootView.findViewById(R.id.apartmentPriceLabel);
         apartmentPriceSlider = rootView.findViewById(R.id.apartmentPriceSlider);
 
+        haveApartmentSwitch = rootView.findViewById(R.id.haveApartmentSwitch);
+
         userHasApartment();
         setGenderMenuItems();
         setFacultyMenuItems();
@@ -135,14 +140,17 @@ public class SettingsFragment extends Fragment {
 
     private void userHasApartment(){
         if(user.isHasApartment()){
+            haveApartmentSwitch.setChecked(true);
             haveApartmentLayout.setVisibility(View.VISIBLE);
             needApartmentLayout.setVisibility(View.GONE);
             hasApartment = true;
             userApartmentPrice();
         }else{
+            haveApartmentSwitch.setChecked(false);
             haveApartmentLayout.setVisibility(View.GONE);
             needApartmentLayout.setVisibility(View.VISIBLE);
             hasApartment = false;
+            apartmentPriceSlider.setValues(500f, 1500f);
             userHasApartmentPrice();
         }
     }
@@ -150,7 +158,6 @@ public class SettingsFragment extends Fragment {
     private void initData(){
         nameEditText.setText(user.getName());
         descriptionEditText.setText(user.getDescription());
-
         String gender = String.valueOf(user.getRoommateGender());
         roommateGenderDropdown.setText(gender,false);
         String price = String.valueOf(Math.round(user.getPriceFrom()));
@@ -343,6 +350,18 @@ public class SettingsFragment extends Fragment {
                     updateUserInfo();
                     navigateToMainActivity(view);
                 //}
+            }
+        });
+        haveApartmentSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(haveApartmentSwitch.isChecked()){
+                    user.setHasApartment(true);
+                }else{
+                    user.setHasApartment(false);
+                }
+                userHasApartment();
+
             }
         });
     }

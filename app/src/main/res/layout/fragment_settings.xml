@@ -137,6 +137,15 @@
             android:valueFrom="18"
             android:valueTo="35" />
 
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/haveApartmentSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/linear_layout_margin"
+            android:checked="false"
+            style="@style/TitleTextViewStyle"
+            android:text="@string/roommate_form_fragment_have_apartment_label"/>
+
         <LinearLayout
             android:id="@+id/have_apartment_layout"
             android:layout_width="match_parent"
@@ -191,7 +200,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit apartment price">
+                android:text="Edit desired apartment price">
             </TextView>
 
             <TextView
