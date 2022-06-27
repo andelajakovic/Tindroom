@@ -9,7 +9,11 @@
         android:id="@+id/swipeFragment"
         android:name="com.example.tindroom.ui.postlogin.SwipeFragment"
         android:label="fragment_swipe"
-        tools:layout="@layout/fragment_swipe" />
+        tools:layout="@layout/fragment_swipe" >
+        <action
+            android:id="@+id/action_swipeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/myProfileFragment"
         android:name="com.example.tindroom.ui.postlogin.MyProfileFragment"

@@ -10,6 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,6 +22,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -54,6 +58,7 @@ public class SwipeFragment extends Fragment {
     private ImageView profilePicture;
     private LinearLayout userDescriptionLayout, apartmentDescriptionLayout;
     private TextView roommatesName, roommatesFaculty, roommatesDescription, apartmentDescription;
+    private Button settings;
     private RelativeLayout layout;
     private ConstraintLayout layout2;
     LoadingDialogBar loadingDialogBar;
@@ -88,6 +93,7 @@ public class SwipeFragment extends Fragment {
         apartmentDescription = rootView.findViewById(R.id.apartmentDescription);
         userDescriptionLayout = rootView.findViewById(R.id.userDescriptionLayout);
         apartmentDescriptionLayout = rootView.findViewById(R.id.apartmentDescriptionLayout);
+        settings = rootView.findViewById(R.id.settings);
         layout = rootView.findViewById(R.id.layout);
         layout2 = rootView.findViewById(R.id.layout2);
     }
@@ -103,6 +109,13 @@ public class SwipeFragment extends Fragment {
 
             public void onSwipeLeft() {
                 swipe(false);
+            }
+        });
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                navigateToSettingsFragment(view);
             }
         });
     }
@@ -338,5 +351,10 @@ public class SwipeFragment extends Fragment {
                 Toast.makeText(getContext(), getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void navigateToSettingsFragment (View view) {
+        NavDirections action = SwipeFragmentDirections.actionSwipeFragmentToSettingsFragment();
+        Navigation.findNavController(view).navigate(action);
     }
 }
