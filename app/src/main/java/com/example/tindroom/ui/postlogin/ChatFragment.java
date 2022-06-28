@@ -122,7 +122,7 @@ public class ChatFragment extends Fragment {
                 }
             }
         }else{
-            Log.d("nema", swipes.toString());
+            Log.d("Swipe list is empty", swipes.toString());
         }
     }
 

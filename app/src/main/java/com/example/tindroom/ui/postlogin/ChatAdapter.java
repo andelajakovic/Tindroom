@@ -93,7 +93,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
         String userId = model.getUserId();
         ArrayList<Chat> chatList = new ArrayList<Chat>();
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+        DatabaseReference reference = FirebaseDatabase.getInstance("https://tindroom-64323-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
