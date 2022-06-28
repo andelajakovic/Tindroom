@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.example.tindroom.R;
 import com.example.tindroom.data.local.SharedPreferencesStorage;
+import com.example.tindroom.data.model.Faculty;
 import com.example.tindroom.data.model.Swipe;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
@@ -34,9 +35,8 @@ public class ChatFragment extends Fragment {
     View rootView;
     private TindroomApiService tindroomApiService;
     private User sessionUser;
-    private static ArrayList<Swipe> swipes = new ArrayList<>();
-    private ArrayList<User> chatUsers = new ArrayList<>();
-    LoadingDialogBar loadingDialogBar;
+    static ArrayList<Swipe> swipes = new ArrayList<>();
+    static ArrayList<User> chatUsers = new ArrayList<>();
     private RecyclerView recyclerView;
     private ChatAdapter.RecyclerViewClickListener listener;
 
@@ -56,28 +56,18 @@ public class ChatFragment extends Fragment {
         tindroomApiService = retrofit.create(TindroomApiService.class);
         sessionUser = SharedPreferencesStorage.getSessionUser(requireContext());
 
+        getSwipes();
         initViews();
         initListeners();
-
-        Log.d("lista", swipes.toString());
-        getSwipes();
-        Log.d("lista", swipes.toString());
-        Log.d("users", chatUsers.toString());
-
-        User user1 = new User();
-        user1.setUserId("Y4p8TWembSNjwPfdhiGQl0Gl1LP2");
-        User user2 = new User();
-        user2.setUserId("AT3K6cCNRFZxj5DjnVwMlPt42Vm2");
-        chatUsers.add(user1);
-        chatUsers.add(user2);
-
+        Log.d("chatusers", chatUsers.toString());
         setOnClickListener();
-        ChatAdapter chatAdapter = new ChatAdapter(getActivity(), chatUsers, listener);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(chatAdapter);
+    }
+    private void initViews() {
+        recyclerView = rootView.findViewById(R.id.recyclerView);
+    }
 
+    private void initListeners() {
 
     }
 
@@ -86,8 +76,9 @@ public class ChatFragment extends Fragment {
         usersSwipesCall.enqueue(new Callback<List<Swipe>>() {
             @Override
             public void onResponse(final Call<List<Swipe>> call, final Response<List<Swipe>> response) {
-                if (response.body() != null)
+                if (response.body() != null) {
                     addData(response.body());
+                }
             }
             @Override
             public void onFailure(final Call<List<Swipe>> call, final Throwable t) {
@@ -96,7 +87,7 @@ public class ChatFragment extends Fragment {
         });
     }
 
-    private void addData(List<Swipe> data){
+    private ArrayList<User> addData(List<Swipe> data){
         swipes.addAll(data);
         if(!swipes.isEmpty()){
             for(Swipe swipe : swipes){
@@ -107,10 +98,41 @@ public class ChatFragment extends Fragment {
                     }else{
                         user.setUserId(swipe.getUserId1());
                     }
-                    chatUsers.add(user);
+                    addChatUser(user);
                 }
             }
         }
+        Log.d("!!!", chatUsers.toString());
+        return chatUsers;
+    }
+
+    private void addChatUser(User user){
+        if(!chatUsers.contains(user)){
+            Log.d("usao u if", chatUsers.toString());
+            Call<User> userIdCall = tindroomApiService.getUserById(user.getUserId());
+            userIdCall.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if(response.body() != null){
+                        chatUsers.add(response.body());
+                    }
+                }
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+
+                }
+            });
+            Log.d("chatuserss", chatUsers.toString());
+        }
+        Log.d("nije usao u if", chatUsers.toString());
+        addAdapter();
+    }
+
+    private void addAdapter(){
+        ChatAdapter chatAdapter = new ChatAdapter(getActivity(), chatUsers, listener);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(chatAdapter);
     }
 
     private void setOnClickListener() {
@@ -119,17 +141,10 @@ public class ChatFragment extends Fragment {
             public void onClick(View v, int position, ArrayList<User> chatUsers) {
                 Fragment selectedFragment = null;
                 selectedFragment = new MessageFragment().newInstance(chatUsers.get(position));
+                Log.d("andrea", chatUsers.get(position).toString());
                 navigateToMessageFragment(rootView);
             }
         };
-    }
-
-    private void initViews() {
-        recyclerView = rootView.findViewById(R.id.recyclerView);
-    }
-
-    private void initListeners() {
-
     }
 
     public void navigateToMessageFragment (View view) {

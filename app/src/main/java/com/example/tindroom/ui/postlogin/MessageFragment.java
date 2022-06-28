@@ -60,11 +60,13 @@ public class MessageFragment extends Fragment {
     private CircleImageView profilePic;
 
 
-    public static MessageFragment newInstance(User chatUser){
+    public MessageFragment newInstance(User chatUser){
         MessageFragment fragment = new MessageFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("ChatUser", (Serializable) chatUser);
+        bundle.putParcelable("ChatUser", chatUser);
         fragment.setArguments(bundle);
+
+        this.chatUser = chatUser;
 
         return fragment;
     }
@@ -74,7 +76,7 @@ public class MessageFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_message, container, false);
 
-        chatUser = (User) getArguments().getSerializable("ChatUser");
+        chatUser = getArguments().getParcelable("ChatUser");
         sessionUser = SharedPreferencesStorage.getSessionUser(requireContext());
 
         return rootView;
@@ -99,9 +101,6 @@ public class MessageFragment extends Fragment {
         recyclerView.setAdapter(messageAdapter);
 
         recyclerView.scrollToPosition(messageAdapter.getItemCount()-1);
-
-
-
         readMessage();
     }
 
