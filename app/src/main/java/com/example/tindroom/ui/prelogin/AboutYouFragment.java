@@ -2,6 +2,7 @@ package com.example.tindroom.ui.prelogin;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -20,9 +21,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.tindroom.R;
+import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.Faculty;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
@@ -31,6 +34,7 @@ import com.example.tindroom.utils.ImageHandler;
 import com.example.tindroom.utils.InputValidator;
 import com.example.tindroom.utils.LoadingDialogBar;
 import com.example.tindroom.utils.NetworkChangeListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -70,6 +74,7 @@ public class AboutYouFragment extends Fragment {
     private Button nextButton;
     private Uri imageUri;
     LoadingDialogBar loadingDialogBar;
+    private BottomSheetDialog bottomSheetDialog;
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
@@ -89,6 +94,7 @@ public class AboutYouFragment extends Fragment {
         Retrofit retrofit = RetrofitService.getRetrofit();
         tindroomApiService = retrofit.create(TindroomApiService.class);
         loadingDialogBar = new LoadingDialogBar(getActivity());
+        bottomSheetDialog = new BottomSheetDialog(requireContext());
 
         initViews();
         initListeners();
@@ -153,7 +159,7 @@ public class AboutYouFragment extends Fragment {
 
             @Override
             public void onClick(final View view) {
-                chooseImage();
+                showBottomSheetDialog();
             }
         });
 
@@ -165,6 +171,39 @@ public class AboutYouFragment extends Fragment {
                     updateUserInfo();
                     navigateToRoommateFormFragment(view);
                 }
+            }
+        });
+    }
+
+    private void showBottomSheetDialog() {
+        bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_layout);
+
+        TextView upload = bottomSheetDialog.findViewById(R.id.upload);
+        TextView remove = bottomSheetDialog.findViewById(R.id.remove);
+
+        upload.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(final View view) {
+                chooseImage();
+            }
+        });
+
+        remove.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(final View view) {
+                imageUri = null;
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetDialog.show();
+
+        bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                // Instructions on bottomSheetDialog Dismiss
             }
         });
     }
@@ -224,6 +263,8 @@ public class AboutYouFragment extends Fragment {
                      .asBitmap()
                      .load(bitmap)
                      .into(avatarImageView);
+                bottomSheetDialog.dismiss();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

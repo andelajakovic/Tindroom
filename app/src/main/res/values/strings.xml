@@ -41,6 +41,8 @@
     <string name="loading">Loading…</string>
     <string name="settings">Settings</string>
     <string name="no_more_matches">No more matches!</string>
+    <string name="upload_profile_picture">New profile picture</string>
+    <string name="remove_profile_picture">Remove profile picture</string>
 
     <!-- Error messages -->
     <string name="edit_profile">Edit profile</string>
@@ -130,7 +132,11 @@
     <string name="swipe_fragment_apartment_description" translatable="false">@string/apartment_description</string>
     <string name="swipe_fragment_edit_your_preferences_label" translatable="false">@string/edit_your_preferences</string>
     <string name="swipe_fragment_settings_button_label" translatable="false">@string/settings</string>
-    <string name="swipe_fragment_no_more_matches_label">@string/no_more_matches</string>
+    <string name="swipe_fragment_no_more_matches_label" translatable="false">@string/no_more_matches</string>
+
+    <!-- Change profile picture bottom sheet layout -->
+    <string name="bottom_sheet_upload_profile_picture_label" translatable="false">@string/upload_profile_picture</string>
+    <string name="bottom_sheet_remove_profile_picture_label" translatable="false">@string/remove_profile_picture</string>
 
     <!-- Arrays -->
     <array name="your_gender_items">

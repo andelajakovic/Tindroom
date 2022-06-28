@@ -44,6 +44,8 @@
     <string name="loading">Učitavanje…</string>
     <string name="settings">Postavke</string>
     <string name="no_more_matches">Nema više podudaranja!</string>
+    <string name="upload_profile_picture">Nova slika profila</string>
+    <string name="remove_profile_picture">Ukloni sliku profila</string>
 
     <!-- Error messages -->
     <string name="user_with_this_email_address_already_exists">Korisnik s ovom adresom e-pošte već postoji.</string>
