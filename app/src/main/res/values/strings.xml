@@ -52,6 +52,9 @@
     <string name="user_with_this_email_address_already_exists">A user with this email address already exists.</string>
     <string name="please_enter_a_valid_email_address">Please enter a valid email address.</string>
     <string name="password_must_have_at_least_eight_characters">Password must have at least 8 characters.</string>
+    <string name="are_you_sure_you_want_to_delete_your_account">Are you sure you want to delete your account?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 
     <!-- Menu items -->
     <string name="menu_item_my_profile" translatable="false">@string/my_profile</string>

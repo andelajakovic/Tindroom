@@ -55,5 +55,7 @@
     <string name="incorrect_email_or_password">Pogrešna adresa e-pošte ili zaporka.</string>
     <string name="this_field_is_mandatory">Ovo polje je obavezno.</string>
     <string name="unexpected_error_occurred">Došlo je do neočekivane pogreške.</string>
-
+    <string name="are_you_sure_you_want_to_delete_your_account">Jeste li sigurni da želite izbrisati svoj korisnički račun?</string>
+    <string name="no">Ne</string>
+    <string name="yes">Da</string>
 </resources>

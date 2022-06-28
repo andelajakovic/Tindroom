@@ -384,8 +384,8 @@ public class SettingsFragment extends Fragment {
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage("Jeste li sigurni da želite izbrisati svoj korisnički račun?").setPositiveButton("Da", dialogClickListener)
-                       .setNegativeButton("Ne", dialogClickListener).show();
+                builder.setMessage(getResources().getString(R.string.are_you_sure_you_want_to_delete_your_account)).setPositiveButton(getResources().getString(R.string.yes), dialogClickListener)
+                       .setNegativeButton(getResources().getString(R.string.no), dialogClickListener).show();
             }
         });
 
