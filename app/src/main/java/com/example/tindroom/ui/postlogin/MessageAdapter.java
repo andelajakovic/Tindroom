@@ -29,7 +29,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Viewhold
     User sessionUser;
 
     private StorageReference mStorageReference;
-    private final String FOLDER_NAME = "volarevic";
+    private final String FOLDER_NAME = "pictures";
 
     // Constructor
     public MessageAdapter(Context context, User chatUser, ArrayList<Chat> chatList) {
@@ -41,14 +41,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Viewhold
     @NonNull
     @Override
     public MessageAdapter.Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // to inflate the layout for each item of recycler view.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_layout, parent, false);
         return new Viewholder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.Viewholder holder, int position) {
-        // to set data to textview and imageview of each card layout
         Chat model = chatList.get(position);
 
         String sessionId = sessionUser.getUserId();

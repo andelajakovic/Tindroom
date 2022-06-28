@@ -158,19 +158,13 @@ public class ChatFragment extends Fragment {
         listener = new ChatAdapter.RecyclerViewClickListener() {
             @Override
             public void onClick(View v, int position, ArrayList<User> chatUsers) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("ChatUsers", chatUsers.get(position));
-                MessageFragment fragment = new MessageFragment();
-                fragment.setArguments(bundle);
-//                new MessageFragment().newInstance(chatUsers.get(position));
-                getFragmentManager().beginTransaction().replace(R.id.chat, fragment);
-
+               navigateToMessageFragment(v, chatUsers.get(position));
             }
         };
     }
 
-    public void navigateToMessageFragment (View view) {
-        NavDirections action = ChatFragmentDirections.actionChatFragmentToMessageFragment();
+    public void navigateToMessageFragment (View view, User chatUser) {
+        NavDirections action = (NavDirections) ChatFragmentDirections.actionChatFragmentToMessageFragment(chatUser);
         Navigation.findNavController(view).navigate(action);
     }
 

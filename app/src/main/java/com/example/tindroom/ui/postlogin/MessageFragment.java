@@ -52,7 +52,7 @@ public class MessageFragment extends Fragment {
     ArrayList<Chat> chatList;
     DatabaseReference reference;
     private StorageReference mStorageReference;
-    final String FOLDER_NAME = "volarevic";
+    final String FOLDER_NAME = "users";
 
     private ImageButton sendButton;
     private EditText textMessage;
@@ -60,27 +60,20 @@ public class MessageFragment extends Fragment {
     private ImageButton backButton;
     private CircleImageView profilePic;
 
-
-//    public MessageFragment newInstance(User chatUser){
-//        MessageFragment fragment = new MessageFragment();
-//        Bundle bundle = new Bundle();
-//        bundle.putParcelable("ChatUser", chatUser);
-//        fragment.setArguments(bundle);
-//
-//        return fragment;
-//    }
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(getArguments() != null){
+            chatUser = getArguments().getParcelable("chatUser");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_message, container, false);
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null){
-            chatUser = bundle.getParcelable("ChatUser");
-            Log.d("andrea", chatUser.toString());
-        }
         sessionUser = SharedPreferencesStorage.getSessionUser(requireContext());
+        reference = FirebaseDatabase.getInstance("https://tindroom-64323-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Chats");
 
         return rootView;
     }
@@ -89,10 +82,8 @@ public class MessageFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView = getView().findViewById(R.id.recyclerView);
-
+        recyclerView = rootView.findViewById(R.id.recyclerView);
         chatList = new ArrayList<>();
-        reference = FirebaseDatabase.getInstance().getReference("Chats");
 
         MessageAdapter messageAdapter = new MessageAdapter(getActivity(), chatUser, chatList);
 
@@ -108,12 +99,12 @@ public class MessageFragment extends Fragment {
     }
 
     public void initViews(){
-        sendButton = getView().findViewById(R.id.sendButton);
-        textMessage = getView().findViewById(R.id.textMessage);
-        name = getView().findViewById(R.id.name);
+        sendButton = rootView.findViewById(R.id.sendButton);
+        textMessage = rootView.findViewById(R.id.textMessage);
+        name = rootView.findViewById(R.id.name);
         name.setText(chatUser.getName());
-        backButton = getView().findViewById(R.id.back);
-        profilePic = getView().findViewById(R.id.profilePic);
+        backButton = rootView.findViewById(R.id.back);
+        profilePic = rootView.findViewById(R.id.profilePic);
 
         int idOfUser = Integer.parseInt(chatUser.getUserId());
 //        mStorageReference = FirebaseStorage.getInstance().getReference().child("images/"+FOLDER_NAME+"/usr" + idOfUser + "/pic1");
