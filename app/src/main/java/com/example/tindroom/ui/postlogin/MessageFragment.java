@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,23 +61,25 @@ public class MessageFragment extends Fragment {
     private CircleImageView profilePic;
 
 
-    public MessageFragment newInstance(User chatUser){
-        MessageFragment fragment = new MessageFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("ChatUser", chatUser);
-        fragment.setArguments(bundle);
-
-        this.chatUser = chatUser;
-
-        return fragment;
-    }
+//    public MessageFragment newInstance(User chatUser){
+//        MessageFragment fragment = new MessageFragment();
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelable("ChatUser", chatUser);
+//        fragment.setArguments(bundle);
+//
+//        return fragment;
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_message, container, false);
 
-        chatUser = getArguments().getParcelable("ChatUser");
+        Bundle bundle = this.getArguments();
+        if (bundle != null){
+            chatUser = bundle.getParcelable("ChatUser");
+            Log.d("andrea", chatUser.toString());
+        }
         sessionUser = SharedPreferencesStorage.getSessionUser(requireContext());
 
         return rootView;
@@ -115,7 +118,7 @@ public class MessageFragment extends Fragment {
         int idOfUser = Integer.parseInt(chatUser.getUserId());
 //        mStorageReference = FirebaseStorage.getInstance().getReference().child("images/"+FOLDER_NAME+"/usr" + idOfUser + "/pic1");
 
-        Context cont = getActivity().getApplicationContext();
+//        Context cont = getActivity().getApplicationContext();
 //        Glide.with(cont)
 //                .load(mStorageReference)
 //                .error(R.drawable.ic_baseline_person_24)

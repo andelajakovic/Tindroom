@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,7 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
 
-    private FragmentActivity context;
+    private Fragment context;
     private ArrayList<User> chatUsers;
     private User sessionUser;
     private RecyclerViewClickListener listener;
@@ -39,7 +40,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
     private StorageReference mStorageReference;
     private final String FOLDER_NAME = "";
 
-    public ChatAdapter(FragmentActivity context, ArrayList<User> chatUsers, RecyclerViewClickListener listener) {
+    public ChatAdapter(Fragment context, ArrayList<User> chatUsers, RecyclerViewClickListener listener) {
         this.context = context;
         this.chatUsers = chatUsers;
         this.listener = listener;
@@ -69,7 +70,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
     @Override
     public ChatAdapter.Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout, parent, false);
-        sessionUser = SharedPreferencesStorage.getSessionUser(context.getApplicationContext());
+        sessionUser = SharedPreferencesStorage.getSessionUser(context.getContext());
         return new Viewholder(view);
     }
 
@@ -82,7 +83,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
         String idOfUser = model.getUserId();
 //        mStorageReference = FirebaseStorage.getInstance().getReference().child("images/" + FOLDER_NAME + "/usr" + idOfUser + "/pic1");
 
-        Context cont = context.getApplicationContext();
+//        Context cont = context.getApplicationContext();
 //        Glide.with(cont)
 //                .load(mStorageReference)
 //                .error(R.drawable.avatar_placeholder)
