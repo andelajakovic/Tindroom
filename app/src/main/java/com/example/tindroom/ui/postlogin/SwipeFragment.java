@@ -189,8 +189,8 @@ public class SwipeFragment extends Fragment {
 
     private void nextUser(List<User> swipeUsers) {
         if (swipeUsers.isEmpty()) {
-//            layout.setVisibility(View.GONE);
-//            layout2.setVisibility(View.VISIBLE);
+            layout.setVisibility(View.GONE);
+            layout2.setVisibility(View.VISIBLE);
         } else {
             displayUser(swipeUsers.get(0));
         }
