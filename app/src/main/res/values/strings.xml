@@ -127,7 +127,7 @@
     <string name="settings_fragment_price_range_title" translatable="false">@string/apartment_price_range</string>
     <string name="settings_fragment_save_changes_button_label" translatable="false">@string/save_changes</string>
     <string name="settings_fragment_delete_account_label" translatable="false">@string/delete_account</string>
-
+    <string name="settings_fragment_gender_hint" translatable="false">@string/gender</string>
     <!-- Swipe fragment -->
     <string name="swipe_fragment_apartment_description" translatable="false">@string/apartment_description</string>
     <string name="swipe_fragment_edit_your_preferences_label" translatable="false">@string/edit_your_preferences</string>

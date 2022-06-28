@@ -1,6 +1,8 @@
 package com.example.tindroom.ui.postlogin;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -60,7 +62,7 @@ public class SettingsFragment extends Fragment {
 
     private TextInputLayout nameInput, dateOfBirthInput, genderInput, facultyInput, priceInput, neighbourhoodInput;
     private TextInputEditText nameEditText, dateOfBirthEditText, descriptionEditText, priceEditTex;
-    private AutoCompleteTextView roommateGenderDropdown, facultyDropdown, neighbourhoodDropdown;
+    private AutoCompleteTextView roommateGenderDropdown, genderDropdown, facultyDropdown, neighbourhoodDropdown;
     private TextInputLayout roommateGenderInput;
     private LinearLayout needApartmentLayout, haveApartmentLayout;
     private List<Faculty> facultyList;
@@ -135,11 +137,15 @@ public class SettingsFragment extends Fragment {
         apartmentPriceSlider = rootView.findViewById(R.id.apartmentPriceSlider);
         apartmentPriceSlider.setLabelBehavior(LABEL_GONE);
 
+        genderInput = rootView.findViewById(R.id.genderInput);
+        genderDropdown = rootView.findViewById(R.id.genderDropdown);
+
         haveApartmentSwitch = rootView.findViewById(R.id.haveApartmentSwitch);
     }
 
-    private void initData(){
+    private void initData() {
         initialApartmentPriceRange();
+        setRoommateGenderMenuItems();
         setGenderMenuItems();
         setFacultyMenuItems();
 
@@ -147,13 +153,13 @@ public class SettingsFragment extends Fragment {
         descriptionEditText.setText(user.getDescription());
         userBirthDate();
         userFaculty();
-
+        userGender();
         roommateGender();
         roommateAge();
 
         userHasApartment();
 
-        if (user.isHasApartment()){
+        if (user.isHasApartment()) {
             userNeighborhood();
             userHasApartmentPrice();
         } else {
@@ -161,13 +167,28 @@ public class SettingsFragment extends Fragment {
         }
     }
 
-    private void userHasApartment(){
-        if(user.isHasApartment()){
+    private void userGender() {
+        if (user.getGender() == 'M') {
+            genderDropdown.setText(getResources().getString(R.string.male), false);
+        } else {
+            genderDropdown.setText(getResources().getString(R.string.female), false);
+        }
+    }
+
+    private void setGenderMenuItems() {
+        String[] items = getResources().getStringArray(R.array.your_gender_items);
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items);
+        genderDropdown.setAdapter(arrayAdapter);
+    }
+
+    private void userHasApartment() {
+        if (user.isHasApartment()) {
             haveApartmentSwitch.setChecked(true);
             haveApartmentLayout.setVisibility(View.VISIBLE);
             needApartmentLayout.setVisibility(View.GONE);
             hasApartment = true;
-        }else{
+        } else {
             haveApartmentSwitch.setChecked(false);
             haveApartmentLayout.setVisibility(View.GONE);
             needApartmentLayout.setVisibility(View.VISIBLE);
@@ -177,28 +198,28 @@ public class SettingsFragment extends Fragment {
 
     private void roommateGender() {
         if (user.getRoommateGender() == 'M') {
-            roommateGenderDropdown.setText(getResources().getString(R.string.male),false);
+            roommateGenderDropdown.setText(getResources().getString(R.string.male), false);
         } else if (user.getRoommateGender() == 'F') {
-            roommateGenderDropdown.setText(getResources().getString(R.string.female),false);
+            roommateGenderDropdown.setText(getResources().getString(R.string.female), false);
         } else {
-            roommateGenderDropdown.setText(getResources().getString(R.string.any),false);
+            roommateGenderDropdown.setText(getResources().getString(R.string.any), false);
         }
     }
 
-    private void userBirthDate(){
-        String month = user.getDateOfBirth().substring(5,7);
-        String day = user.getDateOfBirth().substring(9,10);
-        String year = user.getDateOfBirth().substring(0,4);
+    private void userBirthDate() {
+        String month = user.getDateOfBirth().substring(5, 7);
+        String day = user.getDateOfBirth().substring(9, 10);
+        String year = user.getDateOfBirth().substring(0, 4);
 
         dateCalendar = Calendar.getInstance();
         dateCalendar.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
         dateOfBirthEditText.setText(dateFormatter.format(dateCalendar.getTime()));
     }
 
-    private void roommateAge(){
+    private void roommateAge() {
         String ageFrom = String.valueOf(user.getRoommateAgeFrom());
         String ageTo = String.valueOf(user.getRoommateAgeTo());
-        roommateAgeSlider.setValues((float)(user.getRoommateAgeFrom()),(float)(user.getRoommateAgeTo()));
+        roommateAgeSlider.setValues((float) (user.getRoommateAgeFrom()), (float) (user.getRoommateAgeTo()));
         roommateAgeLabel.setText(getResources().getString(R.string.roommate_age_limit, ageFrom, ageTo));
     }
 
@@ -206,40 +227,44 @@ public class SettingsFragment extends Fragment {
         String priceFrom = String.valueOf(Math.round(500));
         String priceTo = String.valueOf(Math.round(1500));
         apartmentPriceSlider.setValues(500f, 1500f);
-        apartmentPriceLabel.setText(getResources().getString(R.string.apartment_price_range, priceFrom,priceTo));
+        apartmentPriceLabel.setText(getResources().getString(R.string.apartment_price_range, priceFrom, priceTo));
     }
 
-    private void apartmentPrice(){
+    private void apartmentPrice() {
         String priceFrom = String.valueOf(Math.round(user.getPriceFrom()));
         String priceTo = String.valueOf(Math.round(user.getPriceTo()));
-        apartmentPriceSlider.setValues((float)(user.getPriceFrom()),(float)(user.getPriceTo()));
-        apartmentPriceLabel.setText(getResources().getString(R.string.apartment_price_range, priceFrom,priceTo));
+        apartmentPriceSlider.setValues((float) (user.getPriceFrom()), (float) (user.getPriceTo()));
+        apartmentPriceLabel.setText(getResources().getString(R.string.apartment_price_range, priceFrom, priceTo));
     }
 
-    private void userHasApartmentPrice(){
+    private void userHasApartmentPrice() {
         priceEditTex.setText(String.valueOf(Math.round(user.getPriceFrom())));
     }
 
-    private void userFaculty(){
+    private void userFaculty() {
         facultyDropdown.setText(user.getFaculty().getName(), false);
     }
 
-    private void userNeighborhood(){
+    private void userNeighborhood() {
         neighbourhoodDropdown.setText(user.getNeighborhood().getName(), false);
     }
 
-    private void setGenderMenuItems(){
+    private void setRoommateGenderMenuItems() {
         String[] items = getResources().getStringArray(R.array.roommates_gender_items);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items);
         roommateGenderDropdown.setAdapter(arrayAdapter);
     }
 
     private void setRoommateAge() {
-        roommateAgeLabel.setText(getResources().getString(R.string.roommate_age_limit, String.valueOf(roommateAgeSlider.getValues().get(0).intValue()), String.valueOf(roommateAgeSlider.getValues().get(1).intValue())));
+        roommateAgeLabel.setText(getResources().getString(R.string.roommate_age_limit,
+                                                          String.valueOf(roommateAgeSlider.getValues().get(0).intValue()),
+                                                          String.valueOf(roommateAgeSlider.getValues().get(1).intValue())));
     }
 
     private void setApartmentPriceLimitValue() {
-        apartmentPriceLabel.setText(getResources().getString(R.string.roommate_form_fragment_price_range_title, String.valueOf(apartmentPriceSlider.getValues().get(0).intValue()), String.valueOf(apartmentPriceSlider.getValues().get(1).intValue())));
+        apartmentPriceLabel.setText(getResources().getString(R.string.roommate_form_fragment_price_range_title,
+                                                             String.valueOf(apartmentPriceSlider.getValues().get(0).intValue()),
+                                                             String.valueOf(apartmentPriceSlider.getValues().get(1).intValue())));
     }
 
     private void setFacultyMenuItems() {
@@ -248,6 +273,7 @@ public class SettingsFragment extends Fragment {
         Call<List<Faculty>> facultiesCall = tindroomApiService.getFaculties();
 
         facultiesCall.enqueue(new Callback<List<Faculty>>() {
+
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(@NonNull final Call<List<Faculty>> call, @NonNull final Response<List<Faculty>> response) {
@@ -257,8 +283,8 @@ public class SettingsFragment extends Fragment {
 
                 ArrayAdapter<String> spinnerArrayAdapter;
                 spinnerArrayAdapter = new ArrayAdapter<>(getContext(),
-                        android.R.layout.simple_spinner_dropdown_item,
-                        items);
+                                                         android.R.layout.simple_spinner_dropdown_item,
+                                                         items);
                 facultyDropdown.setAdapter(spinnerArrayAdapter);
                 setNeighborhoodMenuItems();
             }
@@ -277,6 +303,7 @@ public class SettingsFragment extends Fragment {
         Call<List<Neighborhood>> neighborhoodsCall = tindroomApiService.getNeighborhoods();
 
         neighborhoodsCall.enqueue(new Callback<List<Neighborhood>>() {
+
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(@NonNull final Call<List<Neighborhood>> call, @NonNull final Response<List<Neighborhood>> response) {
@@ -287,8 +314,8 @@ public class SettingsFragment extends Fragment {
 
                 ArrayAdapter<String> spinnerArrayAdapter;
                 spinnerArrayAdapter = new ArrayAdapter<>(getContext(),
-                        android.R.layout.simple_spinner_dropdown_item,
-                        items);
+                                                         android.R.layout.simple_spinner_dropdown_item,
+                                                         items);
                 neighbourhoodDropdown.setAdapter(spinnerArrayAdapter);
             }
 
@@ -302,24 +329,26 @@ public class SettingsFragment extends Fragment {
 
     private void initListeners() {
         dateOfBirthEditText.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(final View view) {
                 Calendar newCalendar = Calendar.getInstance();  // current date
                 SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), R.style.MySpinnerDatePickerStyle,
-                        (v, year, monthOfYear, dayOfMonth) -> {
-                            dateCalendar = Calendar.getInstance(); // picked date
-                            dateCalendar.set(year, monthOfYear, dayOfMonth);
-                            dateOfBirthEditText.setText(dateFormatter.format(dateCalendar.getTime()));
-                        },
-                        newCalendar.get(Calendar.YEAR),
-                        newCalendar.get(Calendar.MONTH),
-                        newCalendar.get(Calendar.DAY_OF_MONTH));
+                                                                         (v, year, monthOfYear, dayOfMonth) -> {
+                                                                             dateCalendar = Calendar.getInstance(); // picked date
+                                                                             dateCalendar.set(year, monthOfYear, dayOfMonth);
+                                                                             dateOfBirthEditText.setText(dateFormatter.format(dateCalendar.getTime()));
+                                                                         },
+                                                                         newCalendar.get(Calendar.YEAR),
+                                                                         newCalendar.get(Calendar.MONTH),
+                                                                         newCalendar.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.getDatePicker().setMaxDate(newCalendar.getTime().getTime());
                 datePickerDialog.show();
             }
         });
         roommateAgeSlider.addOnChangeListener(new RangeSlider.OnChangeListener() {
+
             @Override
             public void onValueChange(@NonNull final RangeSlider slider, final float value, final boolean fromUser) {
                 setRoommateAge();
@@ -327,31 +356,55 @@ public class SettingsFragment extends Fragment {
         });
 
         apartmentPriceSlider.addOnChangeListener(new RangeSlider.OnChangeListener() {
+
             @Override
             public void onValueChange(@NonNull final RangeSlider slider, final float value, final boolean fromUser) {
                 setApartmentPriceLimitValue();
             }
         });
+
         deleteAccount.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View view) {
-                deleteUser();
+            public void onClick(View v) {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                deleteUser();
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Jeste li sigurni da želite izbrisati svoj korisnički račun?").setPositiveButton("Da", dialogClickListener)
+                       .setNegativeButton("Ne", dialogClickListener).show();
             }
         });
+
         updateInfo.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                if(checkUserInput()){
+                if (checkUserInput()) {
                     updateUserInfo();
                 }
             }
         });
         haveApartmentSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(haveApartmentSwitch.isChecked()){
+                if (haveApartmentSwitch.isChecked()) {
                     user.setHasApartment(true);
-                }else{
+                } else {
                     user.setHasApartment(false);
                 }
                 userHasApartment();
@@ -367,11 +420,17 @@ public class SettingsFragment extends Fragment {
         user.setRoommateAgeFrom(roommateAgeSlider.getValues().get(0).intValue());
         user.setRoommateAgeTo(roommateAgeSlider.getValues().get(1).intValue());
 
+        if (String.valueOf(genderDropdown.getText()).equals(getString(R.string.male))) {
+            user.setGender('M');
+        } else if (String.valueOf(genderDropdown.getText()).equals(getString(R.string.female))) {
+            user.setGender('F');
+        }
+
         if (String.valueOf(roommateGenderDropdown.getText()).equals(getString(R.string.male))) {
             user.setRoommateGender('M');
         } else if (String.valueOf(roommateGenderDropdown.getText()).equals(getString(R.string.female))) {
             user.setRoommateGender('F');
-        }else{
+        } else {
             user.setRoommateGender('A');
         }
         for (Faculty faculty : facultyList) {
@@ -382,32 +441,34 @@ public class SettingsFragment extends Fragment {
             }
         }
 
-        if(hasApartment){
-            for (Neighborhood neighborhood :  neighborhoodList){
-                if(neighborhood.getName().equals(String.valueOf(neighbourhoodDropdown.getText()))) {
+        if (hasApartment) {
+            for (Neighborhood neighborhood : neighborhoodList) {
+                if (neighborhood.getName().equals(String.valueOf(neighbourhoodDropdown.getText()))) {
                     user.setIdNeighborhood(neighborhood.getNeighborhoodId());
                     user.setNeighborhood(neighborhood);
                     break;
                 }
             }
             user.setPriceFrom(Double.parseDouble(String.valueOf(priceEditTex.getText())));
-        }else{
+        } else {
             user.setPriceFrom(apartmentPriceSlider.getValues().get(0).intValue());
             user.setPriceTo(apartmentPriceSlider.getValues().get(1).intValue());
         }
 
-        SharedPreferencesStorage.setSessionUser(getContext(),user);
+        SharedPreferencesStorage.setSessionUser(getContext(), user);
 
         loadingDialogBar.startLoadingDialog();
 
         Call<User> userUpdateCall = tindroomApiService.updateUserById(user.getUserId(), user);
         userUpdateCall.enqueue(new Callback<User>() {
+
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 loadingDialogBar.dismissDialog();
                 navigateToMyProfile(rootView);
                 Log.d("updated", response.toString());
             }
+
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 loadingDialogBar.startLoadingDialog();
@@ -435,20 +496,40 @@ public class SettingsFragment extends Fragment {
         return nameNotEmptyFlag && dateOfBirthNotEmptyFlag && genderNotEmptyFlag && facultyNotEmptyFlag && roommateGenderFlag && priceFlag && neighborhoodFlag;
     }
 
-    private void deleteUser(){
-        mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+    private void deleteUser() {
+        loadingDialogBar.startLoadingDialog();
+        Call<User> deleteUserCall = tindroomApiService.deleteUserById(user.getUserId());
+        deleteUserCall.enqueue(new Callback<User>() {
+
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    navigateToMyProfile(rootView);
-                }
+            public void onResponse(final Call<User> call, final Response<User> response) {
+
+                // TODO (Ivana: ERROR!!!!!!!!!!)
+                mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            loadingDialogBar.dismissDialog();
+                            navigateToMainActivity(rootView);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(final Call<User> call, final Throwable t) {
             }
         });
+    }
 
-        // TODO (treba izbrisati korisnika i s apija, ali za to jos nemamo poziv)
+    public void navigateToMainActivity(View view) {
+        NavDirections action = SettingsFragmentDirections.actionSettingsFragmentToMainActivity();
+        Navigation.findNavController(view).navigate(action);
     }
 
     public void navigateToMyProfile(View view) {
         NavDirections action = SettingsFragmentDirections.actionSettingsFragmentToMyProfileFragment();
         Navigation.findNavController(view).navigate(action);
-    }}
+    }
+}

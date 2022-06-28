@@ -55,6 +55,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_myProfileFragment"
             app:destination="@id/myProfileFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
     </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"
