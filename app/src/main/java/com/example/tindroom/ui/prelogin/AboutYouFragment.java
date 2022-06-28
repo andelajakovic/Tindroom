@@ -122,6 +122,8 @@ public class AboutYouFragment extends Fragment {
 
         nextButton = rootView.findViewById(R.id.nextButton);
 
+        avatarImageView = rootView.findViewById(R.id.avatarImageView);
+
         setGenderMenuItems();
         setFacultyMenuItems();
 

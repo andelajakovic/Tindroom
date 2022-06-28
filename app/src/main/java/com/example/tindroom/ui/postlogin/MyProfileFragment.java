@@ -2,6 +2,7 @@ package com.example.tindroom.ui.postlogin;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -90,6 +91,7 @@ public class MyProfileFragment extends Fragment {
         editProfile = rootView.findViewById(R.id.editProfileButton);
         logout = rootView.findViewById(R.id.logoutButton);
         safety = rootView.findViewById(R.id.safetyButton);
+        profilePicture = rootView.findViewById(R.id.profilePicture);
     }
 
     private void initListeners(){
@@ -126,6 +128,11 @@ public class MyProfileFragment extends Fragment {
     }
 
     private void initData(){
+        Glide.with(rootView)
+             .asBitmap()
+             .load(sessionUser.getImageUrl())
+             .error(getResources().getDrawable(R.drawable.avatar_placeholder))
+             .into(profilePicture);
         usersName.setText( sessionUser.getName());
         usersFaculty.setText(sessionUser.getFaculty().getName());
     }

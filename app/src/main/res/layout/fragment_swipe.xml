@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="-70dp"
             android:gravity="center"
-            android:text="@string/no_matches"
+            android:text="@string/swipe_fragment_no_more_matches_label"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -115,7 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="@string/edit_your_roommate_choices"
+            android:text="@string/swipe_fragment_edit_your_preferences_label"
             app:layout_constraintBottom_toTopOf="@+id/settings"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -126,7 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
-            android:text="Settings"
+            android:text="@string/swipe_fragment_settings_button_label"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

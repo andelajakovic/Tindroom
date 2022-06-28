@@ -20,14 +20,14 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="@dimen/linear_layout_margin"
             android:layout_marginBottom="@dimen/linear_layout_margin"
-            android:text="@string/edit_your_personal_info" />
+            android:text="@string/settings_fragment_edit_your_personal_info_label" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/usernameInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/linear_layout_margin"
-            android:hint="@string/edit_name">
+            android:hint="@string/settings_fragment_name_hint">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/usernameEditText"
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/linear_layout_margin"
-            android:hint="@string/about_you_fragment_date_of_birth_hint">
+            android:hint="@string/settings_fragment_date_of_birth_hint">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/dateOfBirthEditText"
@@ -60,22 +60,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/linear_layout_margin"
-            android:layout_marginTop="196dp"
+            android:hint="@string/settings_fragment_faculty_hint"
             tools:layout_editor_absoluteX="51dp">
 
             <AutoCompleteTextView
                 android:id="@+id/facultyDropdown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                android:hint="Faculty"/>
+                android:inputType="none"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/descriptionInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Edit about you"
+            android:hint="@string/settings_fragment_about_you_hint"
             android:layout_margin="@dimen/linear_layout_margin">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -99,7 +98,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="@dimen/linear_layout_margin"
             android:layout_marginBottom="@dimen/linear_layout_margin"
-            android:text="@string/edit_your_roommate_choices" />
+            android:text="@string/settings_fragment_edit_your_preferences_label" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/roommateGenderInput"
@@ -107,13 +106,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/linear_layout_margin"
-            android:hint="Roommate gender">
+            android:hint="@string/settings_fragment_roommate_gender_hint">
 
             <AutoCompleteTextView
                 android:id="@+id/roommateGenderDropdown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint=""
                 android:inputType="none"
                 android:text="" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -126,7 +124,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="@dimen/linear_layout_margin"
             android:layout_marginEnd="@dimen/linear_layout_margin"
-            android:text="@string/roommate_form_fragment_roommate_age_title" />
+            android:text="@string/settings_fragment_roommate_age_title" />
 
         <com.google.android.material.slider.RangeSlider
             android:id="@+id/slider"
@@ -144,7 +142,7 @@
             android:layout_margin="@dimen/linear_layout_margin"
             android:checked="false"
             style="@style/TitleTextViewStyle"
-            android:text="@string/roommate_form_fragment_have_apartment_label"/>
+            android:text="@string/settings_fragment_have_apartment_label"/>
 
         <LinearLayout
             android:id="@+id/have_apartment_layout"
@@ -152,20 +150,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Edit apartment settings">
-
-            </TextView>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/priceInput"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/linear_layout_margin"
-                android:hint="Change price per person">
+                android:hint="@string/settings_fragment_price_hint">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/priceEditText"
@@ -181,7 +172,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/linear_layout_margin"
-                android:hint="Change neighborhood">
+                android:hint="@string/settings_fragment_neighborhood_hint">
 
                 <AutoCompleteTextView
                     android:id="@+id/neighborhoodDropdown"
@@ -198,17 +189,11 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Edit desired apartment price">
-            </TextView>
-
-            <TextView
                 android:id="@+id/apartmentPriceLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/linear_layout_margin"
-                android:text="@string/roommate_form_fragment_price_range_title" />
+                android:text="@string/settings_fragment_price_range_title" />
 
             <com.google.android.material.slider.RangeSlider
                 android:id="@+id/apartmentPriceSlider"
@@ -235,7 +220,7 @@
                 android:layout_margin="@dimen/linear_layout_margin"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="8dp"
-                android:text="@string/save_preferences"
+                android:text="@string/settings_fragment_save_changes_button_label"
                 app:layout_constraintBottom_toTopOf="@+id/deleteAccount"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -249,7 +234,7 @@
                 android:layout_margin="@dimen/linear_layout_margin"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="64dp"
-                android:text="@string/delete_account"
+                android:text="@string/settings_fragment_delete_account_label"
                 android:textColor="@color/design_default_color_error"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"

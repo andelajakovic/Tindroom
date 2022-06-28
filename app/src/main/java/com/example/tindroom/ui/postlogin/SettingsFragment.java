@@ -1,7 +1,6 @@
 package com.example.tindroom.ui.postlogin;
 
 import android.app.DatePickerDialog;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -50,6 +49,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import static com.google.android.material.slider.LabelFormatter.LABEL_GONE;
 
 public class SettingsFragment extends Fragment {
 
@@ -128,15 +129,36 @@ public class SettingsFragment extends Fragment {
 
         roommateAgeSlider = rootView.findViewById(R.id.slider);
         roommateAgeLabel = rootView.findViewById(R.id.roommateLimit);
+        roommateAgeSlider.setLabelBehavior(LABEL_GONE);
 
         apartmentPriceLabel = rootView.findViewById(R.id.apartmentPriceLabel);
         apartmentPriceSlider = rootView.findViewById(R.id.apartmentPriceSlider);
+        apartmentPriceSlider.setLabelBehavior(LABEL_GONE);
 
         haveApartmentSwitch = rootView.findViewById(R.id.haveApartmentSwitch);
+    }
 
-        userHasApartment();
+    private void initData(){
+        initialApartmentPriceRange();
         setGenderMenuItems();
         setFacultyMenuItems();
+
+        nameEditText.setText(user.getName());
+        descriptionEditText.setText(user.getDescription());
+        userBirthDate();
+        userFaculty();
+
+        roommateGender();
+        roommateAge();
+
+        userHasApartment();
+
+        if (user.isHasApartment()){
+            userNeighborhood();
+            userHasApartmentPrice();
+        } else {
+            apartmentPrice();
+        }
     }
 
     private void userHasApartment(){
@@ -145,30 +167,22 @@ public class SettingsFragment extends Fragment {
             haveApartmentLayout.setVisibility(View.VISIBLE);
             needApartmentLayout.setVisibility(View.GONE);
             hasApartment = true;
-            userApartmentPrice();
         }else{
             haveApartmentSwitch.setChecked(false);
             haveApartmentLayout.setVisibility(View.GONE);
             needApartmentLayout.setVisibility(View.VISIBLE);
             hasApartment = false;
-            apartmentPriceSlider.setValues(500f, 1500f);
-            userHasApartmentPrice();
         }
     }
 
-    private void initData(){
-        nameEditText.setText(user.getName());
-        descriptionEditText.setText(user.getDescription());
-        String gender = String.valueOf(user.getRoommateGender());
-        roommateGenderDropdown.setText(gender,false);
-        String price = String.valueOf(Math.round(user.getPriceFrom()));
-        priceEditTex.setText(price);
-
-        userBirthDate();
-        userRoommateAge();
-        userApartmentPrice();
-        userFaculty();
-        userNeighborhood();
+    private void roommateGender() {
+        if (user.getRoommateGender() == 'M') {
+            roommateGenderDropdown.setText(getResources().getString(R.string.male),false);
+        } else if (user.getRoommateGender() == 'F') {
+            roommateGenderDropdown.setText(getResources().getString(R.string.female),false);
+        } else {
+            roommateGenderDropdown.setText(getResources().getString(R.string.any),false);
+        }
     }
 
     private void userBirthDate(){
@@ -181,14 +195,21 @@ public class SettingsFragment extends Fragment {
         dateOfBirthEditText.setText(dateFormatter.format(dateCalendar.getTime()));
     }
 
-    private void userRoommateAge(){
+    private void roommateAge(){
         String ageFrom = String.valueOf(user.getRoommateAgeFrom());
         String ageTo = String.valueOf(user.getRoommateAgeTo());
         roommateAgeSlider.setValues((float)(user.getRoommateAgeFrom()),(float)(user.getRoommateAgeTo()));
         roommateAgeLabel.setText(getResources().getString(R.string.roommate_age_limit, ageFrom, ageTo));
     }
 
-    private void userApartmentPrice(){
+    private void initialApartmentPriceRange() {
+        String priceFrom = String.valueOf(Math.round(500));
+        String priceTo = String.valueOf(Math.round(1500));
+        apartmentPriceSlider.setValues(500f, 1500f);
+        apartmentPriceLabel.setText(getResources().getString(R.string.apartment_price_range, priceFrom,priceTo));
+    }
+
+    private void apartmentPrice(){
         String priceFrom = String.valueOf(Math.round(user.getPriceFrom()));
         String priceTo = String.valueOf(Math.round(user.getPriceTo()));
         apartmentPriceSlider.setValues((float)(user.getPriceFrom()),(float)(user.getPriceTo()));
@@ -196,43 +217,14 @@ public class SettingsFragment extends Fragment {
     }
 
     private void userHasApartmentPrice(){
-        priceEditTex.setText(String.valueOf(user.getPriceFrom()));
+        priceEditTex.setText(String.valueOf(Math.round(user.getPriceFrom())));
     }
 
     private void userFaculty(){
-        /*Long faculty = user.getIdFaculty();
-        final String[] userFaculty = {""};
-
-        Call<Faculty> facultyCall = tindroomApiService.getFacultyById(faculty);
-        facultyCall.enqueue(new Callback<Faculty>() {
-            @Override
-            public void onResponse(Call<Faculty> call, Response<Faculty> response) {
-                assert response.body() != null;
-                userFaculty[0] = response.body().getName();
-                facultyDropdown.setText(userFaculty[0], false);
-            }
-            @Override
-            public void onFailure(Call<Faculty> call, Throwable t) {
-            }
-        });*/
         facultyDropdown.setText(user.getFaculty().getName(), false);
     }
 
     private void userNeighborhood(){
-        /*Long neighborId = user.getIdNeighborhood();
-        final String[] neighborhood = {""};
-        Call<Neighborhood> neighborhoodCall = tindroomApiService.getNeighborhoodById(neighborId);
-        neighborhoodCall.enqueue(new Callback<Neighborhood>() {
-            @Override
-            public void onResponse(Call<Neighborhood> call, Response<Neighborhood> response) {
-                assert response.body() != null;
-                neighborhood[0] = response.body().getName();
-                neighbourhoodDropdown.setText(neighborhood[0], false);
-            }
-            @Override
-            public void onFailure(Call<Neighborhood> call, Throwable t) {
-            }
-        });*/
         neighbourhoodDropdown.setText(user.getNeighborhood().getName(), false);
     }
 
@@ -349,10 +341,9 @@ public class SettingsFragment extends Fragment {
         updateInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //if(checkUserInput()){
+                if(checkUserInput()){
                     updateUserInfo();
-                    navigateToMainActivity(view);
-                //}
+                }
             }
         });
         haveApartmentSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -386,6 +377,7 @@ public class SettingsFragment extends Fragment {
         for (Faculty faculty : facultyList) {
             if (faculty.getName().equals(String.valueOf(facultyDropdown.getText()))) {
                 user.setIdFaculty(faculty.getFacultyId());
+                user.setFaculty(faculty);
                 break;
             }
         }
@@ -394,8 +386,8 @@ public class SettingsFragment extends Fragment {
             for (Neighborhood neighborhood :  neighborhoodList){
                 if(neighborhood.getName().equals(String.valueOf(neighbourhoodDropdown.getText()))) {
                     user.setIdNeighborhood(neighborhood.getNeighborhoodId());
+                    user.setNeighborhood(neighborhood);
                     break;
-
                 }
             }
             user.setPriceFrom(Double.parseDouble(String.valueOf(priceEditTex.getText())));
@@ -406,21 +398,25 @@ public class SettingsFragment extends Fragment {
 
         SharedPreferencesStorage.setSessionUser(getContext(),user);
 
+        loadingDialogBar.startLoadingDialog();
+
         Call<User> userUpdateCall = tindroomApiService.updateUserById(user.getUserId(), user);
         userUpdateCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
+                loadingDialogBar.dismissDialog();
+                navigateToMyProfile(rootView);
                 Log.d("updated", response.toString());
             }
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
+                loadingDialogBar.startLoadingDialog();
             }
         });
 
     }
 
-    /*private boolean checkUserInput() {
+    private boolean checkUserInput() {
         InputValidator inputValidator = new InputValidator(getContext());
 
         boolean nameNotEmptyFlag = inputValidator.isInputEditTextFilled(nameEditText, nameInput);
@@ -437,14 +433,14 @@ public class SettingsFragment extends Fragment {
         }
 
         return nameNotEmptyFlag && dateOfBirthNotEmptyFlag && genderNotEmptyFlag && facultyNotEmptyFlag && roommateGenderFlag && priceFlag && neighborhoodFlag;
-    }*/
+    }
 
     private void deleteUser(){
         mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    navigateToMainActivity(rootView);
+                    navigateToMyProfile(rootView);
                 }
             }
         });
@@ -452,7 +448,7 @@ public class SettingsFragment extends Fragment {
         // TODO (treba izbrisati korisnika i s apija, ali za to jos nemamo poziv)
     }
 
-    public void navigateToMainActivity(View view) {
-        NavDirections action = SettingsFragmentDirections.actionSettingsFragmentToMainActivity();
+    public void navigateToMyProfile(View view) {
+        NavDirections action = SettingsFragmentDirections.actionSettingsFragmentToMyProfileFragment();
         Navigation.findNavController(view).navigate(action);
     }}
