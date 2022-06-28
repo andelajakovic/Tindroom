@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tindroom.R;
+import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.Chat;
 import com.example.tindroom.data.model.User;
 import com.google.firebase.storage.FirebaseStorage;
@@ -32,10 +33,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Viewhold
     private final String FOLDER_NAME = "pictures";
 
     // Constructor
-    public MessageAdapter(Context context, User chatUser, ArrayList<Chat> chatList) {
+    public MessageAdapter(Context context, User chatUser, User sessionUser, ArrayList<Chat> chatList) {
         this.context = context;
         this.chatUser = chatUser;
         this.chatList = chatList;
+        this.sessionUser = sessionUser;
     }
 
     @NonNull

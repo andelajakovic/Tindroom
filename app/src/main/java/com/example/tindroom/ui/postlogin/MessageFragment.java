@@ -85,7 +85,7 @@ public class MessageFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.recyclerView);
         chatList = new ArrayList<>();
 
-        MessageAdapter messageAdapter = new MessageAdapter(getActivity(), chatUser, chatList);
+        MessageAdapter messageAdapter = new MessageAdapter(getActivity(), chatUser, sessionUser, chatList);
 
         initViews();
         initListeners();
@@ -106,7 +106,7 @@ public class MessageFragment extends Fragment {
         backButton = rootView.findViewById(R.id.back);
         profilePic = rootView.findViewById(R.id.profilePic);
 
-        int idOfUser = Integer.parseInt(chatUser.getUserId());
+//        int idOfUser = Integer.parseInt(chatUser.getUserId());
 //        mStorageReference = FirebaseStorage.getInstance().getReference().child("images/"+FOLDER_NAME+"/usr" + idOfUser + "/pic1");
 
 //        Context cont = getActivity().getApplicationContext();
@@ -139,7 +139,7 @@ public class MessageFragment extends Fragment {
     }
 
     private void sendMessage(String sender, String receiver, String message){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference reference = FirebaseDatabase.getInstance("https://tindroom-64323-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         HashMap<String,Object> hashMap = new HashMap<>();
         hashMap.put("sender", sender);
         hashMap.put("receiver", receiver);
@@ -153,7 +153,7 @@ public class MessageFragment extends Fragment {
         String chatUserId = chatUser.getUserId();
         chatList = new ArrayList<>();
 
-        reference = FirebaseDatabase.getInstance().getReference("Chats");
+        reference = FirebaseDatabase.getInstance("https://tindroom-64323-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
@@ -164,7 +164,7 @@ public class MessageFragment extends Fragment {
                         chatList.add(chat);
                     }
                     if(!chatList.isEmpty()){
-                        MessageAdapter messageAdapter = new MessageAdapter(getActivity(), chatUser, chatList);
+                        MessageAdapter messageAdapter = new MessageAdapter(getActivity(), chatUser, sessionUser, chatList);
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
                         recyclerView.setLayoutManager(linearLayoutManager);
