@@ -40,14 +40,17 @@ import com.example.tindroom.network.TindroomApiService;
 import com.example.tindroom.utils.InputValidator;
 import com.example.tindroom.utils.LoadingDialogBar;
 import com.example.tindroom.utils.NetworkChangeListener;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.slider.RangeSlider;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -249,6 +252,7 @@ public class RoommateFormFragment extends Fragment {
             user.setPriceFrom(apartmentPriceSlider.getValues().get(0));
             user.setPriceTo(apartmentPriceSlider.getValues().get(1));
         }
+
         if(user.getImageUri() != null) {
             uploadImageToFirebase(Uri.parse(user.getImageUri()));
         } else {
@@ -261,17 +265,46 @@ public class RoommateFormFragment extends Fragment {
         Call<User> userCall = tindroomApiService.updateUserById(user.getUserId(), user);
 
         userCall.enqueue(new Callback<User>() {
-
             @Override
             public void onResponse(final Call<User> call, final Response<User> response) {
                 loadingDialogBar.dismissDialog();
                 user.setRegistered(true);
+                setUsersToken();
                 navigateToHomeActivity(rootView);
             }
 
             @Override
             public void onFailure(final Call<User> call, final Throwable t) {
                 Toast.makeText(getContext(), getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setUsersToken() {
+        FirebaseMessaging.getInstance().getToken()
+            .addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        return;
+                    }
+                    String token = task.getResult();
+                    user.setNotificationToken(token);
+                    updateUserToken();
+                }
+            });
+    }
+
+    private void updateUserToken() {
+        Call<User> userCall = tindroomApiService.updateUserById(user.getUserId(), user);
+        userCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                Log.d("body", response.body().toString());
+            }
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.d("failed", t.toString());
             }
         });
     }

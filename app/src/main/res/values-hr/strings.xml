@@ -58,4 +58,8 @@
     <string name="are_you_sure_you_want_to_delete_your_account">Jeste li sigurni da želite izbrisati svoj korisnički račun?</string>
     <string name="no">Ne</string>
     <string name="yes">Da</string>
+
+    <!--Notification-->
+
+
 </resources>

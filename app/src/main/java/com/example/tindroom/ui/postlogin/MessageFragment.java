@@ -1,6 +1,9 @@
 package com.example.tindroom.ui.postlogin;
 
+import android.annotation.SuppressLint;
+import android.app.RemoteInput;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,6 +33,7 @@ import com.example.tindroom.data.model.Chat;
 import com.example.tindroom.data.model.Token;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.utils.FCMSend;
+import com.example.tindroom.utils.PushNotificationService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -98,7 +102,6 @@ public class MessageFragment extends Fragment {
 
         initViews();
         initListeners();
-        setLastSeen();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -115,7 +118,7 @@ public class MessageFragment extends Fragment {
         name.setText(chatUser.getName());
         backButton = rootView.findViewById(R.id.back);
         profilePic = rootView.findViewById(R.id.profilePic);
-        lastSeen = rootView.findViewById(R.id.lastSeen);
+        //lastSeen = rootView.findViewById(R.id.lastSeen);
 
         Context cont = requireContext();
         Glide.with(cont)
@@ -147,10 +150,6 @@ public class MessageFragment extends Fragment {
         });
     }
 
-    private void setLastSeen(){
-
-    }
-
     private void sendMessage(String sender, String receiver, String message){
         DatabaseReference reference = FirebaseDatabase.getInstance("https://tindroom-64323-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         HashMap<String,Object> hashMap = new HashMap<>();
@@ -159,7 +158,7 @@ public class MessageFragment extends Fragment {
         hashMap.put("message", message);
 
         reference.child("Chats").push().setValue(hashMap);
-        sendNotification("New message from user:" + sessionUser.getName(), message);
+        sendNotification(sessionUser.getName(), message);
     }
 
     private void sendNotification(String title, String message){
@@ -171,8 +170,8 @@ public class MessageFragment extends Fragment {
                     message);
             Log.d("chattoken", chatUser.getNotificationToken());
         }
-
     }
+
 
     private void readMessage(){
         String sessionId = sessionUser.getUserId();
