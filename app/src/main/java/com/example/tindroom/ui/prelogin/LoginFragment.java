@@ -17,6 +17,7 @@ import retrofit2.Retrofit;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Objects;
 
@@ -55,6 +57,7 @@ public class LoginFragment extends Fragment {
     private TextView linkToRegistrationFragment;
     private Button loginButton;
     LoadingDialogBar loadingDialogBar;
+    User sessionUser;
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
@@ -136,6 +139,7 @@ public class LoginFragment extends Fragment {
 
                  @Override
                  public void onComplete(@NonNull Task<AuthResult> task) {
+                     loadingDialogBar.dismissDialog();
                      if (task.isSuccessful()) {
                          // Sign in success, update UI with the signed-in user's information
                          FirebaseUser user = mAuth.getCurrentUser();
@@ -145,8 +149,9 @@ public class LoginFragment extends Fragment {
 
                              @Override
                              public void onResponse(final Call<User> call, final Response<User> response) {
-                                 User user = response.body();
-                                 setUsersFaculty(user);
+                                 sessionUser = response.body();
+                                 sessionUser.setDateOfBirth(sessionUser.getDateOfBirth().substring(0, 10));
+                                 setUsersToken();
                              }
 
                              @Override
@@ -162,18 +167,53 @@ public class LoginFragment extends Fragment {
              });
     }
 
-    private void setUsersFaculty(User user) {
-        Call<Faculty> facultyCall = tindroomApiService.getFacultyById(user.getIdFaculty());
+    private void setUsersToken() {
+        Log.d("!!!!!!!!!", sessionUser.toString());
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+                        String token = task.getResult();
+                        sessionUser.setNotificationToken(token);
+                        updateUser();
+                        //setUserToken(id, token);
+
+                        Log.d("token", token);
+                    }
+                });
+    }
+
+    private void updateUser() {
+        Call<User> userCall = tindroomApiService.updateUserById(sessionUser.getUserId(), sessionUser);
+        userCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                setUsersFaculty();
+                Log.d("body", response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.d("failed", t.toString());
+            }
+        });
+    }
+
+    private void setUsersFaculty() {
+        Call<Faculty> facultyCall = tindroomApiService.getFacultyById(sessionUser.getIdFaculty());
         facultyCall.enqueue(new Callback<Faculty>() {
 
             @Override
             public void onResponse(final Call<Faculty> call, final Response<Faculty> response) {
-                user.setFaculty(response.body());
-                if(user.isHasApartment()) {
-                    setUsersNeighborhood(user);
+                sessionUser.setFaculty(response.body());
+                loadingDialogBar.dismissDialog();
+                if(sessionUser.isHasApartment()) {
+                    setUsersNeighborhood();
                 } else {
-                    loadingDialogBar.dismissDialog();
-                    SharedPreferencesStorage.setSessionUser(requireContext(), user);
+                    SharedPreferencesStorage.setSessionUser(requireContext(), sessionUser);
                     navigateToHomeActivity(rootView);
                     requireActivity().finish();
                 }
@@ -181,27 +221,27 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onFailure(final Call<Faculty> call, final Throwable t) {
-
+                loadingDialogBar.dismissDialog();
             }
         });
     }
 
-    private void setUsersNeighborhood (User user) {
-        Call<Neighborhood> neighborhoodCall = tindroomApiService.getNeighborhoodById(user.getIdNeighborhood());
+    private void setUsersNeighborhood () {
+        Call<Neighborhood> neighborhoodCall = tindroomApiService.getNeighborhoodById(sessionUser.getIdNeighborhood());
         neighborhoodCall.enqueue(new Callback<Neighborhood>() {
 
             @Override
             public void onResponse(final Call<Neighborhood> call, final Response<Neighborhood> response) {
                 loadingDialogBar.dismissDialog();
-                user.setNeighborhood(response.body());
-                SharedPreferencesStorage.setSessionUser(requireContext(), user);
+                sessionUser.setNeighborhood(response.body());
+                SharedPreferencesStorage.setSessionUser(requireContext(), sessionUser);
                 navigateToHomeActivity(rootView);
                 requireActivity().finish();
             }
 
             @Override
             public void onFailure(final Call<Neighborhood> call, final Throwable t) {
-
+                loadingDialogBar.dismissDialog();
             }
         });
     }

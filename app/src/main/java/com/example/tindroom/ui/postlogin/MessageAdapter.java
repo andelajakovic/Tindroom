@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tindroom.R;
+import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.Chat;
 import com.example.tindroom.data.model.User;
 import com.google.firebase.storage.FirebaseStorage;
@@ -29,10 +30,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Viewhold
     User sessionUser;
 
     private StorageReference mStorageReference;
-    private final String FOLDER_NAME = "volarevic";
+    private final String FOLDER_NAME = "pictures";
 
     // Constructor
-    public MessageAdapter(Context context, User sessionUser, User chatUser, ArrayList<Chat> chatList) {
+    public MessageAdapter(Context context, User chatUser, User sessionUser, ArrayList<Chat> chatList) {
         this.context = context;
         this.chatUser = chatUser;
         this.chatList = chatList;
@@ -42,14 +43,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Viewhold
     @NonNull
     @Override
     public MessageAdapter.Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // to inflate the layout for each item of recycler view.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_layout, parent, false);
         return new Viewholder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.Viewholder holder, int position) {
-        // to set data to textview and imageview of each card layout
         Chat model = chatList.get(position);
 
         String sessionId = sessionUser.getUserId();
@@ -64,19 +63,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Viewhold
             holder.myMessage.setVisibility(View.GONE);
         }
 
-        //holder.courseIV.setImageResource(model.getCourse_image());
+
+
     }
 
     @Override
     public int getItemCount() {
-        // this method is used for showing number
-        // of card items in recycler view.
-
         return chatList.size();
     }
 
-    // View holder class for initializing of
-    // your views such as TextView and Imageview.
+
     public class Viewholder extends RecyclerView.ViewHolder {
         private ImageView othersProfilePic;
         private TextView othersMessage, myMessage;
@@ -89,13 +85,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Viewhold
             myMessage = itemView.findViewById(R.id.myMessage);
             othersLayout = itemView.findViewById(R.id.othersLayout);
 
-            String idOfUser = chatUser.getUserId();
-            mStorageReference = FirebaseStorage.getInstance().getReference().child("images/"+FOLDER_NAME+"/usr" + idOfUser + "/pic1");
-
             Context cont = context.getApplicationContext();
             Glide.with(cont)
-                    .load(mStorageReference)
-                    .error(R.drawable.avatar_placeholder)
+                    .asBitmap()
+                    .load(chatUser.getImageUrl())
+                    .error(cont.getResources().getDrawable(R.drawable.avatar_placeholder))
                     .into(othersProfilePic);
         }
     }

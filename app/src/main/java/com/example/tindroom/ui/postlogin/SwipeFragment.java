@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
@@ -18,8 +19,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -40,6 +44,7 @@ import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
 import com.example.tindroom.utils.LoadingDialogBar;
+import com.example.tindroom.utils.MatchDialog;
 import com.example.tindroom.utils.OnSwipeTouchListener;
 
 import java.time.LocalDate;
@@ -59,14 +64,15 @@ public class SwipeFragment extends Fragment {
     private List<Neighborhood> neighborhoods;
     private List<Swipe> swipes;
 
-
     private ImageView profilePicture;
     private LinearLayout userDescriptionLayout, apartmentDescriptionLayout;
     private TextView roommatesName, roommatesFaculty, roommatesDescription, apartmentDescription;
     private Button settings;
     private RelativeLayout layout;
-    private ConstraintLayout layout2;
+    private ConstraintLayout layout2, match;
+    private CardView card;
     LoadingDialogBar loadingDialogBar;
+    MatchDialog matchDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,6 +83,7 @@ public class SwipeFragment extends Fragment {
         tindroomApiService = retrofit.create(TindroomApiService.class);
         sessionUser = SharedPreferencesStorage.getSessionUser(requireContext());
         loadingDialogBar = new LoadingDialogBar(getActivity());
+        matchDialog = new MatchDialog(getActivity());
 
         initViews();
         initListeners();
@@ -101,6 +108,7 @@ public class SwipeFragment extends Fragment {
         settings = rootView.findViewById(R.id.settings);
         layout = rootView.findViewById(R.id.layout);
         layout2 = rootView.findViewById(R.id.layout2);
+        match = rootView.findViewById(R.id.match);
 
     }
 
@@ -124,6 +132,7 @@ public class SwipeFragment extends Fragment {
                 navigateToSettingsFragment(view);
             }
         });
+
     }
 
     private void swipe (boolean swipeValue) {
@@ -161,6 +170,19 @@ public class SwipeFragment extends Fragment {
             }
             swipes.add(swipe);
             swipeCall = tindroomApiService.insertSwipe(swipe);
+            // obavijest
+            if (swipe.isSwipe_1() != null && swipe.isSwipe_2() != null && swipe.isSwipe_1() && swipe.isSwipe_2()) {
+                Log.d("andrea", swipe.isSwipe_1().toString());
+                match.setVisibility(View.VISIBLE);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        match.setVisibility(View.GONE);
+                    }
+                }, 3000);
+            }
+
         }
 
         if (swipeCall != null) {
@@ -194,9 +216,6 @@ public class SwipeFragment extends Fragment {
     }
 
     private void displayUser(User swipeUser) {
-
-
-
         Glide.with(rootView)
              .asBitmap()
              .load(swipeUser.getImageUrl())

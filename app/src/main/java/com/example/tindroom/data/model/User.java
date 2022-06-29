@@ -1,12 +1,12 @@
 package com.example.tindroom.data.model;
 
 import android.annotation.SuppressLint;
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.sql.Date;
 import java.util.Calendar;
 
 @SuppressLint("ParcelCreator")
@@ -56,11 +56,24 @@ public class User implements Parcelable {
     @SerializedName("image_url")
     private String imageUrl;
 
+    @SerializedName("notification_token")
+    private String notificationToken;
+
+    @SerializedName("review")
+    private double review;
+
+    @SerializedName("number_of_reviews")
+    private int numberOfReviews;
+
     private String imageUri;
 
     private Faculty faculty;
 
     private Neighborhood neighborhood;
+
+    private String token;
+
+    private Date lastSeen;
 
     public double grade = 0.0;
 
@@ -78,6 +91,22 @@ public class User implements Parcelable {
 
     public void setRegistered(final boolean isRegistered) {
         this.isRegistered = isRegistered ? 1 : 0;
+    }
+
+    public void setToken(final String token){
+        this.token = token;
+    }
+
+    public String getToken(){
+        return token;
+    }
+
+    public void setLastSeen(Date lastSeen){
+        this.lastSeen = lastSeen;
+    }
+
+    public Date getLastSeen(){
+        return lastSeen;
     }
 
     public String getName() {
@@ -208,6 +237,30 @@ public class User implements Parcelable {
         this.neighborhood = neighborhood;
     }
 
+    public String getNotificationToken() {
+        return notificationToken;
+    }
+
+    public void setNotificationToken(String notificationToken) {
+        this.notificationToken = notificationToken;
+    }
+
+    public double getReview() {
+        return review;
+    }
+
+    public void setReview(double review) {
+        this.review = review;
+    }
+
+    public int getNumberOfReviews() {
+        return numberOfReviews;
+    }
+
+    public void setNumberOfReviews(int numberOfReviews) {
+        this.numberOfReviews = numberOfReviews;
+    }
+
     @SerializedName("feedback")
     private Object feedback;
 
@@ -257,6 +310,8 @@ public class User implements Parcelable {
                 ", idNeighborhood=" + idNeighborhood +
                 ", imageUrl=" + imageUrl +
                 ", grade=" + grade +
+                ", token=" + notificationToken +
+                ", feedback=" + feedback +
                 '}';
     }
 
