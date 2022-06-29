@@ -300,7 +300,6 @@ public class RoommateFormFragment extends Fragment {
         userCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                Log.d("body", response.body().toString());
             }
             @Override
             public void onFailure(Call<User> call, Throwable t) {

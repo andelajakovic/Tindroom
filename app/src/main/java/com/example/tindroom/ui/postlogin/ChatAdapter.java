@@ -1,18 +1,25 @@
 package com.example.tindroom.ui.postlogin;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.tindroom.R;
 import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.Chat;
@@ -50,12 +57,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
     public class Viewholder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private CircleImageView profilePic;
         private TextView name, message;
+        private ProgressBar progressBar;
 
         public Viewholder(@NonNull View itemView) {
             super(itemView);
             profilePic = itemView.findViewById(R.id.profilePic);
             name = itemView.findViewById(R.id.name);
             message = itemView.findViewById(R.id.message);
+            progressBar = itemView.findViewById(R.id.progressBar);
 
             itemView.setOnClickListener(this);
 
@@ -82,11 +91,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
         holder.name.setText(String.valueOf(model.getName()));
 
         Context cont = context.requireContext();
+
+        holder.progressBar.setVisibility(View.VISIBLE);
         Glide.with(cont)
-                .asBitmap()
-                .load(model.getImageUrl())
-                .error(cont.getResources().getDrawable(R.drawable.avatar_placeholder))
-                .into(holder.profilePic);
+             .load(model.getImageUrl())
+             .listener(new RequestListener<Drawable>() {
+                 @Override
+                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                     holder.progressBar.setVisibility(View.GONE);
+                     return false;
+                 }
+
+                 @Override
+                 public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                     holder.progressBar.setVisibility(View.GONE);
+                     return false;
+                 }
+             })
+             .error(cont.getResources().getDrawable(R.drawable.avatar_placeholder))
+             .into((holder.profilePic));
 
         String myid = sessionUser.getUserId();
         String userId = model.getUserId();
@@ -117,6 +140,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
         //holder.profilePic.setImageResource();
 
     }
+
+
 
     @Override
     public int getItemCount() {

@@ -32,6 +32,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,6 +51,7 @@ public class ChatFragment extends Fragment {
     LoadingDialogBar loadingDialogBar;
     private SearchView search;
     private ConstraintLayout chats, no_matches;
+    private ArrayList<User> searchUser;
 
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
@@ -74,6 +77,7 @@ public class ChatFragment extends Fragment {
 
         chatUsers = new ArrayList<>();
         swipes  = new ArrayList<>();
+        searchUser  = new ArrayList<>();
 
         getSwipes();
         initViews();
@@ -106,11 +110,22 @@ public class ChatFragment extends Fragment {
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
+                if(!s.equals("")){
+                    searchUser.clear();
+                    for (User user: chatUsers) {
+                        if (user.getName().toLowerCase(Locale.ROOT).startsWith(s)){
+                            addSearchUsers(user);
+                        }
+                    }
+                } else {
+                    addAdapter();
+                }
                 return false;
             }
         });
@@ -171,15 +186,26 @@ public class ChatFragment extends Fragment {
                     Toast.makeText(getContext(), getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_SHORT).show();
                 }
             });
-            Log.d("chatuserss", chatUsers.toString());
     }
     private void addChatUsers(User chatUser){
         chatUsers.add(chatUser);
         addAdapter();
     }
 
+    private void addSearchUsers(User chatUser){
+        searchUser.add(chatUser);
+        addSearchAdapter();
+    }
+
     private void addAdapter(){
         ChatAdapter chatAdapter = new ChatAdapter(ChatFragment.this, chatUsers, listener);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(chatAdapter);
+    }
+
+    private void addSearchAdapter(){
+        ChatAdapter chatAdapter = new ChatAdapter(ChatFragment.this, searchUser, listener);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(chatAdapter);

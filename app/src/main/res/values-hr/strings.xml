@@ -46,6 +46,11 @@
     <string name="no_more_matches">Nema više podudaranja!</string>
     <string name="upload_profile_picture">Nova slika profila</string>
     <string name="remove_profile_picture">Ukloni sliku profila</string>
+    <string name="start_conversation">Započnite razgovor!</string>
+    <string name="rate_this_user">Ocjeni ovog korisnika</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Poništi</string>
+    <string name="no_matches_yet">Još nemate matcheva</string>
 
     <!-- Error messages -->
     <string name="user_with_this_email_address_already_exists">Korisnik s ovom adresom e-pošte već postoji.</string>
@@ -58,6 +63,7 @@
     <string name="are_you_sure_you_want_to_delete_your_account">Jeste li sigurni da želite izbrisati svoj korisnički račun?</string>
     <string name="no">Ne</string>
     <string name="yes">Da</string>
+
 
     <!--Notification-->
 

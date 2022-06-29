@@ -160,7 +160,6 @@ public class MyProfileFragment extends Fragment {
         userCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                Log.d("body", response.body().toString());
             }
 
             @Override

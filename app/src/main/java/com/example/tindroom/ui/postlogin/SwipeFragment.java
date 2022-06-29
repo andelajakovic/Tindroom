@@ -137,7 +137,7 @@ public class SwipeFragment extends Fragment {
             public void onSwipeLeft() {
                 swipe(false);
 //                layout.animate().rotationYBy(-180f).setDuration(1500).start();
-                back.setBackgroundResource(R.color.red);
+                back.setBackgroundResource(R.color.tindroom_pink_500);
 //                back.setRotationY(180f);
                 profilePicture.animate().rotationYBy(-180f).setDuration(800).start();
             }
@@ -158,18 +158,18 @@ public class SwipeFragment extends Fragment {
         Call<Swipe> swipeCall = null;
 
         for (Swipe swipe : swipes) {
-            Log.d("!!!!!", swipe.toString());
             if (swipe.getUserId1().equals(swipedUser.getUserId())) {
                 swipe.setSwipe_2(swipeValue);
                 swipeFound = true;
                 swipeCall = tindroomApiService.updateSwipe(swipe);
+                match(swipe);
                 break;
             }
             if(swipe.getUserId2().equals(swipedUser.getUserId())) {
-                Log.d("!!!!!", swipe.toString());
                 swipe.setSwipe_1(swipeValue);
                 swipeFound = true;
                 swipeCall = tindroomApiService.updateSwipe(swipe);
+                match(swipe);
                 break;
             }
         }
@@ -188,24 +188,9 @@ public class SwipeFragment extends Fragment {
             }
 
             swipes.add(swipe);
-
-            if (swipe.isSwipe_1() != null && swipe.isSwipe_2() != null && swipe.isSwipe_1() && swipe.isSwipe_2()) {
-                Log.d("swipe1!!!!", swipe.isSwipe_1().toString());
-                Log.d("swipe2!!!!", swipe.isSwipe_2().toString());
-                match.setVisibility(View.VISIBLE);
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        match.setVisibility(View.GONE);
-                    }
-                }, 3000);
-            }
+            match(swipe);
 
             swipeCall = tindroomApiService.insertSwipe(swipe);
-
-            // obavijest
-            Log.d("andrea", swipe.toString());
 
         }
 
@@ -223,6 +208,19 @@ public class SwipeFragment extends Fragment {
                     Toast.makeText(getContext(), getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+    }
+
+    private void match(Swipe swipe) {
+        if (swipe.isSwipe_1() != null && swipe.isSwipe_2() != null && swipe.isSwipe_1() && swipe.isSwipe_2()) {
+            match.setVisibility(View.VISIBLE);
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    match.setVisibility(View.GONE);
+                }
+            }, 3000);
         }
     }
 
@@ -490,6 +488,7 @@ public class SwipeFragment extends Fragment {
             @Override
             public void onResponse(final Call<List<User>> call, final Response<List<User>> response) {
                 loadingDialogBar.dismissDialog();
+                layout.setVisibility(View.VISIBLE);
                 if (response.body() != null)
                     swipeUsers = response.body();
                 sortedUsers = sortSwipeUsers(swipeUsers);

@@ -204,7 +204,6 @@ public class MessageFragment extends Fragment {
                     chatUser.getNotificationToken(),
                     title,
                     message);
-            Log.d("chattoken", chatUser.getNotificationToken());
         }
 
     }
