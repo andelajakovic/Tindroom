@@ -1,6 +1,5 @@
 package com.example.tindroom.ui.postlogin;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,29 +16,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 
-import com.bumptech.glide.Glide;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.tindroom.R;
 import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.Chat;
 import com.example.tindroom.data.model.User;
+import com.example.tindroom.utils.FCMSend;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -56,9 +57,10 @@ public class MessageFragment extends Fragment {
 
     private ImageButton sendButton;
     private EditText textMessage;
-    private TextView name;
+    private TextView name, lastSeen;
     private ImageButton backButton;
     private CircleImageView profilePic;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,6 +91,7 @@ public class MessageFragment extends Fragment {
 
         initViews();
         initListeners();
+        setLastSeen();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -105,6 +108,7 @@ public class MessageFragment extends Fragment {
         name.setText(chatUser.getName());
         backButton = rootView.findViewById(R.id.back);
         profilePic = rootView.findViewById(R.id.profilePic);
+        lastSeen = rootView.findViewById(R.id.lastSeen);
 
 //        int idOfUser = Integer.parseInt(chatUser.getUserId());
 //        mStorageReference = FirebaseStorage.getInstance().getReference().child("images/"+FOLDER_NAME+"/usr" + idOfUser + "/pic1");
@@ -138,6 +142,10 @@ public class MessageFragment extends Fragment {
         });
     }
 
+    private void setLastSeen(){
+
+    }
+
     private void sendMessage(String sender, String receiver, String message){
         DatabaseReference reference = FirebaseDatabase.getInstance("https://tindroom-64323-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         HashMap<String,Object> hashMap = new HashMap<>();
@@ -146,6 +154,18 @@ public class MessageFragment extends Fragment {
         hashMap.put("message", message);
 
         reference.child("Chats").push().setValue(hashMap);
+        Log.d("chatusertoken", chatUser.getToken());
+        sendNotification("New message from user:" + sessionUser.getName(), message);
+    }
+
+    private void sendNotification(String title, String message){
+        FCMSend.pushNotification(
+                getContext(),
+                // token drugog - treba ga zapisat u bazu
+                chatUser.getToken(),
+                //"e37c6ZYDS1aPNJaLOoyUFH:APA91bGsL6YIfqxk_DwQMsXf2FeY4SGxBBXrMA6ff_ULpXasbyZqeMEjHKfqFOdHSgHGr6kpiw7DQoaV0Eib7XZGs1cBsgrsR8I4J01tqvqV_7g5PTut3DCK81dMJfeJetAPemIfdA0O",
+                title,
+                message);
     }
 
     private void readMessage(){

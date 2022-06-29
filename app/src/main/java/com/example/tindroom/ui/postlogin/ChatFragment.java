@@ -15,8 +15,11 @@ import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
 import com.example.tindroom.utils.LoadingDialogBar;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,7 +49,27 @@ public class ChatFragment extends Fragment {
 
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
+    FirebaseUser chatUser;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Device id
+        FirebaseMessaging.getInstance().getToken()
+            .addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        return;
+                    }
+
+                    String token = task.getResult();
+                    sessionUser.setToken(token);
+
+                    Log.d("token", token);
+                }
+            });
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,8 +99,6 @@ public class ChatFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
     }
     private void initViews() {
         recyclerView = rootView.findViewById(R.id.recyclerView);
@@ -117,7 +138,6 @@ public class ChatFragment extends Fragment {
                         user.setUserId(swipe.getUserId1());
                         id = swipe.getUserId1();
                     }
-
                     addChatUser(id);
                 }
             }

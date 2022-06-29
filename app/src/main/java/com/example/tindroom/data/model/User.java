@@ -1,12 +1,12 @@
 package com.example.tindroom.data.model;
 
 import android.annotation.SuppressLint;
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.sql.Date;
 import java.util.Calendar;
 
 @SuppressLint("ParcelCreator")
@@ -62,6 +62,10 @@ public class User implements Parcelable {
 
     private Neighborhood neighborhood;
 
+    private String token;
+
+    private Date lastSeen;
+
     public double grade = 0.0;
 
     public String getUserId() {
@@ -78,6 +82,22 @@ public class User implements Parcelable {
 
     public void setRegistered(final boolean isRegistered) {
         this.isRegistered = isRegistered ? 1 : 0;
+    }
+
+    public void setToken(final String token){
+        this.token = token;
+    }
+
+    public String getToken(){
+        return token;
+    }
+
+    public void setLastSeen(Date lastSeen){
+        this.lastSeen = lastSeen;
+    }
+
+    public Date getLastSeen(){
+        return lastSeen;
     }
 
     public String getName() {
