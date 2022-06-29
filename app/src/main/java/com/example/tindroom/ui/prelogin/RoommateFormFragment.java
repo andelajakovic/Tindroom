@@ -1,6 +1,9 @@
 package com.example.tindroom.ui.prelogin;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +38,8 @@ import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
 import com.example.tindroom.utils.InputValidator;
+import com.example.tindroom.utils.LoadingDialogBar;
+import com.example.tindroom.utils.NetworkChangeListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.slider.RangeSlider;
@@ -73,6 +78,9 @@ public class RoommateFormFragment extends Fragment {
     private TextInputEditText priceEditText;
     private Button navigateToHomeActivityButton;
     private TextView roommateAgeLabel, apartmentPriceLabel;
+    LoadingDialogBar loadingDialogBar;
+
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,6 +98,7 @@ public class RoommateFormFragment extends Fragment {
 
         retrofit = RetrofitService.getRetrofit();
         tindroomApiService = retrofit.create(TindroomApiService.class);
+        loadingDialogBar = new LoadingDialogBar(getActivity());
 
         initViews();
         initListeners();
@@ -185,15 +194,16 @@ public class RoommateFormFragment extends Fragment {
 
     private void setNeighborhoodMenuItems() {
         neighborhoodList = new ArrayList<>();
+        loadingDialogBar.startLoadingDialog();
 
         Call<List<Neighborhood>> neighborhoodsCall = tindroomApiService.getNeighborhoods();
 
         neighborhoodsCall.enqueue(new Callback<List<Neighborhood>>() {
-            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
 
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(@NonNull final Call<List<Neighborhood>> call, @NonNull final Response<List<Neighborhood>> response) {
+                loadingDialogBar.dismissDialog();
                 assert response.body() != null;
                 neighborhoodList.addAll(response.body());
                 String[] items = neighborhoodList.stream().map(Neighborhood::getName).toArray(String[]::new);
@@ -228,6 +238,7 @@ public class RoommateFormFragment extends Fragment {
             for (Neighborhood neighborhood : neighborhoodList) {
                 if (neighborhood.getName().equals(String.valueOf(neighborhoodDropdown.getText()))) {
                     user.setIdNeighborhood(neighborhood.getNeighborhoodId());
+                    user.setNeighborhood(neighborhood);
                     break;
                 } else {
                     user.setIdNeighborhood(null);
@@ -246,12 +257,14 @@ public class RoommateFormFragment extends Fragment {
     }
 
     private void updateUser() {
+        loadingDialogBar.startLoadingDialog();
         Call<User> userCall = tindroomApiService.updateUserById(user.getUserId(), user);
+
         userCall.enqueue(new Callback<User>() {
-            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
 
             @Override
             public void onResponse(final Call<User> call, final Response<User> response) {
+                loadingDialogBar.dismissDialog();
                 user.setRegistered(true);
                 navigateToHomeActivity(rootView);
             }
@@ -264,12 +277,13 @@ public class RoommateFormFragment extends Fragment {
     }
 
     private void uploadImageToFirebase(Uri uri) {
+        loadingDialogBar.startLoadingDialog();
         StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(uri));
         fileRef.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
 
             @Override
             public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+                loadingDialogBar.dismissDialog();
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
 
                     @Override
@@ -318,6 +332,19 @@ public class RoommateFormFragment extends Fragment {
         NavDirections action = RoommateFormFragmentDirections.actionRoommateFormFragmentToHomeActivity();
         Navigation.findNavController(view).navigate(action);
         requireActivity().finish();
+    }
+
+    @Override
+    public void onStart() {
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        getActivity().registerReceiver(networkChangeListener,intentFilter);
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        getActivity().unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 
 }

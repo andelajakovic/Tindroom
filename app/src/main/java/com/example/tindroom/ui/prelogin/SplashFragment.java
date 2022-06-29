@@ -1,6 +1,7 @@
 package com.example.tindroom.ui.prelogin;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,14 +35,22 @@ public class SplashFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // TODO (Andrea: napraviti odgodu 1500-3000 ms)
-        if (SharedPreferencesStorage.getSessionUser(requireContext()) == null) {
-            navigateToLoginFragment(rootView);
-        } else if (SharedPreferencesStorage.getSessionUser(requireContext()).isRegistered()) {
-            navigateToHomeActivity(rootView);
-        } else {
-            navigateToAboutYouFragment(rootView);
-        }
+        final Handler handler = new Handler();
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (SharedPreferencesStorage.getSessionUser(requireContext()) == null) {
+                    navigateToLoginFragment(rootView);
+                } else if (SharedPreferencesStorage.getSessionUser(requireContext()).isRegistered()) {
+                    navigateToHomeActivity(rootView);
+                } else {
+                    navigateToAboutYouFragment(rootView);
+                }
+            }
+        }, 2000);
+
+
     }
 
     public void navigateToAboutYouFragment(View view) {

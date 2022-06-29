@@ -1,5 +1,8 @@
 package com.example.tindroom.ui.prelogin;
 
+import android.app.ProgressDialog;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -14,6 +17,8 @@ import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
+import com.example.tindroom.utils.LoadingDialogBar;
+import com.example.tindroom.utils.NetworkChangeListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -47,6 +52,9 @@ public class RegistrationFragment extends Fragment {
     private TextInputLayout passwordInput, repeatPasswordInput, emailInput;
     private TextInputEditText passwordEditText, repeatPasswordEditText, emailEditText;
 
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+    LoadingDialogBar loadingDialogBar;
+
     private String email, password, repeatPassword;
 
 
@@ -64,6 +72,7 @@ public class RegistrationFragment extends Fragment {
         tindroomApiService = retrofit.create(TindroomApiService.class);
 
         user = new User();
+        loadingDialogBar = new LoadingDialogBar(getActivity());
 
         initViews();
         initListeners();
@@ -144,10 +153,11 @@ public class RegistrationFragment extends Fragment {
     }
 
     private void checkIfEmailExists() {
+        loadingDialogBar.startLoadingDialog();
         mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
-            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
             @Override
             public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                loadingDialogBar.dismissDialog();
                 if (task.getResult().getSignInMethods().size() == 0) {
                     insertUserToFirebase();
                 } else {
@@ -158,10 +168,13 @@ public class RegistrationFragment extends Fragment {
     }
 
     private void insertUserToFirebase () {
+
+        loadingDialogBar.startLoadingDialog();
         mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+
+                loadingDialogBar.dismissDialog();
                 if (task.isSuccessful()) {
                     user.setUserId(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
                     user.setRegistered(false);
@@ -181,5 +194,18 @@ public class RegistrationFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        getActivity().registerReceiver(networkChangeListener,intentFilter);
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        getActivity().unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 }

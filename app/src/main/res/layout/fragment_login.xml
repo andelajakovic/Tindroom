@@ -18,7 +18,7 @@
             android:layout_height="150dp"
             android:layout_gravity="center"
             android:layout_margin="@dimen/linear_layout_margin"
-            android:src="@drawable/logo_placeholder"/>
+            android:src="@drawable/logo_white"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailInput"
@@ -62,7 +62,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/linear_layout_margin"
             android:layout_gravity="center"
-            android:enabled="false"
             style="@style/PrimaryButtonStyle"
             android:text="@string/login_fragment_login_button_label"/>
 

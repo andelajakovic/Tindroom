@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="my_profile">Moj Profil</string>
+    <string name="swipe">Swipe</string>
+    <string name="chat">Chat</string>
     <string name="male">Muško</string>
     <string name="female">Žensko</string>
     <string name="any">Svejedno</string>
@@ -28,7 +31,21 @@
     <string name="change_profile_picture">Promijeni sliku profila</string>
     <string name="edit_profile">Uredi profil</string>
     <string name="logout">Odjava</string>
-    <!-- TODO (Ivana: ovdje pises stringove na hrvatski, varijabla mora biti istog naziva kao i na eng) -->
+    <string name="apartment_description">%s, %s kuna po osobi.</string>
+    <string name="edit_your_personal_info">Uredi svoje osobne podatke</string>
+    <string name="edit_your_preferences">Uredi svoje preference</string>
+    <string name="save_changes">Spremi promjene</string>
+    <string name="delete_account">Izbriši račun</string>
+    <string name="safety">Sigurnost</string>
+    <string name="change_password">Promjeni zaporku</string>
+    <string name="re_enter_new_password">Ponovno unesi novu zaporku</string>
+    <string name="enter_new_password">Unesi novu zaporku</string>
+    <string name="enter_old_password">Unesi staru zaporku</string>
+    <string name="loading">Učitavanje…</string>
+    <string name="settings">Postavke</string>
+    <string name="no_more_matches">Nema više podudaranja!</string>
+    <string name="upload_profile_picture">Nova slika profila</string>
+    <string name="remove_profile_picture">Ukloni sliku profila</string>
 
     <!-- Error messages -->
     <string name="user_with_this_email_address_already_exists">Korisnik s ovom adresom e-pošte već postoji.</string>
@@ -38,5 +55,7 @@
     <string name="incorrect_email_or_password">Pogrešna adresa e-pošte ili zaporka.</string>
     <string name="this_field_is_mandatory">Ovo polje je obavezno.</string>
     <string name="unexpected_error_occurred">Došlo je do neočekivane pogreške.</string>
-
+    <string name="are_you_sure_you_want_to_delete_your_account">Jeste li sigurni da želite izbrisati svoj korisnički račun?</string>
+    <string name="no">Ne</string>
+    <string name="yes">Da</string>
 </resources>

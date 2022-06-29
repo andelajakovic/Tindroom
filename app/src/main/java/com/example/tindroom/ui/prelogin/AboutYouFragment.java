@@ -1,8 +1,12 @@
 package com.example.tindroom.ui.prelogin;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,15 +21,20 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.tindroom.R;
+import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.Faculty;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
 import com.example.tindroom.utils.ImageHandler;
 import com.example.tindroom.utils.InputValidator;
+import com.example.tindroom.utils.LoadingDialogBar;
+import com.example.tindroom.utils.NetworkChangeListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -64,6 +73,10 @@ public class AboutYouFragment extends Fragment {
     private ImageButton editImageButton;
     private Button nextButton;
     private Uri imageUri;
+    LoadingDialogBar loadingDialogBar;
+    private BottomSheetDialog bottomSheetDialog;
+
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,6 +93,8 @@ public class AboutYouFragment extends Fragment {
 
         Retrofit retrofit = RetrofitService.getRetrofit();
         tindroomApiService = retrofit.create(TindroomApiService.class);
+        loadingDialogBar = new LoadingDialogBar(getActivity());
+        bottomSheetDialog = new BottomSheetDialog(requireContext());
 
         initViews();
         initListeners();
@@ -90,7 +105,6 @@ public class AboutYouFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
     }
 
     private void initViews() {
@@ -113,6 +127,8 @@ public class AboutYouFragment extends Fragment {
         descriptionEditText.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
         nextButton = rootView.findViewById(R.id.nextButton);
+
+        avatarImageView = rootView.findViewById(R.id.avatarImageView);
 
         setGenderMenuItems();
         setFacultyMenuItems();
@@ -143,7 +159,7 @@ public class AboutYouFragment extends Fragment {
 
             @Override
             public void onClick(final View view) {
-                chooseImage();
+                showBottomSheetDialog();
             }
         });
 
@@ -159,6 +175,39 @@ public class AboutYouFragment extends Fragment {
         });
     }
 
+    private void showBottomSheetDialog() {
+        bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_layout);
+
+        TextView upload = bottomSheetDialog.findViewById(R.id.upload);
+        TextView remove = bottomSheetDialog.findViewById(R.id.remove);
+
+        upload.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(final View view) {
+                chooseImage();
+            }
+        });
+
+        remove.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(final View view) {
+                imageUri = null;
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetDialog.show();
+
+        bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                // Instructions on bottomSheetDialog Dismiss
+            }
+        });
+    }
+
     private void setGenderMenuItems() {
         String[] items = getResources().getStringArray(R.array.your_gender_items);
 
@@ -168,14 +217,15 @@ public class AboutYouFragment extends Fragment {
 
     private void setFacultyMenuItems() {
         facultyList = new ArrayList<>();
+        loadingDialogBar.startLoadingDialog();
 
         Call<List<Faculty>> facultiesCall = tindroomApiService.getFaculties();
 
         facultiesCall.enqueue(new Callback<List<Faculty>>() {
-            // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(@NonNull final Call<List<Faculty>> call, @NonNull final Response<List<Faculty>> response) {
+                loadingDialogBar.dismissDialog();
                 assert response.body() != null;
                 facultyList.addAll(response.body());
                 String[] items = facultyList.stream().map(Faculty::getName).toArray(String[]::new);
@@ -213,6 +263,8 @@ public class AboutYouFragment extends Fragment {
                      .asBitmap()
                      .load(bitmap)
                      .into(avatarImageView);
+                bottomSheetDialog.dismiss();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -245,6 +297,7 @@ public class AboutYouFragment extends Fragment {
         for (Faculty faculty : facultyList) {
             if (faculty.getName().equals(String.valueOf(facultyDropdown.getText()))) {
                 user.setIdFaculty(faculty.getFacultyId());
+                user.setFaculty(faculty);
                 break;
             }
         }
@@ -254,6 +307,19 @@ public class AboutYouFragment extends Fragment {
     public void navigateToRoommateFormFragment(View view) {
         NavDirections action = AboutYouFragmentDirections.actionAboutYouFragmentToRoommateFormFragment(user);
         Navigation.findNavController(view).navigate(action);
+    }
+
+    @Override
+    public void onStart() {
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        getActivity().registerReceiver(networkChangeListener,intentFilter);
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        getActivity().unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 
 }

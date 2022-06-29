@@ -1,5 +1,9 @@
 package com.example.tindroom.ui.prelogin;
 
+import android.app.ProgressDialog;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +17,7 @@ import retrofit2.Retrofit;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +27,14 @@ import android.widget.Toast;
 
 import com.example.tindroom.R;
 import com.example.tindroom.data.local.SharedPreferencesStorage;
+import com.example.tindroom.data.model.Faculty;
+import com.example.tindroom.data.model.Neighborhood;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
+import com.example.tindroom.utils.InputValidator;
+import com.example.tindroom.utils.LoadingDialogBar;
+import com.example.tindroom.utils.NetworkChangeListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -32,6 +42,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Objects;
 
@@ -45,6 +56,11 @@ public class LoginFragment extends Fragment {
     private TextInputEditText passwordEditText, emailEditText;
     private TextView linkToRegistrationFragment;
     private Button loginButton;
+    LoadingDialogBar loadingDialogBar;
+    User sessionUser;
+
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +75,7 @@ public class LoginFragment extends Fragment {
 
         Retrofit retrofit = RetrofitService.getRetrofit();
         tindroomApiService = retrofit.create(TindroomApiService.class);
-
+        loadingDialogBar = new LoadingDialogBar(getActivity());
 
         initViews();
         initListeners();
@@ -99,41 +115,31 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                checkLoginForm();
+                if(checkUserInput()) checkLoginForm();
             }
         });
 
-        TextWatcher textWatcher = new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(final CharSequence charSequence, final int i, final int i1, final int i2) {
-            }
-
-            @Override
-            public void onTextChanged(final CharSequence charSequence, final int i, final int i1, final int i2) {
-                updateButtonState();
-            }
-
-            @Override
-            public void afterTextChanged(final Editable editable) {
-            }
-        };
-
-        emailEditText.addTextChangedListener(textWatcher);
-        passwordEditText.addTextChangedListener(textWatcher);
     }
 
-    private void updateButtonState() {
-        loginButton.setEnabled(!Objects.requireNonNull(emailEditText.getText()).toString().isEmpty() && !Objects.requireNonNull(passwordEditText.getText()).toString().isEmpty());
+    private boolean checkUserInput() {
+        InputValidator inputValidator = new InputValidator(getContext());
+
+        boolean emailNotEmptyFlag = inputValidator.isInputEditTextFilled(emailEditText, emailInput);
+        boolean passwordNotEmptyFlag = inputValidator.isInputEditTextFilled(passwordEditText, passwordInput);
+
+        return emailNotEmptyFlag && passwordNotEmptyFlag;
     }
 
     private void checkLoginForm() {
 
+        loadingDialogBar.startLoadingDialog();
+
         mAuth.signInWithEmailAndPassword(Objects.requireNonNull(emailEditText.getText()).toString().trim(), Objects.requireNonNull(passwordEditText.getText()).toString().trim())
              .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                 // TODO (Andrea: napraviti loading popup dialog i obavijestiti korisnika ako nema internetske veze)
+
                  @Override
                  public void onComplete(@NonNull Task<AuthResult> task) {
+                     loadingDialogBar.dismissDialog();
                      if (task.isSuccessful()) {
                          // Sign in success, update UI with the signed-in user's information
                          FirebaseUser user = mAuth.getCurrentUser();
@@ -143,9 +149,9 @@ public class LoginFragment extends Fragment {
 
                              @Override
                              public void onResponse(final Call<User> call, final Response<User> response) {
-                                 SharedPreferencesStorage.setSessionUser(requireContext(), response.body());
-                                 navigateToHomeActivity(rootView);
-                                 requireActivity().finish();
+                                 sessionUser = response.body();
+                                 sessionUser.setDateOfBirth(sessionUser.getDateOfBirth().substring(0, 10));
+                                 setUsersToken();
                              }
 
                              @Override
@@ -161,6 +167,86 @@ public class LoginFragment extends Fragment {
              });
     }
 
+    private void setUsersToken() {
+        Log.d("!!!!!!!!!", sessionUser.toString());
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+                        String token = task.getResult();
+                        sessionUser.setNotificationToken(token);
+                        updateUser();
+                        //setUserToken(id, token);
+
+                        Log.d("token", token);
+                    }
+                });
+    }
+
+    private void updateUser() {
+        Call<User> userCall = tindroomApiService.updateUserById(sessionUser.getUserId(), sessionUser);
+        userCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                setUsersFaculty();
+                Log.d("body", response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.d("failed", t.toString());
+            }
+        });
+    }
+
+    private void setUsersFaculty() {
+        Call<Faculty> facultyCall = tindroomApiService.getFacultyById(sessionUser.getIdFaculty());
+        facultyCall.enqueue(new Callback<Faculty>() {
+
+            @Override
+            public void onResponse(final Call<Faculty> call, final Response<Faculty> response) {
+                sessionUser.setFaculty(response.body());
+                loadingDialogBar.dismissDialog();
+                if(sessionUser.isHasApartment()) {
+                    setUsersNeighborhood();
+                } else {
+                    SharedPreferencesStorage.setSessionUser(requireContext(), sessionUser);
+                    navigateToHomeActivity(rootView);
+                    requireActivity().finish();
+                }
+            }
+
+            @Override
+            public void onFailure(final Call<Faculty> call, final Throwable t) {
+                loadingDialogBar.dismissDialog();
+            }
+        });
+    }
+
+    private void setUsersNeighborhood () {
+        Call<Neighborhood> neighborhoodCall = tindroomApiService.getNeighborhoodById(sessionUser.getIdNeighborhood());
+        neighborhoodCall.enqueue(new Callback<Neighborhood>() {
+
+            @Override
+            public void onResponse(final Call<Neighborhood> call, final Response<Neighborhood> response) {
+                loadingDialogBar.dismissDialog();
+                sessionUser.setNeighborhood(response.body());
+                SharedPreferencesStorage.setSessionUser(requireContext(), sessionUser);
+                navigateToHomeActivity(rootView);
+                requireActivity().finish();
+            }
+
+            @Override
+            public void onFailure(final Call<Neighborhood> call, final Throwable t) {
+                loadingDialogBar.dismissDialog();
+            }
+        });
+    }
+
+
     public void navigateToRegistrationFragment(View view) {
         NavDirections action = LoginFragmentDirections.actionLoginFragmentToRegistrationFragment();
         Navigation.findNavController(view).navigate(action);
@@ -170,4 +256,19 @@ public class LoginFragment extends Fragment {
         NavDirections action = LoginFragmentDirections.actionLoginFragmentToHomeActivity();
         Navigation.findNavController(view).navigate(action);
     }
+
+
+    @Override
+    public void onStart() {
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        getActivity().registerReceiver(networkChangeListener,intentFilter);
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        getActivity().unregisterReceiver(networkChangeListener);
+        super.onStop();
+    }
+
 }

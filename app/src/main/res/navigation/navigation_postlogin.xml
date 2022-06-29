@@ -9,18 +9,25 @@
         android:id="@+id/swipeFragment"
         android:name="com.example.tindroom.ui.postlogin.SwipeFragment"
         android:label="fragment_swipe"
-        tools:layout="@layout/fragment_swipe" />
+        tools:layout="@layout/fragment_swipe" >
+        <action
+            android:id="@+id/action_swipeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/myProfileFragment"
         android:name="com.example.tindroom.ui.postlogin.MyProfileFragment"
         android:label="fragment_my_profile"
         tools:layout="@layout/fragment_my_profile" >
         <action
-            android:id="@+id/action_myProfileFragment_to_mainActivity"
-            app:destination="@id/mainActivity" />
-        <action
             android:id="@+id/action_myProfileFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_myProfileFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+        <action
+            android:id="@+id/action_myProfileFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
@@ -39,12 +46,10 @@
         <action
             android:id="@+id/action_messageFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
+        <argument
+            android:name="chatUser"
+            app:argType="com.example.tindroom.data.model.User" />
     </fragment>
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.example.tindroom.ui.prelogin.MainActivity"
-        android:label="activity_main"
-        tools:layout="@layout/activity_main" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.tindroom.ui.postlogin.SettingsFragment"
@@ -53,9 +58,6 @@
         <action
             android:id="@+id/action_settingsFragment_to_myProfileFragment"
             app:destination="@id/myProfileFragment" />
-        <action
-            android:id="@+id/action_settingsFragment_to_changePasswordFragment"
-            app:destination="@id/changePasswordFragment" />
         <action
             android:id="@+id/action_settingsFragment_to_mainActivity"
             app:destination="@id/mainActivity" />
@@ -66,7 +68,12 @@
         android:label="fragment_change_password"
         tools:layout="@layout/fragment_change_password" >
         <action
-            android:id="@+id/action_changePasswordFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            android:id="@+id/action_changePasswordFragment_to_myProfileFragment"
+            app:destination="@id/myProfileFragment" />
     </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.tindroom.ui.prelogin.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
 </navigation>

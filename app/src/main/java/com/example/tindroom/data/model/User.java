@@ -1,11 +1,13 @@
 package com.example.tindroom.data.model;
 
 import android.annotation.SuppressLint;
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
+
+import java.sql.Date;
+import java.util.Calendar;
 
 @SuppressLint("ParcelCreator")
 public class User implements Parcelable {
@@ -54,7 +56,26 @@ public class User implements Parcelable {
     @SerializedName("image_url")
     private String imageUrl;
 
+    @SerializedName("notification_token")
+    private String notificationToken;
+
+    @SerializedName("review")
+    private double review;
+
+    @SerializedName("number_of_reviews")
+    private int numberOfReviews;
+
     private String imageUri;
+
+    private Faculty faculty;
+
+    private Neighborhood neighborhood;
+
+    private String token;
+
+    private Date lastSeen;
+
+    public double grade = 0.0;
 
     public String getUserId() {
         return userId;
@@ -70,6 +91,22 @@ public class User implements Parcelable {
 
     public void setRegistered(final boolean isRegistered) {
         this.isRegistered = isRegistered ? 1 : 0;
+    }
+
+    public void setToken(final String token){
+        this.token = token;
+    }
+
+    public String getToken(){
+        return token;
+    }
+
+    public void setLastSeen(Date lastSeen){
+        this.lastSeen = lastSeen;
+    }
+
+    public Date getLastSeen(){
+        return lastSeen;
     }
 
     public String getName() {
@@ -184,11 +221,74 @@ public class User implements Parcelable {
         this.imageUri = imageUri;
     }
 
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(final Faculty faculty) {
+        this.faculty = faculty;
+    }
+
+    public Neighborhood getNeighborhood() {
+        return neighborhood;
+    }
+
+    public void setNeighborhood(final Neighborhood neighborhood) {
+        this.neighborhood = neighborhood;
+    }
+
+    public String getNotificationToken() {
+        return notificationToken;
+    }
+
+    public void setNotificationToken(String notificationToken) {
+        this.notificationToken = notificationToken;
+    }
+
+    public double getReview() {
+        return review;
+    }
+
+    public void setReview(double review) {
+        this.review = review;
+    }
+
+    public int getNumberOfReviews() {
+        return numberOfReviews;
+    }
+
+    public void setNumberOfReviews(int numberOfReviews) {
+        this.numberOfReviews = numberOfReviews;
+    }
+
     @SerializedName("feedback")
     private Object feedback;
 
     public Object getFeedback() {
         return feedback;
+    }
+
+    public String getAge(){
+
+        int month = Integer.parseInt(this.getDateOfBirth().substring(5,7));
+        int day = Integer.parseInt(this.getDateOfBirth().substring(9,10));
+        int year = Integer.parseInt(this.getDateOfBirth().substring(0,4));
+
+        Calendar dob = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+
+        dob.set(year, month, day);
+
+        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)){
+            age--;
+        }
+
+        Integer ageInt = new Integer(age);
+        String ageS = ageInt.toString();
+
+        return ageS;
     }
 
     @Override
@@ -208,6 +308,10 @@ public class User implements Parcelable {
                 ", priceFrom=" + priceFrom +
                 ", priceTo=" + priceTo +
                 ", idNeighborhood=" + idNeighborhood +
+                ", imageUrl=" + imageUrl +
+                ", grade=" + grade +
+                ", token=" + notificationToken +
+                ", feedback=" + feedback +
                 '}';
     }
 
