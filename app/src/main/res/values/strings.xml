@@ -141,6 +141,9 @@
     <string name="bottom_sheet_upload_profile_picture_label" translatable="false">@string/upload_profile_picture</string>
     <string name="bottom_sheet_remove_profile_picture_label" translatable="false">@string/remove_profile_picture</string>
 
+    <!--Notification-->
+    <string name="reply_label" translatable="false">Reply</string>
+
     <!-- Arrays -->
     <array name="your_gender_items">
         <item>@string/male</item>

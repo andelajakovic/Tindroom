@@ -1,6 +1,9 @@
 package com.example.tindroom.ui.postlogin;
 
+import android.annotation.SuppressLint;
+import android.app.RemoteInput;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,6 +33,7 @@ import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
 import com.example.tindroom.utils.FCMSend;
 import com.example.tindroom.utils.ReviewDialog;
+import com.example.tindroom.utils.PushNotificationService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -190,7 +194,7 @@ public class MessageFragment extends Fragment {
         hashMap.put("message", message);
 
         reference.child("Chats").push().setValue(hashMap);
-        sendNotification("New message from user:" + sessionUser.getName(), message);
+        sendNotification(sessionUser.getName(), message);
     }
 
     private void sendNotification(String title, String message){
@@ -204,6 +208,7 @@ public class MessageFragment extends Fragment {
         }
 
     }
+
 
     private void readMessage(){
         String sessionId = sessionUser.getUserId();

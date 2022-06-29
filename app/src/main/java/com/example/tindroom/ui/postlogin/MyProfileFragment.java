@@ -139,6 +139,8 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onClick(final View view) {
                 SharedPreferencesStorage.setSessionUser(requireContext(), null);
+                sessionUser.setNotificationToken(null);
+                updateUserToken();
                 mAuth.signOut();
                 navigateToMainActivity(view);
                 requireActivity().finish();
@@ -149,6 +151,21 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 navigateToChangePasswordFragment(view);
+            }
+        });
+    }
+
+    private void updateUserToken(){
+        Call<User> userCall = tindroomApiService.updateUserById(sessionUser.getUserId(), sessionUser);
+        userCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                Log.d("body", response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.d("failed", t.toString());
             }
         });
     }
