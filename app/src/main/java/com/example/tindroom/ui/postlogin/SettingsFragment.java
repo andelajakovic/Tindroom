@@ -503,20 +503,10 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void onResponse(final Call<User> call, final Response<User> response) {
-
-                // TODO (Ivana: ERROR!!!!!!!!!!)
-                mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            loadingDialogBar.dismissDialog();
-                            navigateToMainActivity(rootView);
-                        }
-                    }
-                });
+                loadingDialogBar.dismissDialog();
+                SharedPreferencesStorage.setSessionUser(requireContext(), null);
+                navigateToMainActivity(rootView);
             }
-
             @Override
             public void onFailure(final Call<User> call, final Throwable t) {
             }
