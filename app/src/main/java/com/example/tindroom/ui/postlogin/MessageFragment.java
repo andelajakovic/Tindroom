@@ -20,16 +20,16 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.example.tindroom.R;
 import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.Chat;
-import com.example.tindroom.data.model.Token;
+import com.example.tindroom.data.model.Review;
 import com.example.tindroom.data.model.User;
+import com.example.tindroom.network.RetrofitService;
+import com.example.tindroom.network.TindroomApiService;
 import com.example.tindroom.utils.FCMSend;
+import com.example.tindroom.utils.ReviewDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,14 +39,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class MessageFragment extends Fragment {
 
@@ -56,6 +58,7 @@ public class MessageFragment extends Fragment {
     private RecyclerView recyclerView;
     ArrayList<Chat> chatList;
     DatabaseReference reference;
+    private TindroomApiService tindroomApiService;
     private StorageReference mStorageReference;
     final String FOLDER_NAME = "users";
 
@@ -65,6 +68,8 @@ public class MessageFragment extends Fragment {
     private ImageButton backButton;
     private CircleImageView profilePic;
     String token;
+    private List<Review> reviews;
+    private ReviewDialog reviewDialog;
 
     FirebaseAuth chatUserFirebase;
 
@@ -84,6 +89,11 @@ public class MessageFragment extends Fragment {
         sessionUser = SharedPreferencesStorage.getSessionUser(requireContext());
         reference = FirebaseDatabase.getInstance("https://tindroom-64323-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Chats");
 
+        reviewDialog = new ReviewDialog(getActivity(), sessionUser, chatUser);
+
+        Retrofit retrofit = RetrofitService.getRetrofit();
+        tindroomApiService = retrofit.create(TindroomApiService.class);
+
         return rootView;
     }
 
@@ -93,6 +103,7 @@ public class MessageFragment extends Fragment {
 
         recyclerView = rootView.findViewById(R.id.recyclerView);
         chatList = new ArrayList<>();
+        reviews = new ArrayList<>();
 
         MessageAdapter messageAdapter = new MessageAdapter(getActivity(), chatUser, sessionUser, chatList);
 
@@ -100,12 +111,32 @@ public class MessageFragment extends Fragment {
         initListeners();
         setLastSeen();
 
+        getReviews();
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(messageAdapter);
 
         recyclerView.scrollToPosition(messageAdapter.getItemCount()-1);
-        readMessage();
+    }
+
+    private void getReviews() {
+        Call<List<Review>> reviewCall = tindroomApiService.getReviewsByUserId(chatUser.getUserId());
+        reviewCall.enqueue(new Callback<List<Review>>() {
+
+            @Override
+            public void onResponse(final Call<List<Review>> call, final Response<List<Review>> response) {
+                if(response.body() != null && !response.body().isEmpty()) {
+                    reviews.addAll(response.body());
+                }
+                readMessage();
+            }
+
+            @Override
+            public void onFailure(final Call<List<Review>> call, final Throwable t) {
+
+            }
+        });
     }
 
     public void initViews(){
@@ -115,7 +146,7 @@ public class MessageFragment extends Fragment {
         name.setText(chatUser.getName());
         backButton = rootView.findViewById(R.id.back);
         profilePic = rootView.findViewById(R.id.profilePic);
-        lastSeen = rootView.findViewById(R.id.lastSeen);
+        //lastSeen = rootView.findViewById(R.id.lastSeen);
 
         Context cont = requireContext();
         Glide.with(cont)
@@ -142,7 +173,7 @@ public class MessageFragment extends Fragment {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateToMessageFragment(rootView);
+                navigateToChatFragment(rootView);
             }
         });
     }
@@ -198,6 +229,19 @@ public class MessageFragment extends Fragment {
 
                         recyclerView.scrollToPosition(messageAdapter.getItemCount()-1);
 
+                        boolean containsReview = false;
+                        if (reviews != null && !reviews.isEmpty()) {
+                            for (Review review:reviews) {
+                                if (review.getReviewerId().equals(sessionUser.getUserId())) {
+                                    containsReview = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (chatList.size() > 10 && !containsReview) {
+                            showReviewPopupDialog();
+                        }
                     }
                 }
             }
@@ -207,7 +251,11 @@ public class MessageFragment extends Fragment {
         });
     }
 
-    public void navigateToMessageFragment (View view) {
+    private void showReviewPopupDialog() {
+        reviewDialog.startReviewDialog();
+    }
+
+    public void navigateToChatFragment(View view) {
         NavDirections action = MessageFragmentDirections.actionMessageFragmentToChatFragment();
         Navigation.findNavController(view).navigate(action);
     }

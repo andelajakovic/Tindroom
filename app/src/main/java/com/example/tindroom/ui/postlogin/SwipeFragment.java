@@ -30,6 +30,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ import com.example.tindroom.R;
 import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.Faculty;
 import com.example.tindroom.data.model.Neighborhood;
+import com.example.tindroom.data.model.Review;
 import com.example.tindroom.data.model.Swipe;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
@@ -71,6 +73,7 @@ public class SwipeFragment extends Fragment {
     private RelativeLayout layout;
     private ConstraintLayout layout2, match;
     private CardView card;
+    private RatingBar ratingBar;
     LoadingDialogBar loadingDialogBar;
     MatchDialog matchDialog;
 
@@ -109,7 +112,7 @@ public class SwipeFragment extends Fragment {
         layout = rootView.findViewById(R.id.layout);
         layout2 = rootView.findViewById(R.id.layout2);
         match = rootView.findViewById(R.id.match);
-
+        ratingBar = rootView.findViewById(R.id.rating);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -172,7 +175,8 @@ public class SwipeFragment extends Fragment {
             swipeCall = tindroomApiService.insertSwipe(swipe);
             // obavijest
             if (swipe.isSwipe_1() != null && swipe.isSwipe_2() != null && swipe.isSwipe_1() && swipe.isSwipe_2()) {
-                Log.d("andrea", swipe.isSwipe_1().toString());
+                Log.d("swipe1!!!!", swipe.isSwipe_1().toString());
+                Log.d("swipe2!!!!", swipe.isSwipe_2().toString());
                 match.setVisibility(View.VISIBLE);
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -221,6 +225,13 @@ public class SwipeFragment extends Fragment {
              .load(swipeUser.getImageUrl())
              .error(getResources().getDrawable(R.drawable.avatar_placeholder))
              .into(profilePicture);
+
+        if (swipeUser.getNumberOfReviews() > 0) {
+            ratingBar.setRating((float) swipeUser.getReview());
+            ratingBar.setVisibility(View.VISIBLE);
+        } else {
+            ratingBar.setVisibility(View.GONE);
+        }
 
         roommatesName.setText(String.format("%s, %s", swipeUser.getName(), swipeUser.getAge()));
 
