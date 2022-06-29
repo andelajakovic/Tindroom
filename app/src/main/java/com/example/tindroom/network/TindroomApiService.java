@@ -3,6 +3,7 @@ package com.example.tindroom.network;
 
 import com.example.tindroom.data.model.Faculty;
 import com.example.tindroom.data.model.Neighborhood;
+import com.example.tindroom.data.model.Review;
 import com.example.tindroom.data.model.Swipe;
 import com.example.tindroom.data.model.User;
 
@@ -52,5 +53,11 @@ public interface TindroomApiService {
 
     @DELETE("/delete/{user_id}")
     Call<User> deleteUserById(@Path("user_id") String userId);
+
+    @POST("/reviews/insert")
+    Call<Review> insertReview(@Body Review review);
+
+    @GET("reviews/{user_id}")
+    Call<List<Review>> getReviewsByUserId(@Path("user_id") String userId);
 }
 
