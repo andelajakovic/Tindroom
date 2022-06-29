@@ -110,14 +110,13 @@ public class MessageFragment extends Fragment {
         profilePic = rootView.findViewById(R.id.profilePic);
         lastSeen = rootView.findViewById(R.id.lastSeen);
 
-//        int idOfUser = Integer.parseInt(chatUser.getUserId());
-//        mStorageReference = FirebaseStorage.getInstance().getReference().child("images/"+FOLDER_NAME+"/usr" + idOfUser + "/pic1");
+        Context cont = requireContext();
+        Glide.with(cont)
+                .asBitmap()
+                .load(chatUser.getImageUrl())
+                .error(cont.getResources().getDrawable(R.drawable.avatar_placeholder))
+                .into(profilePic);
 
-//        Context cont = getActivity().getApplicationContext();
-//        Glide.with(cont)
-//                .load(mStorageReference)
-//                .error(R.drawable.ic_baseline_person_24)
-//                .into(profilePic);
     }
 
     public void initListeners(){

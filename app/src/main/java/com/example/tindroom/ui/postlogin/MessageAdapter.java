@@ -63,6 +63,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Viewhold
             holder.myMessage.setVisibility(View.GONE);
         }
 
+
+
     }
 
     @Override
@@ -83,14 +85,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Viewhold
             myMessage = itemView.findViewById(R.id.myMessage);
             othersLayout = itemView.findViewById(R.id.othersLayout);
 
-            String idOfUser = chatUser.getUserId();
-//            mStorageReference = FirebaseStorage.getInstance().getReference().child("images/"+FOLDER_NAME+"/usr" + idOfUser + "/pic1");
-
             Context cont = context.getApplicationContext();
-//            Glide.with(cont)
-//                    .load(mStorageReference)
-//                    .error(R.drawable.avatar_placeholder)
-//                    .into(othersProfilePic);
+            Glide.with(cont)
+                    .asBitmap()
+                    .load(chatUser.getImageUrl())
+                    .error(cont.getResources().getDrawable(R.drawable.avatar_placeholder))
+                    .into(othersProfilePic);
         }
     }
 }

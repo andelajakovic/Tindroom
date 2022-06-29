@@ -169,10 +169,10 @@ public class LoginFragment extends Fragment {
             @Override
             public void onResponse(final Call<Faculty> call, final Response<Faculty> response) {
                 user.setFaculty(response.body());
+                loadingDialogBar.dismissDialog();
                 if(user.isHasApartment()) {
                     setUsersNeighborhood(user);
                 } else {
-                    loadingDialogBar.dismissDialog();
                     SharedPreferencesStorage.setSessionUser(requireContext(), user);
                     navigateToHomeActivity(rootView);
                     requireActivity().finish();
@@ -181,7 +181,7 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onFailure(final Call<Faculty> call, final Throwable t) {
-
+                loadingDialogBar.dismissDialog();
             }
         });
     }
@@ -201,7 +201,7 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onFailure(final Call<Neighborhood> call, final Throwable t) {
-
+                loadingDialogBar.dismissDialog();
             }
         });
     }

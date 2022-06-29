@@ -79,15 +79,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
         User model = chatUsers.get(position);
         holder.name.setText(String.valueOf(model.getName()));
 
-
-        String idOfUser = model.getUserId();
-        mStorageReference = FirebaseStorage.getInstance().getReference().child("images/" + FOLDER_NAME + "/usr" + idOfUser + "/pic1");
-
-//        Context cont = context.getApplicationContext();
-//        Glide.with(cont)
-//                .load(mStorageReference)
-//                .error(R.drawable.avatar_placeholder)
-//                .into(holder.profilePic);
+        Context cont = context.requireContext();
+        Glide.with(cont)
+                .asBitmap()
+                .load(model.getImageUrl())
+                .error(cont.getResources().getDrawable(R.drawable.avatar_placeholder))
+                .into(holder.profilePic);
 
         String myid = sessionUser.getUserId();
         String userId = model.getUserId();
