@@ -137,7 +137,7 @@ public class SwipeFragment extends Fragment {
             public void onSwipeLeft() {
                 swipe(false);
 //                layout.animate().rotationYBy(-180f).setDuration(1500).start();
-                back.setBackgroundResource(R.color.red);
+                back.setBackgroundResource(R.color.tindroom_pink_500);
 //                back.setRotationY(180f);
                 profilePicture.animate().rotationYBy(-180f).setDuration(800).start();
             }
