@@ -163,12 +163,15 @@ public class MessageFragment extends Fragment {
     }
 
     private void sendNotification(String title, String message){
+        if (chatUser.getNotificationToken() != null) {
+            FCMSend.pushNotification(
+                    getContext(),
+                    chatUser.getNotificationToken(),
+                    title,
+                    message);
+            Log.d("chattoken", chatUser.getNotificationToken());
+        }
 
-        FCMSend.pushNotification(
-                getContext(),
-                chatUser.getNotificationToken(),
-                title,
-                message);
     }
 
     private void readMessage(){
