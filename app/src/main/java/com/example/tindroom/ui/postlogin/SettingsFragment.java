@@ -45,6 +45,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,6 +78,7 @@ public class SettingsFragment extends Fragment {
     SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     FirebaseAuth mAuth;
+    FirebaseUser userFirebase;
     private List<Neighborhood> neighborhoodList;
 
     @Override
@@ -92,6 +94,9 @@ public class SettingsFragment extends Fragment {
         Retrofit retrofit = RetrofitService.getRetrofit();
         tindroomApiService = retrofit.create(TindroomApiService.class);
         loadingDialogBar = new LoadingDialogBar(getActivity());
+
+        mAuth = FirebaseAuth.getInstance();
+        userFirebase = mAuth.getCurrentUser();
 
         initViews();
         initData();
@@ -500,25 +505,26 @@ public class SettingsFragment extends Fragment {
         loadingDialogBar.startLoadingDialog();
         Call<User> deleteUserCall = tindroomApiService.deleteUserById(user.getUserId());
         deleteUserCall.enqueue(new Callback<User>() {
-
             @Override
             public void onResponse(final Call<User> call, final Response<User> response) {
-
-                // TODO (Ivana: ERROR!!!!!!!!!!)
-                mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            loadingDialogBar.dismissDialog();
-                            navigateToMainActivity(rootView);
-                        }
-                    }
-                });
+                loadingDialogBar.dismissDialog();
+                deleteUserFirebase();
             }
 
             @Override
             public void onFailure(final Call<User> call, final Throwable t) {
+            }
+        });
+    }
+    private void deleteUserFirebase(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    mAuth.signOut();
+                    navigateToMainActivity(rootView);
+                }
             }
         });
     }
