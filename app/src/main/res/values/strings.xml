@@ -43,6 +43,7 @@
     <string name="no_more_matches">No more matches!</string>
     <string name="upload_profile_picture">New profile picture</string>
     <string name="remove_profile_picture">Remove profile picture</string>
+    <string name="start_conversation">Start conversation!</string>
 
     <!-- Error messages -->
     <string name="edit_profile">Edit profile</string>
@@ -55,6 +56,10 @@
     <string name="are_you_sure_you_want_to_delete_your_account">Are you sure you want to delete your account?</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="rate_this_user">Rate this user</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_matches_yet">There are no matches yet</string>
 
     <!-- Menu items -->
     <string name="menu_item_my_profile" translatable="false">@string/my_profile</string>
@@ -143,6 +148,13 @@
 
     <!--Notification-->
     <string name="reply_label" translatable="false">Reply</string>
+
+    <!-- Chat fragment -->
+    <string name="chat_fragment_start_conversation_label" translatable="false">@string/start_conversation</string>
+    <string name="review_popup_dialog_title" translatable="false">@string/rate_this_user</string>
+    <string name="review_popup_dialog_ok_label" translatable="false">@string/ok</string>
+    <string name="review_popup_dialog_cancel_label" translatable="false">@string/cancel</string>
+    <string name="chat_fragment_no_matches_yet_label" translatable="false">@string/no_matches_yet</string>
 
     <!-- Arrays -->
     <array name="your_gender_items">

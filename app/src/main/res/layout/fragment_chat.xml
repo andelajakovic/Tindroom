@@ -45,7 +45,7 @@
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="There are no matches yet"
+            android:text="@string/chat_fragment_no_matches_yet_label"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
