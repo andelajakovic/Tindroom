@@ -56,6 +56,15 @@ public class User implements Parcelable {
     @SerializedName("image_url")
     private String imageUrl;
 
+    @SerializedName("notification_token")
+    private String notificationToken;
+
+    @SerializedName("review")
+    private double review;
+
+    @SerializedName("number_of_reviews")
+    private int numberOfReviews;
+
     private String imageUri;
 
     private Faculty faculty;
@@ -228,6 +237,30 @@ public class User implements Parcelable {
         this.neighborhood = neighborhood;
     }
 
+    public String getNotificationToken() {
+        return notificationToken;
+    }
+
+    public void setNotificationToken(String notificationToken) {
+        this.notificationToken = notificationToken;
+    }
+
+    public double getReview() {
+        return review;
+    }
+
+    public void setReview(double review) {
+        this.review = review;
+    }
+
+    public int getNumberOfReviews() {
+        return numberOfReviews;
+    }
+
+    public void setNumberOfReviews(int numberOfReviews) {
+        this.numberOfReviews = numberOfReviews;
+    }
+
     @SerializedName("feedback")
     private Object feedback;
 
@@ -277,6 +310,8 @@ public class User implements Parcelable {
                 ", idNeighborhood=" + idNeighborhood +
                 ", imageUrl=" + imageUrl +
                 ", grade=" + grade +
+                ", token=" + notificationToken +
+                ", feedback=" + feedback +
                 '}';
     }
 

@@ -1,5 +1,6 @@
 package com.example.tindroom.ui.postlogin;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,11 +23,14 @@ import android.widget.TextView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.bumptech.glide.Glide;
 import com.example.tindroom.R;
 import com.example.tindroom.data.local.SharedPreferencesStorage;
 import com.example.tindroom.data.model.Chat;
+import com.example.tindroom.data.model.Token;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.utils.FCMSend;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -60,6 +64,9 @@ public class MessageFragment extends Fragment {
     private TextView name, lastSeen;
     private ImageButton backButton;
     private CircleImageView profilePic;
+    String token;
+
+    FirebaseAuth chatUserFirebase;
 
 
     @Override
@@ -116,7 +123,6 @@ public class MessageFragment extends Fragment {
                 .load(chatUser.getImageUrl())
                 .error(cont.getResources().getDrawable(R.drawable.avatar_placeholder))
                 .into(profilePic);
-
     }
 
     public void initListeners(){
@@ -153,16 +159,14 @@ public class MessageFragment extends Fragment {
         hashMap.put("message", message);
 
         reference.child("Chats").push().setValue(hashMap);
-        Log.d("chatusertoken", chatUser.getToken());
         sendNotification("New message from user:" + sessionUser.getName(), message);
     }
 
     private void sendNotification(String title, String message){
+
         FCMSend.pushNotification(
                 getContext(),
-                // token drugog - treba ga zapisat u bazu
-                chatUser.getToken(),
-                //"e37c6ZYDS1aPNJaLOoyUFH:APA91bGsL6YIfqxk_DwQMsXf2FeY4SGxBBXrMA6ff_ULpXasbyZqeMEjHKfqFOdHSgHGr6kpiw7DQoaV0Eib7XZGs1cBsgrsR8I4J01tqvqV_7g5PTut3DCK81dMJfeJetAPemIfdA0O",
+                chatUser.getNotificationToken(),
                 title,
                 message);
     }
@@ -194,13 +198,11 @@ public class MessageFragment extends Fragment {
                     }
                 }
             }
-
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
             }
         });
     }
-
 
     public void navigateToMessageFragment (View view) {
         NavDirections action = MessageFragmentDirections.actionMessageFragmentToChatFragment();
