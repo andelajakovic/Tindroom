@@ -69,7 +69,7 @@
                 android:background="@null"
                 android:padding="10dp"
                 android:src="@drawable/ic_baseline_send_24"
-                android:tint="@color/tindroom_pink_500"
+                app:tint="@color/tindroom_pink_500"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -86,7 +86,7 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profilePic"
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="60dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/avatar_placeholder"

@@ -12,5 +12,7 @@
     <color name="tindroom_pink_200">#fa5788</color>
     <color name="tindroom_pink_500">#c2165b</color>
     <color name="tindroom_pink_700">#8c0032</color>
+    <color name="green">#5a9216</color>
+    <color name="red">#7f0000</color>
 
 </resources>
