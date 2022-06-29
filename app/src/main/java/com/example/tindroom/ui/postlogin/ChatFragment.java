@@ -54,21 +54,6 @@ public class ChatFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Device id
-        FirebaseMessaging.getInstance().getToken()
-            .addOnCompleteListener(new OnCompleteListener<String>() {
-                @Override
-                public void onComplete(@NonNull Task<String> task) {
-                    if (!task.isSuccessful()) {
-                        return;
-                    }
-
-                    String token = task.getResult();
-                    sessionUser.setToken(token);
-
-                    Log.d("token", token);
-                }
-            });
     }
 
     @Override
