@@ -68,7 +68,7 @@ public class SwipeFragment extends Fragment {
     private TextView roommatesName, roommatesFaculty, roommatesDescription, apartmentDescription;
     private Button settings;
     private RelativeLayout layout;
-    private ConstraintLayout layout2;
+    private ConstraintLayout layout2, match;
     private CardView card;
     LoadingDialogBar loadingDialogBar;
     MatchDialog matchDialog;
@@ -107,6 +107,7 @@ public class SwipeFragment extends Fragment {
         settings = rootView.findViewById(R.id.settings);
         layout = rootView.findViewById(R.id.layout);
         layout2 = rootView.findViewById(R.id.layout2);
+        match = rootView.findViewById(R.id.match);
 
     }
 
@@ -169,13 +170,18 @@ public class SwipeFragment extends Fragment {
             swipes.add(swipe);
             swipeCall = tindroomApiService.insertSwipe(swipe);
             // obavijest
-            matchDialog.startMatchDialog();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                        matchDialog.dismissMatchDialog();
-                }
-            }, 1500);
+            if (swipe.isSwipe_1() != null && swipe.isSwipe_2() != null && swipe.isSwipe_1() && swipe.isSwipe_2()) {
+                Log.d("andrea", swipe.isSwipe_1().toString());
+                match.setVisibility(View.VISIBLE);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        match.setVisibility(View.GONE);
+                    }
+                }, 3000);
+            }
+
         }
 
         if (swipeCall != null) {
