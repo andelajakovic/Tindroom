@@ -39,7 +39,6 @@ public class FCMSend {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, BASE_URL, json, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.d("FCM response", response.toString());
                 }
             }, new Response.ErrorListener() {
                 @Override

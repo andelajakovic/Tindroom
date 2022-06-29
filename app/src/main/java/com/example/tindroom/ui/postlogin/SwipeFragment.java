@@ -158,7 +158,6 @@ public class SwipeFragment extends Fragment {
         Call<Swipe> swipeCall = null;
 
         for (Swipe swipe : swipes) {
-            Log.d("!!!!!", swipe.toString());
             if (swipe.getUserId1().equals(swipedUser.getUserId())) {
                 swipe.setSwipe_2(swipeValue);
                 swipeFound = true;
@@ -167,7 +166,6 @@ public class SwipeFragment extends Fragment {
                 break;
             }
             if(swipe.getUserId2().equals(swipedUser.getUserId())) {
-                Log.d("!!!!!", swipe.toString());
                 swipe.setSwipe_1(swipeValue);
                 swipeFound = true;
                 swipeCall = tindroomApiService.updateSwipe(swipe);
@@ -193,9 +191,6 @@ public class SwipeFragment extends Fragment {
             match(swipe);
 
             swipeCall = tindroomApiService.insertSwipe(swipe);
-
-            // obavijest
-            Log.d("andrea", swipe.toString());
 
         }
 

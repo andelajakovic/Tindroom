@@ -186,7 +186,6 @@ public class ChatFragment extends Fragment {
                     Toast.makeText(getContext(), getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_SHORT).show();
                 }
             });
-            Log.d("chatuserss", chatUsers.toString());
     }
     private void addChatUsers(User chatUser){
         chatUsers.add(chatUser);

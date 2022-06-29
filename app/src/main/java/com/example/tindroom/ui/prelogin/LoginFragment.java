@@ -168,7 +168,6 @@ public class LoginFragment extends Fragment {
     }
 
     private void setUsersToken() {
-        Log.d("!!!!!!!!!", sessionUser.toString());
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -179,9 +178,6 @@ public class LoginFragment extends Fragment {
                         String token = task.getResult();
                         sessionUser.setNotificationToken(token);
                         updateUser();
-                        //setUserToken(id, token);
-
-                        Log.d("token", token);
                     }
                 });
     }
@@ -192,7 +188,6 @@ public class LoginFragment extends Fragment {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 setUsersFaculty();
-                Log.d("body", response.body().toString());
             }
 
             @Override

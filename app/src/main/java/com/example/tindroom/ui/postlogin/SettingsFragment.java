@@ -291,7 +291,6 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull final Call<List<Faculty>> call, @NonNull final Throwable t) {
-                Log.d("faculties FAILURE", t.toString());
                 loadingDialogBar.dismissDialog();
             }
         });
@@ -466,7 +465,6 @@ public class SettingsFragment extends Fragment {
             public void onResponse(Call<User> call, Response<User> response) {
                 loadingDialogBar.dismissDialog();
                 navigateToMyProfile(rootView);
-                Log.d("updated", response.toString());
             }
 
             @Override
