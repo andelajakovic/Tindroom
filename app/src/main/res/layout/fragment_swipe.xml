@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/back"
     tools:context=".ui.postlogin.SwipeFragment">
 
     <RelativeLayout
@@ -24,17 +25,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/swipe_description_background"
-            android:padding="16dp"
+            android:gravity="bottom"
             android:orientation="vertical"
-            android:gravity="bottom">
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:textSize="30dp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/faculty"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="Maja, 19" />
@@ -43,9 +44,9 @@
                 android:id="@+id/faculty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
                 android:textColor="@color/white"
                 android:textSize="18dp"
-                android:layout_marginBottom="4dp"
                 app:layout_constraintBottom_toTopOf="@+id/textView2"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="Sveučilište u Rijeci" />
@@ -55,10 +56,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                tools:text="Lorem ipsum dolor sit amet, eu mea aeque graecis eligendi, bonorum inciderint qui ei. Eripuit splendide ius cu, est detracto explicari reprehendunt eu, pro et appareat fabellas. Vis te vidit perfecto, odio soleat et vis, pro rationibus adipiscing ad. Ius ut illum ignota iuvaret. An soleat iisque aliquip sed, et."
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Lorem ipsum dolor sit amet, eu mea aeque graecis eligendi, bonorum inciderint qui ei. Eripuit splendide ius cu, est detracto explicari reprehendunt eu, pro et appareat fabellas. Vis te vidit perfecto, odio soleat et vis, pro rationibus adipiscing ad. Ius ut illum ignota iuvaret. An soleat iisque aliquip sed, et." />
 
 
             <LinearLayout
@@ -79,16 +80,16 @@
                     android:id="@+id/apartmentDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
                     android:padding="10dp"
-                    tools:text="Banderovo, 1200 kuna po osobi."
+                    android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="Banderovo, 1200 kuna po osobi." />
             </LinearLayout>
 
 
-    </LinearLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 

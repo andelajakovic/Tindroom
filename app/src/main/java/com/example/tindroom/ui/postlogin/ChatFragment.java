@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.tindroom.R;
@@ -23,6 +24,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavDirections;
@@ -46,6 +48,8 @@ public class ChatFragment extends Fragment {
     private RecyclerView recyclerView;
     private ChatAdapter.RecyclerViewClickListener listener;
     LoadingDialogBar loadingDialogBar;
+    private SearchView search;
+    private ConstraintLayout chats, no_matches;
 
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
@@ -87,9 +91,30 @@ public class ChatFragment extends Fragment {
     }
     private void initViews() {
         recyclerView = rootView.findViewById(R.id.recyclerView);
+        search = rootView.findViewById(R.id.searchView);
+        chats = rootView.findViewById(R.id.chats);
+        no_matches = rootView.findViewById(R.id.no_matches);
     }
 
     private void initListeners() {
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search.onActionViewExpanded();
+            }
+        });
+
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
     }
 
     private void getSwipes() {
@@ -128,6 +153,8 @@ public class ChatFragment extends Fragment {
             }
         }else{
             Log.d("Swipe list is empty", swipes.toString());
+            chats.setVisibility(View.GONE);
+            no_matches.setVisibility(View.VISIBLE);
         }
     }
 

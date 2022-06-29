@@ -115,7 +115,6 @@ public class MessageFragment extends Fragment {
         name.setText(chatUser.getName());
         backButton = rootView.findViewById(R.id.back);
         profilePic = rootView.findViewById(R.id.profilePic);
-        lastSeen = rootView.findViewById(R.id.lastSeen);
 
         Context cont = requireContext();
         Glide.with(cont)

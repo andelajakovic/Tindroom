@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -71,6 +72,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.Viewholder> {
     public ChatAdapter.Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout, parent, false);
         sessionUser = SharedPreferencesStorage.getSessionUser(context.getContext());
+
         return new Viewholder(view);
     }
 

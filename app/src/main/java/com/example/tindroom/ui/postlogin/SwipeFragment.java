@@ -2,6 +2,7 @@ package com.example.tindroom.ui.postlogin;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -28,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -65,6 +67,7 @@ public class SwipeFragment extends Fragment {
     private List<Swipe> swipes;
 
     private ImageView profilePicture;
+    private FrameLayout back;
     private LinearLayout userDescriptionLayout, apartmentDescriptionLayout;
     private TextView roommatesName, roommatesFaculty, roommatesDescription, apartmentDescription;
     private Button settings;
@@ -109,6 +112,7 @@ public class SwipeFragment extends Fragment {
         layout = rootView.findViewById(R.id.layout);
         layout2 = rootView.findViewById(R.id.layout2);
         match = rootView.findViewById(R.id.match);
+        back = rootView.findViewById(R.id.back);
 
     }
 
@@ -119,10 +123,19 @@ public class SwipeFragment extends Fragment {
             // TODO (Andrea: dodati animacije)
             public void onSwipeRight() {
                 swipe(true);
+//                layout.animate().rotationYBy(180f).setDuration(1500).start();
+                back.setBackgroundResource(R.color.green);
+//                back.setRotationY(180f);
+
+                profilePicture.animate().rotationYBy(180f).setDuration(800).start();
             }
 
             public void onSwipeLeft() {
                 swipe(false);
+//                layout.animate().rotationYBy(-180f).setDuration(1500).start();
+                back.setBackgroundResource(R.color.red);
+//                back.setRotationY(180f);
+                profilePicture.animate().rotationYBy(-180f).setDuration(800).start();
             }
         });
 
@@ -163,16 +176,17 @@ public class SwipeFragment extends Fragment {
                 swipe.setUserId1(sessionUser.getUserId());
                 swipe.setUserId2(swipedUser.getUserId());
                 swipe.setSwipe_1(swipeValue);
+
             } else {
                 swipe.setUserId1(swipedUser.getUserId());
                 swipe.setUserId2(sessionUser.getUserId());
                 swipe.setSwipe_2(swipeValue);
             }
+
             swipes.add(swipe);
-            swipeCall = tindroomApiService.insertSwipe(swipe);
-            // obavijest
+
             if (swipe.isSwipe_1() != null && swipe.isSwipe_2() != null && swipe.isSwipe_1() && swipe.isSwipe_2()) {
-                Log.d("andrea", swipe.isSwipe_1().toString());
+                Log.d("andrea2", swipe.toString());
                 match.setVisibility(View.VISIBLE);
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -183,23 +197,24 @@ public class SwipeFragment extends Fragment {
                 }, 3000);
             }
 
+            swipeCall = tindroomApiService.insertSwipe(swipe);
+
+            // obavijest
+            Log.d("andrea", swipe.toString());
+
         }
 
         if (swipeCall != null) {
-            loadingDialogBar.startLoadingDialog();
             swipeCall.enqueue(new Callback<Swipe>() {
 
                 @Override
                 public void onResponse(final Call<Swipe> call, final Response<Swipe> response) {
-                    Log.d("!!!!!!!", String.valueOf(response));
-                    loadingDialogBar.dismissDialog();
                     sortedUsers.remove(0);
                     nextUser(sortedUsers);
                 }
 
                 @Override
                 public void onFailure(final Call<Swipe> call, final Throwable t) {
-                    loadingDialogBar.dismissDialog();
                     Toast.makeText(getContext(), getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_SHORT).show();
                 }
             });
@@ -210,6 +225,7 @@ public class SwipeFragment extends Fragment {
         if (swipeUsers.isEmpty()) {
             layout.setVisibility(View.GONE);
             layout2.setVisibility(View.VISIBLE);
+            back.setBackgroundColor(Color.TRANSPARENT);
         } else {
             displayUser(swipeUsers.get(0));
         }
@@ -373,8 +389,6 @@ public class SwipeFragment extends Fragment {
             }
         });
 
-        Log.d("!!!!!!!!!!!!", sortedUsers.toString());
-
         return sortedUsers;
     }
 
@@ -400,7 +414,7 @@ public class SwipeFragment extends Fragment {
             public void onResponse(final Call<List<Swipe>> call, final Response<List<Swipe>> response) {
                 if (response.body() != null)
                     swipes.addAll(response.body());
-                getFaculties();
+                    getFaculties();
             }
 
             @Override
