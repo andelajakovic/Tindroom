@@ -16,7 +16,12 @@ import com.example.tindroom.data.model.Review;
 import com.example.tindroom.data.model.User;
 import com.example.tindroom.network.RetrofitService;
 import com.example.tindroom.network.TindroomApiService;
+import com.example.tindroom.ui.postlogin.ChatFragmentDirections;
+import com.example.tindroom.ui.postlogin.MessageFragmentDirections;
 
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,13 +37,17 @@ public class ReviewDialog {
     private User reviewer, user;
     private Integer rating = null;
     private ProgressBar progressBar;
+    private Fragment fragment;
+    private View view;
 
     private TindroomApiService tindroomApiService;
 
-    public ReviewDialog(Activity myActivity, User reviewer, User user) {
+    public ReviewDialog(Activity myActivity, User reviewer, User user, Fragment fragment, View view) {
         activity = myActivity;
         this.reviewer = reviewer;
         this.user = user;
+        this.fragment = fragment;
+        this.view = view;
     }
 
     public void startReviewDialog() {
@@ -190,5 +199,8 @@ public class ReviewDialog {
 
     public void dismissReviewDialog() {
         dialog.dismiss();
+        NavDirections action = (NavDirections) MessageFragmentDirections.actionMessageFragmentSelf(user);
+        Navigation.findNavController(view).navigate(action);
     }
+
 }

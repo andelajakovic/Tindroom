@@ -93,7 +93,9 @@ public class MessageFragment extends Fragment {
         sessionUser = SharedPreferencesStorage.getSessionUser(requireContext());
         reference = FirebaseDatabase.getInstance("https://tindroom-64323-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Chats");
 
-        reviewDialog = new ReviewDialog(getActivity(), sessionUser, chatUser);
+        reviewDialog = new ReviewDialog(getActivity(), sessionUser, chatUser, this, rootView);
+
+
 
         Retrofit retrofit = RetrofitService.getRetrofit();
         tindroomApiService = retrofit.create(TindroomApiService.class);

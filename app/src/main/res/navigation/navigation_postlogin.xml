@@ -49,6 +49,9 @@
         <argument
             android:name="chatUser"
             app:argType="com.example.tindroom.data.model.User" />
+        <action
+            android:id="@+id/action_messageFragment_self"
+            app:destination="@id/messageFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
